@@ -1,4 +1,5 @@
 <?php
+// Path: app/Core/Controller.php
 
 namespace App\Database;
 
