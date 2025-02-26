@@ -1,5 +1,5 @@
 <?php
-// Path: app/Core/Controller.php
+// Path: app/Database/Connection.php
 
 namespace App\Database;
 

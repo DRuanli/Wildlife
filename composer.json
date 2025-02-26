@@ -10,7 +10,6 @@
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
         "guzzlehttp/guzzle": "^7.5",
-        "fruitcake/laravel-cors": "^3.0",
         "intervention/image": "^2.7",
         "league/flysystem-aws-s3-v3": "^3.0",
         "laravel/socialite": "^5.6",
