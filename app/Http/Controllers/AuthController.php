@@ -509,7 +509,7 @@ class AuthController extends Controller
      * @param string $type Message type (success, danger, warning, info)
      * @return void
      */
-    private function setFlashMessage($message, $type = 'info')
+    protected function setFlashMessage($message, $type = 'info')
     {
         $_SESSION['flash_message'] = $message;
         $_SESSION['flash_type'] = $type;
