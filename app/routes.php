@@ -37,4 +37,15 @@ class Connection extends \PDO
             throw new \Exception('Database connection failed. Please try again later.');
         }
     }
+    function getRoutes() {
+        return [
+            '/' => 'HomeController@index',
+            '/auth/login' => 'AuthController@showLogin',
+            '/auth/login/process' => 'AuthController@login',
+            '/auth/register' => 'AuthController@showRegister',
+            '/auth/register/process' => 'AuthController@register',
+            '/auth/logout' => 'AuthController@logout',
+            '/dashboard' => 'DashboardController@index'
+        ];
+    }
 }
