@@ -39,15 +39,17 @@ try {
 
     // Get the current URI
     $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-
-    // Remove the /Wildlife base path from the request
-    $requestUri = str_replace('/Wildlife', '', $requestUri);
     
-    // If empty, set to root path
-    if (empty($requestUri)) {
-        $requestUri = '/';
+    // Remove base path from URI
+    $basePath = '/Wildlife';
+    if (strpos($requestUri, $basePath) === 0) {
+        $requestUri = substr($requestUri, strlen($basePath));
     }
-
+    
+    // Ensure URI starts with /
+    if (empty($requestUri) || $requestUri[0] !== '/') {
+        $requestUri = '/' . $requestUri;
+    }
     
     // Initialize router
     $router = new App\Core\Router();

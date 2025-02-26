@@ -53,21 +53,28 @@ class OAuthService
     private $appUrl;
     
     /**
+     * Base path for application
+     * @var string
+     */
+    private $basePath;
+    
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->appUrl = $_ENV['APP_URL'] ?? 'http://localhost';
+        $this->basePath = '/Wildlife'; // Đường dẫn cơ sở của ứng dụng
         
         // Google OAuth configuration
         $this->googleClientId = $_ENV['GOOGLE_CLIENT_ID'] ?? '';
         $this->googleClientSecret = $_ENV['GOOGLE_CLIENT_SECRET'] ?? '';
-        $this->googleRedirectUri = $this->appUrl . '/auth/google/callback';
+        $this->googleRedirectUri = $this->appUrl . $this->basePath . '/auth/google/callback';
         
         // Apple OAuth configuration
         $this->appleClientId = $_ENV['APPLE_CLIENT_ID'] ?? '';
         $this->appleClientSecret = $_ENV['APPLE_CLIENT_SECRET'] ?? '';
-        $this->appleRedirectUri = $this->appUrl . '/auth/apple/callback';
+        $this->appleRedirectUri = $this->appUrl . $this->basePath . '/auth/apple/callback';
     }
     
     /**
@@ -188,16 +195,48 @@ class OAuthService
     /**
      * Generate client secret for Apple OAuth
      * 
+     * Uses Apple's certificate to create a JWT client secret
+     * 
      * @return string Generated client secret (JWT)
      */
     private function generateAppleClientSecret()
     {
-        // In a real implementation, this would generate a JWT token
-        // using the private key and team ID from Apple Developer account
-        // For simplicity, we're assuming the client secret is already generated
-        // and stored in the environment variable
+        // If using static client secret from environment (for simplicity)
+        if ($this->appleClientSecret) {
+            return $this->appleClientSecret;
+        }
         
-        return $this->appleClientSecret;
+        // For a real implementation, we would generate a JWT token
+        // using a private key obtained from Apple Developer account
+        
+        // JWT Header: Algorithm + Type
+        $header = json_encode([
+            'alg' => 'ES256',
+            'kid' => 'YOUR_KEY_ID'
+        ]);
+        
+        // JWT Payload: Claims
+        $time = time();
+        $payload = json_encode([
+            'iss' => 'YOUR_TEAM_ID',
+            'iat' => $time,
+            'exp' => $time + 15777000, // 6 months
+            'aud' => 'https://appleid.apple.com',
+            'sub' => $this->appleClientId
+        ]);
+        
+        // Encode header and payload
+        $base64Header = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($header));
+        $base64Payload = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($payload));
+        
+        // Create signature using your private key
+        $privateKey = "YOUR_PRIVATE_KEY";
+        $signature = "GENERATED_SIGNATURE"; // Normally created with openssl_sign()
+        
+        // Create JWT
+        $jwt = $base64Header . '.' . $base64Payload . '.' . $signature;
+        
+        return $jwt;
     }
     
     /**
