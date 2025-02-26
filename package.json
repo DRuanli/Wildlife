@@ -1,0 +1,42 @@
+{
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "watch": "vite build --watch"
+    },
+    "dependencies": {
+        "axios": "^1.4.0",
+        "bootstrap": "^5.3.0",
+        "chart.js": "^4.3.0",
+        "lodash": "^4.17.21",
+        "moment": "^2.29.4",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-router-dom": "^6.11.2",
+        "three": "^0.154.0",
+        "vue": "^3.3.4",
+        "vue-router": "^4.2.2",
+        "vuex": "^4.1.0",
+        "@react-three/fiber": "^8.13.3",
+        "@react-three/drei": "^9.77.0",
+        "ar.js": "^2.2.2",
+        "socket.io-client": "^4.6.2",
+        "tailwindcss": "^3.3.2",
+        "tensorflow-tfjs": "^4.7.0"
+    },
+    "devDependencies": {
+        "@vitejs/plugin-react": "^4.0.1",
+        "@vitejs/plugin-vue": "^4.2.3",
+        "autoprefixer": "^10.4.14",
+        "laravel-vite-plugin": "^0.7.8",
+        "postcss": "^8.4.24",
+        "sass": "^1.63.6",
+        "vite": "^4.3.9",
+        "vitest": "^0.32.0",
+        "eslint": "^8.42.0",
+        "eslint-plugin-react": "^7.32.2",
+        "eslint-plugin-vue": "^9.14.1"
+    }
+}
