@@ -336,3 +336,33 @@ CREATE TABLE Transactions (
     INDEX idx_currency (currency),
     INDEX idx_created (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Add missing columns to Users table
+ALTER TABLE Users 
+ADD COLUMN email_verification_token VARCHAR(100) NULL,
+ADD COLUMN email_verified_at DATETIME NULL,
+ADD COLUMN remember_token VARCHAR(100) NULL,
+ADD COLUMN remember_token_expires_at DATETIME NULL,
+ADD COLUMN oauth_provider VARCHAR(20) NULL,
+ADD COLUMN oauth_id VARCHAR(100) NULL;
+
+
+-- Create Habitat and Creature tables if they don't exist yet
+CREATE TABLE IF NOT EXISTS Habitats (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    type ENUM('forest', 'ocean', 'mountain', 'sky', 'cosmic', 'enchanted') NOT NULL,
+    level INT DEFAULT 1,
+    expansion_level INT DEFAULT 1,
+    decorations JSON, -- JSON array of decoration IDs
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE,
+    INDEX idx_user (user_id),
+    INDEX idx_type (type)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Add habitat_id column to Creatures table
+ALTER TABLE Creatures 
+ADD COLUMN habitat_id INT NULL,
+ADD FOREIGN KEY (habitat_id) REFERENCES Habitats(id);

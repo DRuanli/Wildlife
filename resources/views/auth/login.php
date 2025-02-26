@@ -1,88 +1,507 @@
-<?php require_once ROOT_PATH . '/resources/views/layouts/header.php'; 
-    // resources/views/auth/login.php
+<?php
+/**
+ * Wildlife Haven - Login Page
+ * 
+ * This login page follows Japandi aesthetic principles:
+ * - Clean, minimalist layout with ample whitespace
+ * - Neutral, nature-inspired color palette
+ * - Simple, functional elements with organic touches
+ * - Focus on user experience with calm visual hierarchy
+ */
+
+// Ensure this page is not cached
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Pragma: no-cache");
+header("Expires: 0");
+
+// Base URL for consistent path references
+$baseUrl = '/Wildlife';
+
+// Check if there's a redirect URL in the query string
+$redirectUrl = isset($_GET['redirect']) ? htmlspecialchars($_GET['redirect']) : $baseUrl . '/dashboard';
+
+// Flash message handling
+$flashMessage = '';
+$flashType = '';
+if (isset($_SESSION['flash_message'])) {
+    $flashMessage = $_SESSION['flash_message'];
+    $flashType = $_SESSION['flash_type'] ?? 'info';
+    unset($_SESSION['flash_message'], $_SESSION['flash_type']);
+}
 ?>
 
-<div class="container mx-auto px-4 py-8">
-    <div class="max-w-md mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
-        <div class="px-6 py-8">
-            <h2 class="text-2xl font-bold text-center text-gray-800 mb-8">Sign In to Wildlife Haven</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Wildlife Haven</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="<?= $baseUrl ?>/assets/images/favicon.ico" type="image/x-icon">
+    
+    <!-- Google Fonts - Noto Sans and Noto Serif for Japandi aesthetic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600&family=Noto+Serif:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <style>
+        /* Japandi-inspired color palette */
+        :root {
+            --color-primary: #6A8D73;       /* Muted sage green */
+            --color-primary-light: #8FAD97; /* Lighter sage */
+            --color-primary-dark: #4D6B54;  /* Darker sage */
+            --color-secondary: #F4F0E6;     /* Warm off-white */
+            --color-accent: #D7C0AE;        /* Warm wood */
+            --color-text: #2D2D2A;          /* Soft charcoal */
+            --color-text-light: #6B6B67;    /* Lighter text */
+            --color-subtle: #E8E4DC;        /* Light neutral */
+            --color-error: #B9716F;         /* Muted red */
+            --color-success: #84A59D;       /* Muted teal */
+            --color-warning: #D9B779;       /* Muted gold */
+            --color-info: #8EAEC5;          /* Muted blue */
+        }
+        
+        /* Base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans', sans-serif;
+            background-color: var(--color-secondary);
+            color: var(--color-text);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Left panel - decorative nature image */
+        .auth-image {
+            display: none; /* Hidden on mobile */
+            background-image: url('<?= $baseUrl ?>/assets/images/auth-nature.jpg');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        /* Semi-transparent overlay with subtle texture */
+        .auth-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(106, 141, 115, 0.2); /* Sage green with opacity */
+            background-image: url('<?= $baseUrl ?>/assets/images/texture-light.png');
+            background-blend-mode: overlay;
+            z-index: 1;
+        }
+        
+        /* Right panel - form container */
+        .auth-form-container {
+            flex: 1;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #FFFFFF;
+        }
+        
+        /* Auth form */
+        .auth-form {
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        /* Logo and branding */
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        
+        .auth-logo img {
+            height: 60px;
+            width: auto;
+        }
+        
+        .auth-logo h1 {
+            font-family: 'Noto Serif', serif;
+            font-weight: 500;
+            font-size: 1.5rem;
+            margin-top: 0.5rem;
+            color: var(--color-primary-dark);
+        }
+        
+        /* Typography */
+        h2 {
+            font-family: 'Noto Serif', serif;
+            font-weight: 500;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: var(--color-text);
+        }
+        
+        /* Form elements with Japandi aesthetic */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--color-text-light);
+        }
+        
+        input[type="email"],
+        input[type="password"],
+        input[type="text"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--color-subtle);
+            border-radius: 4px;
+            background-color: #FFFFFF;
+            font-family: 'Noto Sans', sans-serif;
+            font-size: 1rem;
+            color: var(--color-text);
+            transition: border-color 0.2s ease;
+        }
+        
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 2px rgba(106, 141, 115, 0.1);
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-top: 0.25rem;
+        }
+        
+        input[type="checkbox"] {
+            margin-right: 0.5rem;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--color-primary);
+        }
+        
+        .form-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .form-footer a {
+            color: var(--color-primary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        
+        .form-footer a:hover {
+            color: var(--color-primary-dark);
+            text-decoration: underline;
+        }
+        
+        /* Buttons with natural, organic feel */
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-family: 'Noto Sans', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: white;
+            width: 100%;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--color-primary-dark);
+        }
+        
+        /* Social login buttons - subtle styling */
+        .social-login {
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        .social-login-divider {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+        }
+        
+        .social-login-divider::before,
+        .social-login-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background-color: var(--color-subtle);
+        }
+        
+        .social-login-divider span {
+            padding: 0 1rem;
+            color: var(--color-text-light);
+            font-size: 0.9rem;
+        }
+        
+        .social-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .btn-social {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem;
+            background-color: white;
+            border: 1px solid var(--color-subtle);
+            border-radius: 4px;
+            color: var(--color-text);
+        }
+        
+        .btn-social:hover {
+            background-color: var(--color-secondary);
+        }
+        
+        .btn-social svg {
+            width: 20px;
+            height: 20px;
+            margin-right: 0.5rem;
+        }
+        
+        /* Registration link */
+        .auth-alt {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--color-subtle);
+            font-size: 0.9rem;
+            color: var(--color-text-light);
+        }
+        
+        .auth-alt a {
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .auth-alt a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Alert/flash message styling - with gentle colors */
+        .alert {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .alert svg {
+            width: 20px;
+            height: 20px;
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+            margin-top: 0.125rem;
+        }
+        
+        .alert-success {
+            background-color: rgba(132, 165, 157, 0.1);
+            border-left: 3px solid var(--color-success);
+            color: var(--color-success);
+        }
+        
+        .alert-danger {
+            background-color: rgba(185, 113, 111, 0.1);
+            border-left: 3px solid var(--color-error);
+            color: var(--color-error);
+        }
+        
+        .alert-warning {
+            background-color: rgba(217, 183, 121, 0.1);
+            border-left: 3px solid var(--color-warning);
+            color: var(--color-warning);
+        }
+        
+        .alert-info {
+            background-color: rgba(142, 174, 197, 0.1);
+            border-left: 3px solid var(--color-info);
+            color: var(--color-info);
+        }
+        
+        /* Natural leaf-inspired decoration element */
+        .nature-decoration {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background-image: url('<?= $baseUrl ?>/assets/images/leaf-decoration.svg');
+            background-repeat: no-repeat;
+            background-size: contain;
+            opacity: 0.15;
+            z-index: -1;
+        }
+        
+        .decoration-top-right {
+            top: 2rem;
+            right: 2rem;
+            transform: rotate(45deg);
+        }
+        
+        .decoration-bottom-left {
+            bottom: 2rem;
+            left: 2rem;
+            transform: rotate(-135deg);
+        }
+        
+        /* Responsive styles */
+        @media (min-width: 768px) {
+            body {
+                flex-direction: row;
+            }
             
-            <?php if (isset($_SESSION['flash_message'])): ?>
-                <div class="bg-<?= $_SESSION['flash_type'] ?? 'blue' ?>-100 border-l-4 border-<?= $_SESSION['flash_type'] ?? 'blue' ?>-500 text-<?= $_SESSION['flash_type'] ?? 'blue' ?>-700 p-4 mb-6" role="alert">
-                    <p><?= $_SESSION['flash_message']; ?></p>
+            .auth-image {
+                display: block;
+                flex: 1;
+            }
+            
+            .auth-form-container {
+                flex: 1;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .auth-image {
+                flex: 1.2;
+            }
+            
+            .auth-form-container {
+                flex: 0.8;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Left panel with nature image -->
+    <div class="auth-image"></div>
+    
+    <!-- Right panel with login form -->
+    <div class="auth-form-container">
+        <!-- Natural decorative elements - leaf motifs -->
+        <div class="nature-decoration decoration-top-right"></div>
+        <div class="nature-decoration decoration-bottom-left"></div>
+        
+        <div class="auth-form">
+            <!-- Logo and branding -->
+            <div class="auth-logo">
+                <img src="<?= $baseUrl ?>/assets/images/logo.svg" alt="Wildlife Haven Logo">
+                <h1>Wildlife Haven</h1>
+            </div>
+            
+            <!-- Page title -->
+            <h2>Welcome Back</h2>
+            
+            <!-- Flash message display -->
+            <?php if ($flashMessage): ?>
+                <div class="alert alert-<?= $flashType ?>">
+                    <?php if ($flashType == 'success'): ?>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-.997-6l7.07-7.071-1.414-1.414-5.656 5.657-2.829-2.829-1.414 1.414L11.003 16z"/>
+                        </svg>
+                    <?php elseif ($flashType == 'danger'): ?>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1-7v2h2v-2h-2zm0-8v6h2V7h-2z"/>
+                        </svg>
+                    <?php elseif ($flashType == 'warning'): ?>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1-7v2h2v-2h-2zm0-8v6h2V7h-2z"/>
+                        </svg>
+                    <?php else: ?>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1-11v6h2v-6h-2zm0-4v2h2V7h-2z"/>
+                        </svg>
+                    <?php endif; ?>
+                    <div><?= $flashMessage ?></div>
                 </div>
-                <?php unset($_SESSION['flash_message'], $_SESSION['flash_type']); ?>
             <?php endif; ?>
             
-            <form action="<?= $baseUrl ?>/auth/login/process" method="POST" class="space-y-6">
-                <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                    <input type="email" name="email" id="email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500" required>
+            <!-- Login form -->
+            <form action="<?= $baseUrl ?>/auth/login/process" method="POST">
+                <!-- Hidden redirect URL -->
+                <input type="hidden" name="redirect" value="<?= $redirectUrl ?>">
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required autofocus>
                 </div>
                 
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                    <input type="password" name="password" id="password" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500" required>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
                 </div>
                 
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <input type="checkbox" name="remember" id="remember" class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded">
-                        <label for="remember" class="ml-2 block text-sm text-gray-700">Remember me</label>
+                <div class="form-footer">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="remember" name="remember">
+                        <label for="remember">Remember me</label>
                     </div>
                     
-                    <div class="text-sm">
-                        <a href="<?= $baseUrl ?>/auth/forgot-password" class="font-medium text-green-600 hover:text-green-500">Forgot your password?</a>
-                    </div>
+                    <a href="<?= $baseUrl ?>/auth/forgot-password">Forgot password?</a>
                 </div>
                 
-                <div>
-                    <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                        Sign In
-                    </button>
-                </div>
+                <button type="submit" class="btn btn-primary">Sign In</button>
             </form>
             
-            <div class="mt-6">
-                <div class="relative">
-                    <div class="absolute inset-0 flex items-center">
-                        <div class="w-full border-t border-gray-300"></div>
-                    </div>
-                    <div class="relative flex justify-center text-sm">
-                        <span class="px-2 bg-white text-gray-500">Or continue with</span>
-                    </div>
+            <!-- Social login options -->
+            <div class="social-login">
+                <div class="social-login-divider">
+                    <span>Or continue with</span>
                 </div>
                 
-                <div class="mt-6 grid grid-cols-2 gap-3">
-                    <div>
-                        <a href="<?= $baseUrl ?>/auth/google" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032 c0-3.331,2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2 C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/>
-                            </svg>
-                        </a>
-                    </div>
+                <div class="social-buttons">
+                    <a href="<?= $baseUrl ?>/auth/google" class="btn-social">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z" fill="#4285F4"/>
+                        </svg>
+                        Google
+                    </a>
                     
-                    <div>
-                        <a href="<?= $baseUrl ?>/auth/apple" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <path d="M16.032 15.935c-.148.352-.32.703-.512 1.047a8.932 8.932 0 01-.648.962 5.255 5.255 0 01-.902.952c-.36.312-.672.513-.945.611-.382.131-.764.195-1.146.195-.414 0-.82-.07-1.214-.212a3.76 3.76 0 01-1.01-.539c-.14-.105-.342-.262-.61-.471-.269-.207-.465-.336-.59-.383a6.004 6.004 0 01-.61.383c-.27.21-.471.367-.61.471-.355.254-.691.433-1.01.539-.395.141-.8.212-1.214.212-.382 0-.764-.064-1.146-.195-.273-.098-.586-.3-.945-.61a5.255 5.255 0 01-.902-.954 8.932 8.932 0 01-.648-.962c-.192-.344-.364-.695-.512-1.048-.49-1.125-.735-2.403-.735-3.812 0-1.093.227-2.016.68-2.77.453-.752 1.023-1.35 1.71-1.792.688-.444 1.438-.667 2.25-.667.305 0 .63.055.976.164.345.11.699.281 1.06.512.363.23.65.425.86.582.21.156.445.349.704.578.258-.23.492-.422.703-.578.21-.157.497-.351.86-.582.36-.23.715-.402 1.06-.512.345-.11.671-.164.976-.164.813 0 1.563.223 2.25.667.688.441 1.258 1.04 1.71 1.793.454.753.68 1.676.68 2.769 0 1.41-.245 2.687-.734 3.812z"/>
-                                <path d="M16.57 7.45c-.383-.52-.907-.925-1.587-1.215-.5-.215-1.07-.357-1.704-.433.101-.812.413-1.422.938-1.828.523-.406 1.207-.61 2.05-.61.047 0 .118.004.212.012a.675.675 0 01.207 0c.094-.008.165-.012.211-.012V2c-.508.016-.883.023-1.125.023-.852 0-1.602.157-2.25.473-.648.316-1.149.785-1.504 1.41-.355.624-.539 1.39-.551 2.296v.187c.773.035 1.297.117 1.575.246.468.21.836.507 1.102.89.266.381.399.842.399 1.381 0 .532-.133.995-.399 1.387-.266.391-.628.685-1.086.883-.457.199-1.04.297-1.746.297-.719 0-1.315-.113-1.79-.34-.477-.226-.868-.604-1.174-1.135-.307-.53-.461-1.213-.461-2.047 0-.984.266-1.804.797-2.46.531-.658 1.19-1.172 1.977-1.542.453-.21.996-.374 1.625-.492-.031-.218-.094-.43-.19-.633a1.979 1.979 0 00-.445-.633c-.218-.21-.484-.316-.797-.316-.5 0-.899.125-1.197.375-.297.25-.46.59-.488 1.02-.531-.032-1.148-.166-1.852-.404a.651.651 0 01-.176-.071 8.49 8.49 0 01-.176-.082c.063-.75.293-1.418.688-2.004.395-.586.91-1.04 1.547-1.363C10.332 2.84 11.035 2.66 11.8 2.66c.695 0 1.35.093 1.961.281.613.188 1.156.51 1.63.965.477.457.845 1.077 1.102 1.863.258.786.387 1.75.387 2.89 0 1.296-.168 2.358-.504 3.189-.336.83-.824 1.41-1.465 1.737-.64.329-1.425.493-2.355.493-.93 0-1.716-.164-2.356-.493-.64-.328-1.129-.907-1.465-1.737-.305-.735-.46-1.695-.461-2.882 0-.023.004-.058.012-.105-.437.18-.756.42-.957.718-.199.297-.3.662-.3 1.093 0 .375.078.703.234.985.156.28.352.51.586.686.235.175.485.328.75.457.305.14.7.251 1.184.33.484.078.84.12 1.067.125v1.125c-.844-.031-1.48-.113-1.907-.246a4.475 4.475 0 01-1.204-.563 3.663 3.663 0 01-.89-.843 3.55 3.55 0 01-.587-1.112 4.322 4.322 0 01-.211-1.394c0-.798.176-1.488.527-2.07.352-.584.868-1.022 1.547-1.313.68-.29 1.5-.491 2.461-.602v-.117c.024-1.203.466-2.145 1.325-2.824.86-.68 1.939-1.02 3.235-1.02.07 0 .207.008.41.024v1.36c-.047 0-.095-.004-.144-.012a.675.675 0 01-.14 0c-.048.008-.095.012-.14.012-.618 0-1.13.187-1.536.562-.406.375-.636.883-.691 1.524.468.03.875.09 1.22.175.344.086.653.203.926.352.273.148.536.332.785.55.321.21.594.483.82.818.227.336.39.682.489 1.04.98.356.148.723.148 1.1 0 .625-.134 1.184-.399 1.676z"/>
-                            </svg>
-                        </a>
-                    </div>
+                    <a href="<?= $baseUrl ?>/auth/apple" class="btn-social">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 8.42 7.31c1.33.07 2.25.8 3.06.85.83 0 2.13-.84 3.59-.71 1.85.19 3.24 1.05 3.96 2.69-3.14 1.93-2.2 5.55.59 6.75-.62 1.53-1.42 3-2.57 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.26 2.31-2.14 4.2-3.74 4.25z" fill="#000000"/>
+                        </svg>
+                        Apple
+                    </a>
                 </div>
             </div>
-        </div>
-        
-        <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
-            <p class="text-center text-sm text-gray-600">
-                Don't have an account? 
-                <a href="<?= $baseUrl ?>/auth/register" class="font-medium text-green-600 hover:text-green-500">
-                    Sign up
-                </a>
-            </p>
+            
+            <!-- Registration link -->
+            <div class="auth-alt">
+                <p>Don't have an account? <a href="<?= $baseUrl ?>/auth/register">Sign up</a></p>
+            </div>
         </div>
     </div>
-</div>
-
-<?php require_once ROOT_PATH . '/resources/views/layouts/footer.php'; ?>
+</body>
+</html>
