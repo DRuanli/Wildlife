@@ -58,7 +58,7 @@
           <div>
             <h3 class="text-sm font-semibold text-gray-300 uppercase tracking-wider">Help</h3>
             <ul class="mt-4 space-y-2">
-              <li><a href="<?= $baseUrl ?>/support" class="text-gray-400 hover:text-white transition">Support</a></li>
+              <li><a href="<?= $baseUrl ?>/learn/support" class="text-gray-400 hover:text-white transition">Support</a></li>
               <li><a href="<?= $baseUrl ?>/faq" class="text-gray-400 hover:text-white transition">FAQ</a></li>
               <li><a href="<?= $baseUrl ?>/contact" class="text-gray-400 hover:text-white transition">Contact Us</a></li>
               <li><a href="<?= $baseUrl ?>/privacy" class="text-gray-400 hover:text-white transition">Privacy Policy</a></li>

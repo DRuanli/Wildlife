@@ -208,7 +208,7 @@
       <div class="container mx-auto px-4 py-12 relative z-10">
         <div class="flex flex-col md:flex-row justify-between items-center">
           <div class="mb-6 md:mb-0 animate-fade-in" style="--animation-delay: 0.1s;">
-            <h1 class="headline headline-large mb-2">Welcome back, Username!</h1>
+            <h1 class="headline headline-large mb-2">Welcome back, <?php echo $user['username']; ?>!</h1>
             <p class="text-emerald-100 text-lg max-w-xl">Your wildlife sanctuary awaits your attention. Continue your focus journey and see your creatures thrive.</p>
           </div>
           

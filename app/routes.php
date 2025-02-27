@@ -51,5 +51,8 @@ function getRoutes() {
 
         // Creature gallery routes
         '/gallery' => 'GalleryController@index',
+
+        // Assisted learning routes
+        '/learn/support' => 'LearnController@support',
     ];
 }
