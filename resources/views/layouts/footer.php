@@ -1,20 +1,21 @@
 <?php
 // Path: resources/views/layouts/footer.php
 // Sử dụng biến $baseUrl từ header.php
+$baseUrl = '/Wildlife';
 ?>
 
 </main>
 
 <footer class="bg-gray-900 text-white mt-12 relative overflow-hidden">
   <!-- Decorative Background Pattern (optional) -->
-  <div class="absolute inset-0 opacity-20" style="background: url('<?= $baseUrl ?>/images/footer-pattern.png') repeat;"></div>
+  <div class="absolute inset-0 opacity-20" style="background: url('<?= $baseUrl ?>/public/images/footer.png') repeat;"></div>
   <div class="relative z-10">
     <div class="container mx-auto px-4 py-12">
       <div class="flex flex-col md:flex-row justify-between items-start">
         <!-- Branding & Newsletter -->
         <div class="mb-8 md:mb-0">
           <div class="flex items-center">
-            <img src="<?= $baseUrl ?>/images/logo.png" alt="Wildlife Haven Logo" class="h-12 w-auto mr-3">
+            <img src="<?= $baseUrl ?>/public/images/logo.png" alt="Wildlife Haven Logo" class="h-12 w-auto mr-3">
             <span class="text-2xl font-bold">Wildlife Haven</span>
           </div>
           <p class="mt-3 text-gray-400">
