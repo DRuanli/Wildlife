@@ -357,17 +357,13 @@
           <div class="advanced-card-content" :style="{ transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }">
             <!-- Front Face -->
             <div class="advanced-card-front">
-              <img src="<?= $baseUrl ?>/images/icon-secure.png" alt="Secure Icon" class="card-icon" />
-              <h3 class="sub-headline card-title">Giant Panda (Ailuropoda melanoleuca)</h3>
-              <p class="body-text card-desc">
-                With robust security practices—SOC 2 Type II certification, HIPAA compliance options, and more—we ensure your focus sessions and data remain protected.
-              </p>
+              <img src="<?= $baseUrl ?>/public/img/panda.jpg" alt="Secure Icon" class="card-icon" />
             </div>
             <!-- Back Face -->
             <div class="advanced-card-back">
-              <h4 class="sub-headline" style="margin-bottom: 0.5rem;">Featured Post</h4>
+              <h4 class="sub-headline" style="margin-bottom: 0.5rem;">Giant Panda (Ailuropoda melanoleuca)</h4>
               <p class="small-text">
-                <em>Constitutional Classifiers: Defending Against Universal Jailbreaks</em>
+                <em>An iconic species of China, the giant panda is famous for its black-and-white fur and a diet primarily consisting of bamboo. Their population is limited and strictly protected.</em>
               </p>
             </div>
           </div>
