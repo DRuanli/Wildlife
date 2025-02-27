@@ -286,7 +286,7 @@
         <div class="bg-white rounded-lg shadow-sm border border-[var(--neutral-light)] overflow-hidden group hover:shadow-md transition-all duration-300 shop-item">
             <div class="relative">
                 <div class="bg-[var(--primary-bg)] h-48 flex items-center justify-center p-4 transition-all duration-300 group-hover:bg-[#F5F2E9]">
-                <img src="<?= $baseUrl ?>/images/shop/arctic-shimmer-hare.png" alt="Arctic Shimmer Hare" class="h-32 w-auto object-contain item-image transform transition-transform duration-300 group-hover:scale-105">
+                <img src="<?= $baseUrl ?>/public/images/arctic_hare.png" alt="Arctic Shimmer Hare" class="h-32 w-auto object-contain item-image transform transition-transform duration-300 group-hover:scale-105">
                 </div>
                 <div class="absolute top-3 right-3 badge-rare text-xs font-medium px-2 py-1 rounded-full">
                 Rare
