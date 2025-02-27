@@ -9,6 +9,8 @@
  * - Focus on user experience with calm visual hierarchy
  */
 
+// Path: resources/views/auth/login.php
+
 // Ensure this page is not cached
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Pragma: no-cache");

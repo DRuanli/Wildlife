@@ -186,14 +186,23 @@ class User
                 )
             ');
             
-            $stmt->bindParam(':username', $userData['username'], \PDO::PARAM_STR);
-            $stmt->bindParam(':email', $userData['email'], \PDO::PARAM_STR);
-            $stmt->bindParam(':password_hash', $userData['password_hash'], \PDO::PARAM_STR);
-            $stmt->bindParam(':avatar_url', $userData['avatar_url'] ?? null, \PDO::PARAM_STR);
-            $stmt->bindParam(':email_verification_token', $userData['email_verification_token'] ?? null, \PDO::PARAM_STR);
-            $stmt->bindParam(':email_verified_at', $userData['email_verified_at'] ?? null, \PDO::PARAM_STR);
-            $stmt->bindParam(':oauth_provider', $userData['oauth_provider'] ?? null, \PDO::PARAM_STR);
-            $stmt->bindParam(':oauth_id', $userData['oauth_id'] ?? null, \PDO::PARAM_STR);
+            $username = $userData['username'];
+            $email = $userData['email'];
+            $password_hash = $userData['password_hash'];
+            $avatar_url = $userData['avatar_url'] ?? null;
+            $email_verification_token = $userData['email_verification_token'] ?? null;
+            $email_verified_at = $userData['email_verified_at'] ?? null;
+            $oauth_provider = $userData['oauth_provider'] ?? null;
+            $oauth_id = $userData['oauth_id'] ?? null;
+
+            $stmt->bindParam(':username', $username, \PDO::PARAM_STR);
+            $stmt->bindParam(':email', $email, \PDO::PARAM_STR);
+            $stmt->bindParam(':password_hash', $password_hash, \PDO::PARAM_STR);
+            $stmt->bindParam(':avatar_url', $avatar_url, \PDO::PARAM_STR);
+            $stmt->bindParam(':email_verification_token', $email_verification_token, \PDO::PARAM_STR);
+            $stmt->bindParam(':email_verified_at', $email_verified_at, \PDO::PARAM_STR);
+            $stmt->bindParam(':oauth_provider', $oauth_provider, \PDO::PARAM_STR);
+            $stmt->bindParam(':oauth_id', $oauth_id, \PDO::PARAM_STR);
             
             $stmt->execute();
             $userId = $this->db->lastInsertId();
