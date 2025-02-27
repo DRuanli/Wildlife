@@ -6,7 +6,7 @@
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@400;500&display=swap');
 
   :root {
-    --primary-color: #CE6246;
+    --primary-color: #4D724D;
     --background-color: #F9F8F2;
     --text-dark: #111;
     --text-gray: #333;
@@ -284,63 +284,251 @@
   </section>
 
   <!-- FEATURES SECTION -->
-  <section class="section" id="features">
-    <h2 class="sub-headline">Innovative Focus Tools</h2>
-    <p class="body-text">
+<section class="section" id="features" style="background-color: #F9F8F2; padding: 6rem 0;">
+  <div class="container mx-auto px-4 text-center">
+    <h2 class="sub-headline text-4xl font-bold text-gray-900 mb-4" style="font-family: 'Playfair Display', serif;">Innovative Focus Tools</h2>
+    <p class="body-text text-lg text-gray-700 mb-12">
       Experience a cutting-edge focus timer, dynamic creature gallery, and immersive testimonials—all designed to elevate your productivity and passion for conservation.
     </p>
-  </section>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+      <!-- Feature Card 1: Focus Timer -->
+      <div class="feature-card bg-white rounded-2xl shadow-lg p-8 transform transition duration-300 hover:scale-105">
+        <div class="icon mb-6">
+          <i class="fas fa-clock text-6xl" style="color: #4D724D;"></i>
+        </div>
+        <h3 class="text-2xl font-semibold text-gray-800 mb-3">Advanced Focus Timer</h3>
+        <p class="text-gray-600">
+          Stay in the zone with our dynamic radial progress timer that visualizes your focus sessions in real time.
+        </p>
+      </div>
+      <!-- Feature Card 2: Creature Gallery -->
+        <div class="feature-card bg-white rounded-2xl shadow-lg p-8 transform transition duration-300 hover:scale-105">
+            <div class="icon mb-6">
+                <i class="fas fa-kiwi-bird text-6xl" style="color: #2F4F2F;"></i>
+            </div>
+            <h3 class="text-2xl font-semibold text-gray-800 mb-3">Dynamic Creature Gallery</h3>
+            <p class="text-gray-600">
+                Unlock and evolve a collection of mystical creatures (including rare species like the Kiwi Bird) as you hit your focus milestones.
+            </p>
+        </div>
+
+      <!-- Feature Card 3: Testimonials -->
+      <div class="feature-card bg-white rounded-2xl shadow-lg p-8 transform transition duration-300 hover:scale-105">
+        <div class="icon mb-6">
+          <i class="fas fa-comment-dots text-6xl" style="color: #CE6246;"></i>
+        </div>
+        <h3 class="text-2xl font-semibold text-gray-800 mb-3">Immersive Testimonials</h3>
+        <p class="text-gray-600">
+          Read inspiring success stories from users who have transformed their productivity and supported conservation.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
 
   <!-- ADVANCED FOCUS TIMER WITH RADIAL PROGRESS -->
-  <section class="section" id="focus-timer">
-    <h2 class="sub-headline" style="margin-bottom: 1rem;">Interactive Focus Timer</h2>
-    
-    <!-- Timer Container -->
-    <div style="display: inline-block; position: relative; margin-bottom: 2rem;">
-      <svg id="timerRing" width="200" height="200">
-        <circle
-          id="timerCircleBg"
-          cx="100"
-          cy="100"
-          r="90"
-          fill="none"
-          stroke="#e5e5e5"
-          stroke-width="15"
-        ></circle>
-        <circle
-          id="timerCircle"
-          cx="100"
-          cy="100"
-          r="90"
-          fill="none"
-          stroke="#CE6246"
-          stroke-width="15"
-          stroke-linecap="round"
-          stroke-dasharray="565.48"
-          stroke-dashoffset="565.48"
-        ></circle>
-      </svg>
-      <div id="timerDisplay">00:00</div>
+<section class="section" id="focus-timer" style="text-align: center; font-family: 'Inter', sans-serif;">
+  <h2 class="sub-headline" style="margin-bottom: 1rem; color: #4D724D;">Interactive Focus Timer</h2>
+  
+  <!-- Timer Container -->
+  <div class="timer-container" style="display: inline-block; position: relative; margin-bottom: 2rem;">
+    <svg id="timerRing" width="220" height="220">
+      <!-- Background Circle -->
+      <circle
+        id="timerCircleBg"
+        cx="110"
+        cy="110"
+        r="95"
+        fill="none"
+        stroke="#e0e0e0"
+        stroke-width="15"
+      ></circle>
+      <!-- Progress Circle -->
+      <circle
+        id="timerCircle"
+        cx="110"
+        cy="110"
+        r="95"
+        fill="none"
+        stroke="#4D724D"
+        stroke-width="15"
+        stroke-linecap="round"
+        stroke-dasharray="597"
+        stroke-dashoffset="597"
+      ></circle>
+    </svg>
+    <div id="timerDisplay" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); font-size:2.5rem; color:#4D724D;">
+      25:00
     </div>
+  </div>
+  
+  <!-- Controls & Duration Input -->
+  <div style="margin-bottom: 1rem;">
+    <label for="timerInput" class="small-text" style="margin-right: 0.5rem; color:#555;">
+      Set Focus Time (minutes):
+    </label>
+    <input id="timerInput" type="number" min="1" max="999" value="25" style="padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; width: 60px; text-align: center;" />
+  </div>
+  
+  <!-- Action Buttons -->
+  <div class="timer-controls" style="display: inline-flex; gap: 1rem; margin-bottom: 1rem;">
+    <button id="startBtn" class="btn" onclick="startTimer()" style="width: 100px; border: none; background-color: #4D724D; color: #fff; padding: 0.5rem; border-radius: 4px;">
+      <i class="fas fa-play"></i> Start
+    </button>
+    <button id="pauseBtn" class="btn" onclick="togglePause()" style="width: 100px; border: none; background-color: #4D724D; color: #fff; padding: 0.5rem; border-radius: 4px;">
+      <i class="fas fa-pause"></i> Pause
+    </button>
+    <button id="resetBtn" class="btn" onclick="resetTimer()" style="width: 100px; border: none; background-color: #4D724D; color: #fff; padding: 0.5rem; border-radius: 4px;">
+      <i class="fas fa-sync-alt"></i> Reset
+    </button>
+  </div>
+  
+  <!-- Sound Options -->
+  <div style="margin-top: 1rem;">
+    <label for="soundSelect" class="small-text" style="margin-right: 0.5rem; color:#555;">Sound Option:</label>
+    <select id="soundSelect" style="padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+      <option value="beep">Beep</option>
+      <option value="chime">Chime</option>
+      <option value="alarm">Alarm</option>
+    </select>
+  </div>
+  
+  <!-- Audio Elements -->
+  <audio id="beepAudio" src="<?= $baseUrl ?>/audio/beep.mp3" preload="auto"></audio>
+  <audio id="chimeAudio" src="<?= $baseUrl ?>/audio/chime.mp3" preload="auto"></audio>
+  <audio id="alarmAudio" src="<?= $baseUrl ?>/audio/alarm.mp3" preload="auto"></audio>
+</section>
+
+<!-- CSS Styles for Pulse Effect -->
+<style>
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+  /* Class to apply pulse animation */
+  .pulse {
+    animation: pulse 1s ease-in-out infinite;
+  }
+  
+  /* Optional: Hover effect for buttons */
+  .btn:hover {
+    opacity: 0.9;
+  }
+</style>
+
+<!-- JavaScript for Timer Functionality & UI Updates -->
+<script>
+  let totalTime, remainingTime, timerInterval;
+  let isPaused = false;
+  
+  const timerCircle = document.getElementById('timerCircle');
+  const timerDisplay = document.getElementById('timerDisplay');
+  const startBtn = document.getElementById('startBtn');
+  const pauseBtn = document.getElementById('pauseBtn');
+  const timerInput = document.getElementById('timerInput');
+  
+  const audioElements = {
+    beep: document.getElementById('beepAudio'),
+    chime: document.getElementById('chimeAudio'),
+    alarm: document.getElementById('alarmAudio')
+  };
+  
+  function startTimer() {
+    // Lấy thời gian từ input (phút) và chuyển về giây
+    totalTime = parseInt(timerInput.value) * 60;
+    remainingTime = totalTime;
+    updateDisplay();
+    resetCircle();
+    // Phát âm thanh bắt đầu
+    playSound('beep');
     
-    <!-- Controls & Duration Input -->
-    <div style="margin-bottom: 1rem;">
-      <label for="timerInput" class="small-text" style="margin-right: 0.5rem;">
-        Set Focus Time (minutes):
-      </label>
-      <input id="timerInput" type="number" min="1" max="999" value="25" />
-    </div>
+    // Cài đặt lại các nút
+    startBtn.disabled = true;
+    pauseBtn.disabled = false;
+    pauseBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
+    isPaused = false;
     
-    <!-- Action Buttons -->
-    <div style="display: inline-flex; gap: 1rem;">
-      <button class="btn btn-primary" onclick="startTimer()" style="width: 100px;">Start</button>
-      <button class="btn btn-secondary" onclick="pauseTimer()" style="width: 100px;">Pause</button>
-      <button class="btn btn-secondary" onclick="resetTimer()" style="width: 100px;">Reset</button>
-    </div>
-    
-    <!-- Audio for Beep -->
-    <audio id="beepAudio" src="<?= $baseUrl ?>/audio/beep.mp3" preload="auto"></audio>
-  </section>
+    timerInterval = setInterval(() => {
+      if (!isPaused) {
+        remainingTime--;
+        updateDisplay();
+        updateCircle();
+        // Nếu thời gian dưới 10%, thêm hiệu ứng pulse cho vòng tròn
+        if (remainingTime / totalTime <= 0.1) {
+          timerCircle.classList.add('pulse');
+        } else {
+          timerCircle.classList.remove('pulse');
+        }
+        if (remainingTime <= 0) {
+          clearInterval(timerInterval);
+          playSound('alarm');
+          startBtn.disabled = false;
+          pauseBtn.disabled = true;
+        }
+      }
+    }, 1000);
+  }
+  
+  function updateDisplay() {
+    let minutes = Math.floor(remainingTime / 60);
+    let seconds = remainingTime % 60;
+    timerDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  }
+  
+  function resetCircle() {
+    // Tổng chu vi của vòng tròn
+    const circumference = 2 * Math.PI * timerCircle.getAttribute('r');
+    timerCircle.setAttribute('stroke-dasharray', circumference);
+    timerCircle.setAttribute('stroke-dashoffset', circumference);
+  }
+  
+  function updateCircle() {
+    const circumference = 2 * Math.PI * timerCircle.getAttribute('r');
+    const progress = (totalTime - remainingTime) / totalTime;
+    timerCircle.setAttribute('stroke-dashoffset', circumference * (1 - progress));
+  }
+  
+  function togglePause() {
+    if (!startBtn.disabled) return; // Nếu chưa bắt đầu, không làm gì
+    isPaused = !isPaused;
+    if (isPaused) {
+      pauseBtn.innerHTML = '<i class="fas fa-play"></i> Resume';
+      playSound('chime');
+    } else {
+      pauseBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
+    }
+  }
+  
+  function resetTimer() {
+    clearInterval(timerInterval);
+    remainingTime = totalTime;
+    updateDisplay();
+    resetCircle();
+    timerCircle.classList.remove('pulse');
+    startBtn.disabled = false;
+    pauseBtn.disabled = false;
+    pauseBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
+  }
+  
+  function playSound(type) {
+    // Lấy giá trị âm thanh đã chọn từ dropdown
+    const selectedSound = document.getElementById('soundSelect').value;
+    // Phát âm thanh dựa trên loại sự kiện
+    if (type === 'beep') {
+      audioElements[selectedSound].currentTime = 0;
+      audioElements[selectedSound].play();
+    } else if (type === 'chime') {
+      audioElements[selectedSound].currentTime = 0;
+      audioElements[selectedSound].play();
+    } else if (type === 'alarm') {
+      audioElements[selectedSound].currentTime = 0;
+      audioElements[selectedSound].play();
+    }
+  }
+</script>
+
 
   
   <!-- ADVANCED TESTIMONIALS CAROUSEL -->
