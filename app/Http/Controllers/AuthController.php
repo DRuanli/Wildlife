@@ -52,7 +52,7 @@ class AuthController extends Controller
     {
         // If user is already logged in, redirect to dashboard
         if ($this->isLoggedIn()) {
-            $this->redirect('/dashboard');
+            $this->redirect('/');
             return;
         }
         

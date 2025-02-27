@@ -22,7 +22,7 @@ class HomeController extends Controller
     {
         // If user is logged in, redirect to dashboard
         if (isset($_SESSION['logged_in']) && $_SESSION['logged_in']) {
-            $this->redirect('/dashboard');
+            $this->redirect('');
             return;
         }
         
