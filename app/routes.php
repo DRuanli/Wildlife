@@ -48,5 +48,8 @@ function getRoutes() {
         '/shop/history' => 'ShopController@history',
         '/shop/wishlist' => 'ShopController@wishlist',
         '/shop/conservation' => 'ShopController@conservation',
+
+        // Creature gallery routes
+        '/creature-gallery' => 'GalleryController@index',
     ];
 }
