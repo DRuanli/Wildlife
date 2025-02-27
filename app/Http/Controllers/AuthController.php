@@ -100,7 +100,6 @@ class AuthController extends Controller
             $this->redirect('/auth/login');
             return;
         }
-        
         // Login successful - create session
         $this->createUserSession($user);
         

@@ -55,11 +55,15 @@ class Controller
      * @param string $url URL to redirect to
      * @return void
      */
-    protected function redirect($url)
-    {
-        header("Location: {$url}");
-        exit;
+    protected function redirect($path) {
+        // Prepend '/Wildlife' to the path if it doesn't already start with it
+        $prefixedPath = (strpos($path, '/Wildlife') === 0) ? $path : '/Wildlife' . $path;
+        
+        // Perform the actual redirection
+        header("Location: " . $prefixedPath);
+        exit();
     }
+    
     
     /**
      * Set flash message for the next request
