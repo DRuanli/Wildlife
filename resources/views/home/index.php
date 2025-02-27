@@ -99,11 +99,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: url('<?= $baseUrl ?>/public/img/jonatan-pie-d7ZBAPEuXGc-unsplash.jpg') center/cover no-repeat;
+    background: url('<?= $baseUrl ?>/public/videos/vid.mov') center/cover no-repeat;
     color: #fff;
   }
   .hero::after {
-    content: "";
+    content: ""; 
     position: absolute;
     inset: 0;
     background: rgba(0, 0, 0, 0.4);
@@ -368,59 +368,18 @@
             </div>
           </div>
         </div>
-        
+
         <div class="advanced-card" x-data="{ flipped: false }" @click="flipped = !flipped">
           <div class="advanced-card-content" :style="{ transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }">
+            <!-- Front Face -->
             <div class="advanced-card-front">
-              <img src="<?= $baseUrl ?>/images/icon-trust.png" alt="Trust Icon" class="card-icon" />
-              <h3 class="sub-headline card-title">Trustworthy</h3>
-              <p class="body-text card-desc">
-                We combine best-in-class LLM risk mitigation with rigorous testing to protect your brand and community from harm.
-              </p>
+              <img src="<?= $baseUrl ?>/public/img/snow_leopard.png" alt="Secure Icon" class="card-icon" />
             </div>
+            <!-- Back Face -->
             <div class="advanced-card-back">
-              <h4 class="sub-headline" style="margin-bottom: 0.5rem;">Featured Post</h4>
+              <h4 class="sub-headline" style="margin-bottom: 0.5rem;">Snow Leopard (Panthera uncia)</h4>
               <p class="small-text">
-                <em>Challenges in Red Teaming AI Systems</em><br />
-                Discover how we continually test and refine our defenses against AI vulnerabilities.
-              </p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="advanced-card" x-data="{ flipped: false }" @click="flipped = !flipped">
-          <div class="advanced-card-content" :style="{ transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }">
-            <div class="advanced-card-front">
-              <img src="<?= $baseUrl ?>/images/icon-learning.png" alt="Learning Icon" class="card-icon" />
-              <h3 class="sub-headline card-title">Continuous Learning</h3>
-              <p class="body-text card-desc">
-                Our platform evolves alongside user feedback, ensuring advanced model fine-tuning and seamless improvements for your productivity.
-              </p>
-            </div>
-            <div class="advanced-card-back">
-              <h4 class="sub-headline" style="margin-bottom: 0.5rem;">Featured Paper</h4>
-              <p class="small-text">
-                <em>Red Teaming Language Models to Reduce Harm</em><br />
-                A deeper look into how we identify and address emerging risks in real time.
-              </p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="advanced-card" x-data="{ flipped: false }" @click="flipped = !flipped">
-          <div class="advanced-card-content" :style="{ transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }">
-            <div class="advanced-card-front">
-              <img src="<?= $baseUrl ?>/images/icon-evolving.png" alt="Evolving Icon" class="card-icon" />
-              <h3 class="sub-headline card-title">Evolving</h3>
-              <p class="body-text card-desc">
-                We refine our approach constantly—building a more inclusive, transparent AI experience with every iteration.
-              </p>
-            </div>
-            <div class="advanced-card-back">
-              <h4 class="sub-headline" style="margin-bottom: 0.5rem;">Featured Paper</h4>
-              <p class="small-text">
-                <em>Evaluating and Mitigating Discrimination in Language Model Decisions</em><br />
-                How we foster fairness and accountability in AI-driven environments.
+                <em>Inhabiting the high mountains of Central Asia, the snow leopard is a symbol of strength but is at risk due to illegal hunting and habitat loss.</em>
               </p>
             </div>
           </div>
@@ -428,18 +387,15 @@
 
         <div class="advanced-card" x-data="{ flipped: false }" @click="flipped = !flipped">
           <div class="advanced-card-content" :style="{ transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }">
+            <!-- Front Face -->
             <div class="advanced-card-front">
-              <img src="<?= $baseUrl ?>/images/icon-evolving.png" alt="Evolving Icon" class="card-icon" />
-              <h3 class="sub-headline card-title">Evolving</h3>
-              <p class="body-text card-desc">
-                We refine our approach constantly—building a more inclusive, transparent AI experience with every iteration.
-              </p>
+              <img src="<?= $baseUrl ?>/public/img/whale.png" alt="Secure Icon" class="card-icon" />
             </div>
+            <!-- Back Face -->
             <div class="advanced-card-back">
-              <h4 class="sub-headline" style="margin-bottom: 0.5rem;">Featured Paper</h4>
+              <h4 class="sub-headline" style="margin-bottom: 0.5rem;">Blue Whale (Balaenoptera musculus)</h4>
               <p class="small-text">
-                <em>Evaluating and Mitigating Discrimination in Language Model Decisions</em><br />
-                How we foster fairness and accountability in AI-driven environments.
+                <em>As the largest animal on Earth, the blue whale is under severe pressure from hunting and ocean pollution, making it extremely rare.</em>
               </p>
             </div>
           </div>
@@ -447,18 +403,47 @@
 
         <div class="advanced-card" x-data="{ flipped: false }" @click="flipped = !flipped">
           <div class="advanced-card-content" :style="{ transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }">
+            <!-- Front Face -->
             <div class="advanced-card-front">
-              <img src="<?= $baseUrl ?>/images/icon-evolving.png" alt="Evolving Icon" class="card-icon" />
-              <h3 class="sub-headline card-title">Evolving</h3>
-              <p class="body-text card-desc">
-                We refine our approach constantly—building a more inclusive, transparent AI experience with every iteration.
+              <img src="<?= $baseUrl ?>/public/img/ele.png" alt="Secure Icon" class="card-icon" />
+            </div>
+            <!-- Back Face -->
+            <div class="advanced-card-back">
+              <h4 class="sub-headline" style="margin-bottom: 0.5rem;">Asian Elephant (Elephas maximus)</h4>
+              <p class="small-text">
+                <em>Asian elephants are severely threatened by habitat loss and human-wildlife conflict. They play a vital role in maintaining the biodiversity of Asian forests.</em>
               </p>
             </div>
+          </div>
+        </div>
+
+        <div class="advanced-card" x-data="{ flipped: false }" @click="flipped = !flipped">
+          <div class="advanced-card-content" :style="{ transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }">
+            <!-- Front Face -->
+            <div class="advanced-card-front">
+              <img src="<?= $baseUrl ?>/public/img/rhino.png" alt="Secure Icon" class="card-icon" />
+            </div>
+            <!-- Back Face -->
             <div class="advanced-card-back">
-              <h4 class="sub-headline" style="margin-bottom: 0.5rem;">Featured Paper</h4>
+              <h4 class="sub-headline" style="margin-bottom: 0.5rem;">Sumatran Rhinoceros (Dicerorhinus sumatrensis)</h4>
               <p class="small-text">
-                <em>Evaluating and Mitigating Discrimination in Language Model Decisions</em><br />
-                How we foster fairness and accountability in AI-driven environments.
+                <em>This species is one of the smallest and rarest rhinoceroses in the world. It is critically endangered due to poaching and habitat destruction.</em>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="advanced-card" x-data="{ flipped: false }" @click="flipped = !flipped">
+          <div class="advanced-card-content" :style="{ transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }">
+            <!-- Front Face -->
+            <div class="advanced-card-front">
+              <img src="<?= $baseUrl ?>/public/img/IndochineseTiger.jpg" alt="Secure Icon" class="card-icon" />
+            </div>
+            <!-- Back Face -->
+            <div class="advanced-card-back">
+              <h4 class="sub-headline" style="margin-bottom: 0.5rem;">Indochinese Tiger (Panthera tigris corbetti)</h4>
+              <p class="small-text">
+                <em>One of the most endangered tiger species, the Indochinese tiger faces habitat loss and illegal poaching. It plays a crucial role in the tropical forest ecosystem of Southeast Asia.</em>
               </p>
             </div>
           </div>
