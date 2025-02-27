@@ -119,7 +119,7 @@
                 <!-- Coin Interactions -->
                 <div class="mt-4 flex justify-between items-center">
                     <div class="text-sm text-gray-500">Available to spend</div>
-                    <a href="<?= $baseUrl ?>/marketplace" class="text-yellow-500 hover:text-yellow-600 text-sm font-medium flex items-center">
+                    <a href="<?= $baseUrl ?>/shop" class="text-yellow-500 hover:text-yellow-600 text-sm font-medium flex items-center">
                         <span>Shop</span>
                         <i class="fas fa-chevron-right ml-1 text-xs"></i>
                     </a>

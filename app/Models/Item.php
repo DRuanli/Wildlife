@@ -136,37 +136,7 @@ class Item
      * @param int $limit Maximum number of items to return
      * @return array Array of featured items
      */
-    public function getFeatured($limit = 5)
-    {
-        $now = date('Y-m-d H:i:s');
-        
-        $stmt = $this->db->prepare('
-            SELECT i.*
-            FROM Items i
-            JOIN FeaturedItems fi ON i.id = fi.item_id
-            WHERE (fi.start_date IS NULL OR fi.start_date <= :now)
-            AND (fi.end_date IS NULL OR fi.end_date >= :now)
-            AND (i.available_from IS NULL OR i.available_from <= :now)
-            AND (i.available_until IS NULL OR i.available_until >= :now)
-            ORDER BY fi.priority DESC
-            LIMIT :limit
-        ');
-        
-        $stmt->bindParam(':now', $now, \PDO::PARAM_STR);
-        $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
-        $stmt->execute();
-        
-        $items = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        
-        // Parse JSON fields
-        foreach ($items as &$item) {
-            if (isset($item['conservation_impact'])) {
-                $item['conservation_impact'] = json_decode($item['conservation_impact'], true);
-            }
-        }
-        
-        return $items;
-    }
+    
     
     /**
      * Get daily deals
@@ -174,66 +144,7 @@ class Item
      * @param int $limit Maximum number of deals to return
      * @return array Array of daily deal items
      */
-    public function getDailyDeals($limit = 5)
-    {
-        $today = date('Y-m-d');
-        $now = date('Y-m-d H:i:s');
-        
-        // Calculate seed for consistent daily deals
-        $seed = date('Ymd');
-        $this->db->query("SET @seed = {$seed}");
-        
-        $stmt = $this->db->prepare('
-            SELECT i.*, 
-                   dd.discount_percentage,
-                   ROUND(i.price * (1 - dd.discount_percentage / 100)) as discounted_price
-            FROM Items i
-            JOIN DailyDeals dd ON i.id = dd.item_id
-            WHERE dd.deal_date = :today
-            AND (i.available_from IS NULL OR i.available_from <= :now)
-            AND (i.available_until IS NULL OR i.available_until >= :now)
-            ORDER BY dd.priority DESC
-            LIMIT :limit
-        ');
-        
-        $stmt->bindParam(':today', $today, \PDO::PARAM_STR);
-        $stmt->bindParam(':now', $now, \PDO::PARAM_STR);
-        $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
-        $stmt->execute();
-        
-        $deals = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        
-        // If no deals are scheduled for today, generate random deals
-        if (empty($deals)) {
-            $stmt = $this->db->prepare('
-                SELECT i.*,
-                       FLOOR(20 + (RAND() * 30)) as discount_percentage,
-                       ROUND(i.price * (1 - (20 + (RAND() * 30)) / 100)) as discounted_price
-                FROM Items i
-                WHERE i.price > 100
-                AND (i.available_from IS NULL OR i.available_from <= :now)
-                AND (i.available_until IS NULL OR i.available_until >= :now)
-                AND i.rarity IN ("uncommon", "rare", "legendary")
-                ORDER BY RAND()
-                LIMIT :limit
-            ');
-            
-            $stmt->bindParam(':now', $now, \PDO::PARAM_STR);
-            $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
-            $stmt->execute();
-            
-            $deals = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        }
-        
-        // Parse JSON fields
-        foreach ($deals as &$deal) {
-            if (isset($deal['conservation_impact'])) {
-                $deal['conservation_impact'] = json_decode($deal['conservation_impact'], true);
-            }
-        }
-        
-        return $deals;
-    }
+    
     
     /**
      * Get recently viewed items for a user

@@ -44,6 +44,9 @@ function getRoutes() {
         '/creatures/habitat' => 'CreatureController@moveToHabitat',
 
         // Shop controller routes
-        '/shop' => 'ShopController@index'
+        '/shop' => 'ShopController@index',
+        '/shop/history' => 'ShopController@history',
+        '/shop/wishlist' => 'ShopController@wishlist',
+        '/shop/conservation' => 'ShopController@conservation',
     ];
 }

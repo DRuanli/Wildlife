@@ -74,19 +74,12 @@ class ShopController extends Controller
         $habitatModel = new Habitat($this->db);
         $userHabitats = $habitatModel->findByUserId($userId);
         
-        // Get featured items
-        $featuredItems = $this->itemModel->getFeatured();
-        
-        // Get daily deals
-        $dailyDeals = $this->itemModel->getDailyDeals();
-        
         // Get user's recently viewed items
         $recentlyViewed = $this->itemModel->getRecentlyViewed($userId);
         
         // Get conservation partners and statistics
         $conservationModel = new ConservationPartner($this->db);
         $conservationPartners = $conservationModel->getAll();
-        $conservationStats = $conservationModel->getGlobalStats();
         
         // Organize items by category
         $organizedItems = [
@@ -113,11 +106,8 @@ class ShopController extends Controller
             'items' => $items,
             'userCreatures' => $userCreatures,
             'userHabitats' => $userHabitats,
-            'featuredItems' => $featuredItems,
-            'dailyDeals' => $dailyDeals,
             'recentlyViewed' => $recentlyViewed,
             'conservationPartners' => $conservationPartners,
-            'conservationStats' => $conservationStats,
             'organizedItems' => $organizedItems,
             'baseUrl' => '/Wildlife' // Base URL for assets
         ]);
@@ -542,24 +532,16 @@ class ShopController extends Controller
         $user = $this->userModel->findById($userId);
         $userCoins = $user['coins_balance'] ?? 0;
         
-        // Get conservation packages
-        $conservationPackages = $this->itemModel->getByType('conservation_package');
-        
         // Get conservation partners
         $conservationModel = new ConservationPartner($this->db);
         $partners = $conservationModel->getAll();
         
         // Get global and user conservation stats
-        $globalStats = $conservationModel->getGlobalStats();
-        $userStats = $conservationModel->getUserStats($userId);
         
         // Render the conservation shop view
         $this->render('shop/conservation', [
             'userCoins' => $userCoins,
-            'conservationPackages' => $conservationPackages,
             'partners' => $partners,
-            'globalStats' => $globalStats,
-            'userStats' => $userStats,
             'baseUrl' => '/Wildlife' // Base URL for assets
         ]);
     }
