@@ -368,7 +368,7 @@
 
 <!-- Hidden Audio Elements -->
 <audio id="ambient-sound" loop>
-  <source src="<?= $baseUrl ?>/audio/ambient_nature.mp3" type="audio/mpeg">
+  <source src="<?= $baseUrl ?>/resources/audio/ambient_nature.mp3" type="audio/mpeg">
 </audio>
 <audio id="creature-sound">
   <source src="" type="audio/mpeg">
