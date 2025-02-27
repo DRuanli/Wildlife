@@ -95,11 +95,14 @@ class AuthController extends Controller
         }
         
         // Check if email is verified
+        /* Future implementation
         if (!$user['email_verified_at']) {
             $this->setFlashMessage('Please verify your email address before logging in.', 'warning');
             $this->redirect('/auth/login');
             return;
         }
+        */
+        
         // Login successful - create session
         $this->createUserSession($user);
         
