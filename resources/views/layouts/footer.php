@@ -1,6 +1,7 @@
 <?php
 // Path: resources/views/layouts/footer.php
-// Sử dụng biến $baseUrl từ header.php
+// Use BASE_URL which is defined in index.php
+$baseUrl = BASE_URL;
 ?>
 
 </main>
@@ -10,7 +11,7 @@
         <div class="flex flex-col md:flex-row justify-between">
             <div class="mb-6 md:mb-0">
                 <div class="flex items-center">
-                    <img src="<?= asset('images/logo.png') ?>" alt="Wildlife Haven Logo" class="h-10 w-auto mr-2">
+                    <img src="<?= $baseUrl ?>/assets/images/logo.png" alt="Wildlife Haven Logo" class="h-10 w-auto mr-2">
                     <span class="text-xl font-bold">Wildlife Haven</span>
                 </div>
                 <p class="mt-2 text-gray-400">
@@ -22,10 +23,10 @@
                 <div>
                     <h3 class="text-sm font-semibold text-gray-300 uppercase tracking-wider">App</h3>
                     <ul class="mt-4 space-y-2">
-                        <li><a href="<?= url('dashboard') ?>" class="text-gray-400 hover:text-white">Dashboard</a></li>
-                        <li><a href="<?= url('focus') ?>" class="text-gray-400 hover:text-white">Focus Timer</a></li>
-                        <li><a href="<?= url('creatures') ?>" class="text-gray-400 hover:text-white">Creatures</a></li>
-                        <li><a href="<?= url('habitats') ?>" class="text-gray-400 hover:text-white">Habitats</a></li>
+                        <li><a href="<?= $baseUrl ?>/dashboard" class="text-gray-400 hover:text-white">Dashboard</a></li>
+                        <li><a href="<?= $baseUrl ?>/focus" class="text-gray-400 hover:text-white">Focus Timer</a></li>
+                        <li><a href="<?= $baseUrl ?>/creatures" class="text-gray-400 hover:text-white">Creatures</a></li>
+                        <li><a href="<?= $baseUrl ?>/habitats" class="text-gray-400 hover:text-white">Habitats</a></li>
                     </ul>
                 </div>
                 

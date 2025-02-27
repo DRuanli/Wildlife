@@ -11,13 +11,13 @@ $baseUrl = BASE_URL;
     <title>Wildlife Haven - Focus and Conservation</title>
     
     <!-- Favicon -->
-    <link rel="icon" href="<?= asset('images/favicon.ico') ?>" type="image/x-icon">
+    <link rel="icon" href="<?= $baseUrl ?>/assets/images/favicon.ico" type="image/x-icon">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="<?= asset('css/styles.css') ?>">
+    <link rel="stylesheet" href="<?= $baseUrl ?>/assets/css/styles.css">
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
@@ -27,21 +27,21 @@ $baseUrl = BASE_URL;
         <div class="container mx-auto px-4 py-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <a href="<?= url('/') ?>" class="flex items-center">
-                        <img src="<?= asset('images/logo.png') ?>" alt="Wildlife Haven Logo" class="h-10 w-auto mr-2">
+                    <a href="<?= $baseUrl ?>/" class="flex items-center">
+                        <img src="<?= $baseUrl ?>/assets/images/logo.png" alt="Wildlife Haven Logo" class="h-10 w-auto mr-2">
                         <span class="text-xl font-bold">Wildlife Haven</span>
                     </a>
                 </div>
                 
                 <div class="hidden md:flex items-center space-x-4">
                     <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in']): ?>
-                        <a href="<?= url('dashboard') ?>" class="px-3 py-2 rounded hover:bg-green-700">Dashboard</a>
-                        <a href="<?= url('focus') ?>" class="px-3 py-2 rounded hover:bg-green-700">Focus</a>
-                        <a href="<?= url('creatures') ?>" class="px-3 py-2 rounded hover:bg-green-700">Creatures</a>
-                        <a href="<?= url('habitats') ?>" class="px-3 py-2 rounded hover:bg-green-700">Habitats</a>
-                        <a href="<?= url('marketplace') ?>" class="px-3 py-2 rounded hover:bg-green-700">Marketplace</a>
-                        <a href="<?= url('conservation') ?>" class="px-3 py-2 rounded hover:bg-green-700">Conservation</a>
-                        <a href="<?= url('community') ?>" class="px-3 py-2 rounded hover:bg-green-700">Community</a>
+                        <a href="<?= $baseUrl ?>/dashboard" class="px-3 py-2 rounded hover:bg-green-700">Dashboard</a>
+                        <a href="<?= $baseUrl ?>/focus" class="px-3 py-2 rounded hover:bg-green-700">Focus</a>
+                        <a href="<?= $baseUrl ?>/creatures" class="px-3 py-2 rounded hover:bg-green-700">Creatures</a>
+                        <a href="<?= $baseUrl ?>/habitats" class="px-3 py-2 rounded hover:bg-green-700">Habitats</a>
+                        <a href="<?= $baseUrl ?>/marketplace" class="px-3 py-2 rounded hover:bg-green-700">Marketplace</a>
+                        <a href="<?= $baseUrl ?>/conservation" class="px-3 py-2 rounded hover:bg-green-700">Conservation</a>
+                        <a href="<?= $baseUrl ?>/community" class="px-3 py-2 rounded hover:bg-green-700">Community</a>
                         
                         <div class="relative ml-3">
                             <button id="user-menu-button" class="flex items-center">
@@ -59,15 +59,15 @@ $baseUrl = BASE_URL;
                             </button>
                             
                             <div id="user-menu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 text-gray-700">
-                                <a href="/dashboard/profile" class="block px-4 py-2 hover:bg-gray-100">Profile</a>
-                                <a href="/dashboard/settings" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
+                                <a href="<?= $baseUrl ?>/dashboard/profile" class="block px-4 py-2 hover:bg-gray-100">Profile</a>
+                                <a href="<?= $baseUrl ?>/dashboard/settings" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
                                 <div class="border-t border-gray-200"></div>
-                                <a href="/auth/logout" class="block px-4 py-2 hover:bg-gray-100">Sign out</a>
+                                <a href="<?= $baseUrl ?>/auth/logout" class="block px-4 py-2 hover:bg-gray-100">Sign out</a>
                             </div>
                         </div>
                      <?php else: ?>
-                        <a href="<?= url('auth/login') ?>" class="px-3 py-2 rounded hover:bg-green-700">Sign In</a>
-                        <a href="<?= url('auth/register') ?>" class="px-3 py-2 bg-white text-green-600 font-medium rounded hover:bg-gray-100">Sign Up</a>
+                        <a href="<?= $baseUrl ?>/auth/login" class="px-3 py-2 rounded hover:bg-green-700">Sign In</a>
+                        <a href="<?= $baseUrl ?>/auth/register" class="px-3 py-2 bg-white text-green-600 font-medium rounded hover:bg-gray-100">Sign Up</a>
                     <?php endif; ?>
                 </div>
                 
@@ -84,20 +84,20 @@ $baseUrl = BASE_URL;
             <!-- Mobile menu -->
             <div id="mobile-menu" class="hidden md:hidden mt-3 space-y-1 pb-3">
                 <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in']): ?>
-                    <a href="/dashboard" class="block px-3 py-2 rounded hover:bg-green-700">Dashboard</a>
-                    <a href="/focus" class="block px-3 py-2 rounded hover:bg-green-700">Focus</a>
-                    <a href="/creatures" class="block px-3 py-2 rounded hover:bg-green-700">Creatures</a>
-                    <a href="/habitats" class="block px-3 py-2 rounded hover:bg-green-700">Habitats</a>
-                    <a href="/marketplace" class="block px-3 py-2 rounded hover:bg-green-700">Marketplace</a>
-                    <a href="/conservation" class="block px-3 py-2 rounded hover:bg-green-700">Conservation</a>
-                    <a href="/community" class="block px-3 py-2 rounded hover:bg-green-700">Community</a>
+                    <a href="<?= $baseUrl ?>/dashboard" class="block px-3 py-2 rounded hover:bg-green-700">Dashboard</a>
+                    <a href="<?= $baseUrl ?>/focus" class="block px-3 py-2 rounded hover:bg-green-700">Focus</a>
+                    <a href="<?= $baseUrl ?>/creatures" class="block px-3 py-2 rounded hover:bg-green-700">Creatures</a>
+                    <a href="<?= $baseUrl ?>/habitats" class="block px-3 py-2 rounded hover:bg-green-700">Habitats</a>
+                    <a href="<?= $baseUrl ?>/marketplace" class="block px-3 py-2 rounded hover:bg-green-700">Marketplace</a>
+                    <a href="<?= $baseUrl ?>/conservation" class="block px-3 py-2 rounded hover:bg-green-700">Conservation</a>
+                    <a href="<?= $baseUrl ?>/community" class="block px-3 py-2 rounded hover:bg-green-700">Community</a>
                     <div class="border-t border-green-700 my-2"></div>
-                    <a href="/dashboard/profile" class="block px-3 py-2 rounded hover:bg-green-700">Profile</a>
-                    <a href="/dashboard/settings" class="block px-3 py-2 rounded hover:bg-green-700">Settings</a>
-                    <a href="/auth/logout" class="block px-3 py-2 rounded hover:bg-green-700">Sign out</a>
+                    <a href="<?= $baseUrl ?>/dashboard/profile" class="block px-3 py-2 rounded hover:bg-green-700">Profile</a>
+                    <a href="<?= $baseUrl ?>/dashboard/settings" class="block px-3 py-2 rounded hover:bg-green-700">Settings</a>
+                    <a href="<?= $baseUrl ?>/auth/logout" class="block px-3 py-2 rounded hover:bg-green-700">Sign out</a>
                 <?php else: ?>
-                    <a href="/auth/login" class="block px-3 py-2 rounded hover:bg-green-700">Sign In</a>
-                    <a href="/auth/register" class="block px-3 py-2 rounded hover:bg-green-700">Sign Up</a>
+                    <a href="<?= $baseUrl ?>/auth/login" class="block px-3 py-2 rounded hover:bg-green-700">Sign In</a>
+                    <a href="<?= $baseUrl ?>/auth/register" class="block px-3 py-2 rounded hover:bg-green-700">Sign Up</a>
                 <?php endif; ?>
             </div>
         </div>
