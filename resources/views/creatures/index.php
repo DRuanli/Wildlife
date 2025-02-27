@@ -1,428 +1,486 @@
 <?php require_once ROOT_PATH . '/resources/views/layouts/header.php'; ?>
 
-<div class="min-h-screen bg-gradient-to-b from-green-50 to-white pb-12">
-    <!-- Creatures Hero Banner -->
-    <div class="relative overflow-hidden bg-purple-600 text-white">
-        <div class="absolute opacity-20 right-0 top-0 w-full h-full">
-            <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
-                <defs>
-                    <pattern id="pattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-                        <path d="M0 40L40 0" stroke="currentColor" stroke-width="1" fill="none" />
-                    </pattern>
-                </defs>
-                <rect width="100%" height="100%" fill="url(#pattern)" />
-            </svg>
-        </div>
-        <div class="container mx-auto px-4 py-8 relative z-10">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="mb-6 md:mb-0">
-                    <h1 class="text-3xl md:text-4xl font-bold mb-2">My Mythical Creatures</h1>
-                    <p class="text-purple-100 text-lg">Collect, grow, and evolve your wildlife companion creatures</p>
-                </div>
-                <div class="flex space-x-2">
-                    <a href="<?= $baseUrl ?>/focus" class="px-4 py-2 bg-white text-purple-700 rounded-lg text-sm font-medium hover:bg-purple-50 transition-colors shadow-md">
-                        <i class="fas fa-clock mr-2"></i> Start Focus to Grow
-                    </a>
-                </div>
-            </div>
+<div class="min-h-screen bg-[#F9F8F4]">
+    <!-- Page Header - Inspired by Anthropic's clean headers -->
+    <div class="pt-24 pb-16 px-6 md:px-12 max-w-7xl mx-auto">
+        <h1 class="text-4xl md:text-5xl font-display font-medium text-gray-900 mb-4">Your Wildlife Collection</h1>
+        <p class="text-xl text-gray-600 max-w-3xl">Nurture and evolve your mythical companions through focused attention.</p>
+        
+        <div class="flex flex-wrap gap-4 mt-8">
+            <a href="<?= $baseUrl ?>/focus" class="inline-flex items-center px-6 py-3 rounded-full bg-[#4D724D] text-white font-medium hover:bg-[#3D5D3D] transition-colors shadow-sm">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Start Focus Session
+            </a>
+            <a href="<?= $baseUrl ?>/shop" class="inline-flex items-center px-6 py-3 rounded-full bg-white text-[#4D724D] font-medium hover:bg-gray-50 transition-colors shadow-sm border border-[#4D724D]">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                </svg>
+                Visit Shop
+            </a>
         </div>
     </div>
-
-    <div class="container mx-auto px-4 -mt-6">
-        <!-- Creature Collection Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <!-- Overall Collection -->
-            <div class="bg-white rounded-xl shadow-md overflow-hidden">
-                <div class="bg-gradient-to-r from-purple-600 to-purple-700 px-6 py-4">
-                    <h3 class="text-lg font-bold text-white">My Collection</h3>
-                </div>
-                <div class="p-6">
-                    <div class="grid grid-cols-2 gap-4 mb-4">
-                        <div class="bg-purple-50 rounded-lg p-4 text-center">
-                            <p class="text-sm text-purple-600 font-medium">Total Creatures</p>
-                            <p class="text-3xl font-bold text-gray-800"><?= count($creatures) ?></p>
+    
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-6 md:px-12 pb-24">
+        <!-- Collection Overview - Stats Cards -->
+        <div class="mb-16">
+            <h2 class="text-2xl font-medium text-gray-900 mb-6">Collection Overview</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
+                <!-- Total Collection -->
+                <div class="col-span-1 md:col-span-2 bg-white rounded-2xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-lg font-medium text-gray-800 mb-1">Total Collection</h3>
+                            <p class="text-3xl font-semibold"><?= count($creatures) ?> creatures</p>
+                            
+                            <div class="mt-4 flex space-x-6">
+                                <div>
+                                    <p class="text-sm text-gray-500 mb-1">Species Found</p>
+                                    <?php
+                                    // Calculate unique species count
+                                    $uniqueSpecies = [];
+                                    foreach ($creatures as $creature) {
+                                        $uniqueSpecies[$creature['species_id']] = true;
+                                    }
+                                    $speciesCount = count($uniqueSpecies);
+                                    ?>
+                                    <p class="text-lg font-medium"><?= $speciesCount ?><span class="text-sm text-gray-400 ml-1">/ 24</span></p>
+                                </div>
+                                
+                                <div>
+                                    <p class="text-sm text-gray-500 mb-1">Mythical Stage</p>
+                                    <p class="text-lg font-medium"><?= isset($organized['mythicals']) ? count($organized['mythicals']) : 0 ?></p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="bg-purple-50 rounded-lg p-4 text-center">
-                            <p class="text-sm text-purple-600 font-medium">Species Found</p>
-                            <?php
-                            // Calculate unique species count
-                            $uniqueSpecies = [];
-                            foreach ($creatures as $creature) {
-                                $uniqueSpecies[$creature['species_id']] = true;
-                            }
-                            $speciesCount = count($uniqueSpecies);
-                            ?>
-                            <p class="text-3xl font-bold text-gray-800"><?= $speciesCount ?></p>
+                        
+                        <div class="h-14 w-14 rounded-full bg-[#F2F5F2] flex items-center justify-center">
+                            <svg class="w-7 h-7 text-[#4D724D]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                            </svg>
                         </div>
                     </div>
                     
-                    <!-- Collection Progress -->
-                    <div class="mt-4">
+                    <!-- Progress Bar -->
+                    <div class="mt-6">
                         <div class="flex justify-between text-sm mb-1">
-                            <span class="text-gray-700 font-medium">Collection Progress</span>
-                            <span class="text-purple-600"><?= $speciesCount ?>/24</span>
+                            <span class="text-gray-600">Collection Progress</span>
+                            <span class="text-[#4D724D]"><?= $speciesCount ?>/24</span>
                         </div>
-                        <div class="h-3 bg-gray-200 rounded-full overflow-hidden mb-4">
-                            <div class="h-full bg-gradient-to-r from-purple-500 to-purple-700 rounded-full" style="width: <?= ($speciesCount / 24) * 100 ?>%"></div>
+                        <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-[#4D724D] rounded-full" style="width: <?= ($speciesCount / 24) * 100 ?>%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Lifecycle Distribution -->
+                <div class="col-span-1 md:col-span-3 bg-white rounded-2xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
+                    <div class="flex justify-between items-start mb-6">
+                        <h3 class="text-lg font-medium text-gray-800">Lifecycle Distribution</h3>
+                        
+                        <div class="h-10 w-10 rounded-full bg-[#F2F5F2] flex items-center justify-center">
+                            <svg class="w-5 h-5 text-[#4D724D]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <!-- Lifecycle Stage Distribution with subtle, anthropic-inspired styling -->
+                    <div class="grid grid-cols-5 gap-2">
+                        <!-- Eggs -->
+                        <div class="flex flex-col items-center">
+                            <div class="w-full aspect-square rounded-xl bg-gray-50 flex flex-col items-center justify-center gap-2 relative overflow-hidden group">
+                                <div class="absolute inset-0 bg-yellow-50 transform origin-bottom transition-all duration-300 ease-out" 
+                                     style="height: <?= isset($organized['eggs']) ? (count($organized['eggs']) / max(1, count($creatures)) * 100) : 0 ?>%"></div>
+                                <svg class="w-7 h-7 text-yellow-500 relative z-10" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 22C8.5 22 5 18.5 5 13.5C5 8.5 8 3 12 3C16 3 19 8.5 19 13.5C19 18.5 15.5 22 12 22Z"></path>
+                                </svg>
+                                <span class="text-lg font-medium text-gray-800 relative z-10"><?= isset($organized['eggs']) ? count($organized['eggs']) : 0 ?></span>
+                            </div>
+                            <span class="text-sm text-gray-600 mt-2">Eggs</span>
                         </div>
                         
-                        <!-- Collection Stats -->
-                        <div class="grid grid-cols-5 gap-1 my-4">
-                            <div class="flex flex-col items-center">
-                                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mb-1">
-                                    <i class="fas fa-egg text-sm"></i>
-                                </div>
-                                <span class="text-xs font-medium text-gray-700"><?= isset($organized['eggs']) ? count($organized['eggs']) : 0 ?></span>
+                        <!-- Babies -->
+                        <div class="flex flex-col items-center">
+                            <div class="w-full aspect-square rounded-xl bg-gray-50 flex flex-col items-center justify-center gap-2 relative overflow-hidden group">
+                                <div class="absolute inset-0 bg-blue-50 transform origin-bottom transition-all duration-300 ease-out" 
+                                     style="height: <?= isset($organized['babies']) ? (count($organized['babies']) / max(1, count($creatures)) * 100) : 0 ?>%"></div>
+                                <svg class="w-7 h-7 text-blue-500 relative z-10" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 12.5C11.5 12.5 11 12.3 10.6 11.9C10.2 11.5 10 11 10 10.5C10 10 10.2 9.5 10.6 9.1C11 8.7 11.5 8.5 12 8.5C12.5 8.5 13 8.7 13.4 9.1C13.8 9.5 14 10 14 10.5C14 11 13.8 11.5 13.4 11.9C13 12.3 12.5 12.5 12 12.5ZM15 22H9C8.5 22 8 21.8 7.6 21.4C7.2 21 7 20.5 7 20C7 17.9 7.8 16.1 9.3 14.6C10.9 13.1 12.7 12.3 14.8 12.3H15C15.5 12.3 15.9 12.5 16.3 12.9C16.7 13.3 16.9 13.7 16.9 14.2C17 16.3 16.2 18.1 14.7 19.6C13.2 21.2 11.4 22 9.3 22H15Z"></path>
+                                </svg>
+                                <span class="text-lg font-medium text-gray-800 relative z-10"><?= isset($organized['babies']) ? count($organized['babies']) : 0 ?></span>
                             </div>
-                            <div class="flex flex-col items-center">
-                                <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 mb-1">
-                                    <i class="fas fa-baby text-sm"></i>
-                                </div>
-                                <span class="text-xs font-medium text-gray-700"><?= isset($organized['babies']) ? count($organized['babies']) : 0 ?></span>
+                            <span class="text-sm text-gray-600 mt-2">Babies</span>
+                        </div>
+                        
+                        <!-- Juveniles -->
+                        <div class="flex flex-col items-center">
+                            <div class="w-full aspect-square rounded-xl bg-gray-50 flex flex-col items-center justify-center gap-2 relative overflow-hidden group">
+                                <div class="absolute inset-0 bg-green-50 transform origin-bottom transition-all duration-300 ease-out" 
+                                     style="height: <?= isset($organized['juveniles']) ? (count($organized['juveniles']) / max(1, count($creatures)) * 100) : 0 ?>%"></div>
+                                <svg class="w-7 h-7 text-green-500 relative z-10" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2M15.9 8.1C15.5 7.7 14.8 7 13.5 7H11C8.2 7 6 9.2 6 12C6 14.2 7.5 16.1 9.5 16.8L7 22H9L10.6 18.6L12 22H14L12.5 17.5L14 14.5V22H16V14.5L18 9L15.9 8.1Z"></path>
+                                </svg>
+                                <span class="text-lg font-medium text-gray-800 relative z-10"><?= isset($organized['juveniles']) ? count($organized['juveniles']) : 0 ?></span>
                             </div>
-                            <div class="flex flex-col items-center">
-                                <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 mb-1">
-                                    <i class="fas fa-dragon text-sm"></i>
-                                </div>
-                                <span class="text-xs font-medium text-gray-700"><?= isset($organized['juveniles']) ? count($organized['juveniles']) : 0 ?></span>
+                            <span class="text-sm text-gray-600 mt-2">Juveniles</span>
+                        </div>
+                        
+                        <!-- Adults -->
+                        <div class="flex flex-col items-center">
+                            <div class="w-full aspect-square rounded-xl bg-gray-50 flex flex-col items-center justify-center gap-2 relative overflow-hidden group">
+                                <div class="absolute inset-0 bg-purple-50 transform origin-bottom transition-all duration-300 ease-out" 
+                                     style="height: <?= isset($organized['adults']) ? (count($organized['adults']) / max(1, count($creatures)) * 100) : 0 ?>%"></div>
+                                <svg class="w-7 h-7 text-purple-500 relative z-10" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2M20 18C21.1 18 22 17.1 22 16V14.5C22 13.1 21.2 11.9 20 11.3V7.5C20 6.1 19.1 5 18 5H14.8C14.4 4.4 13.8 4 13 4H11C10.2 4 9.6 4.4 9.2 5H6C4.9 5 4 6.1 4 7.5V11.3C2.8 11.9 2 13.1 2 14.5V16C2 17.1 2.9 18 4 18H6.2C6.6 19.8 8.1 21.2 10 21.7V22H14V21.7C15.9 21.2 17.4 19.8 17.8 18H20M7.5 12.5L8 10H8.5L9 12.5H7.5M6 10H7L6 13L5.5 15H4V14.5C4 13.7 4.4 13 5 12.5V10M16.5 15L16 13L15 10H16V12.5C16.6 13 17 13.7 17 14.5V15H16.5M18 10H19V12.5C19.6 13 20 13.7 20 14.5V15H18.5L18 13L17.5 10H18M14.5 10H15.5L16 12.5H15V15H13V12.5L14.5 10M10.5 10H11.5L13 12.5V15H11V12.5H10L10.5 10M8.5 15H9.5V12.5H11V15H9.5V19.2C8.6 18.9 8 18 8 17V15H8.5Z"></path>
+                                </svg>
+                                <span class="text-lg font-medium text-gray-800 relative z-10"><?= isset($organized['adults']) ? count($organized['adults']) : 0 ?></span>
                             </div>
-                            <div class="flex flex-col items-center">
-                                <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 mb-1">
-                                    <i class="fas fa-paw text-sm"></i>
-                                </div>
-                                <span class="text-xs font-medium text-gray-700"><?= isset($organized['adults']) ? count($organized['adults']) : 0 ?></span>
+                            <span class="text-sm text-gray-600 mt-2">Adults</span>
+                        </div>
+                        
+                        <!-- Mythicals -->
+                        <div class="flex flex-col items-center">
+                            <div class="w-full aspect-square rounded-xl bg-gray-50 flex flex-col items-center justify-center gap-2 relative overflow-hidden group">
+                                <div class="absolute inset-0 bg-rose-50 transform origin-bottom transition-all duration-300 ease-out" 
+                                     style="height: <?= isset($organized['mythicals']) ? (count($organized['mythicals']) / max(1, count($creatures)) * 100) : 0 ?>%"></div>
+                                <svg class="w-7 h-7 text-rose-500 relative z-10" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+                                </svg>
+                                <span class="text-lg font-medium text-gray-800 relative z-10"><?= isset($organized['mythicals']) ? count($organized['mythicals']) : 0 ?></span>
                             </div>
-                            <div class="flex flex-col items-center">
-                                <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600 mb-1">
-                                    <i class="fas fa-crown text-sm"></i>
-                                </div>
-                                <span class="text-xs font-medium text-gray-700"><?= isset($organized['mythicals']) ? count($organized['mythicals']) : 0 ?></span>
-                            </div>
+                            <span class="text-sm text-gray-600 mt-2">Mythicals</span>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <!-- Currently Growing -->
-            <div class="bg-white rounded-xl shadow-md overflow-hidden">
-                <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 py-4">
-                    <h3 class="text-lg font-bold text-white">Active Growth</h3>
+        </div>
+        
+        <!-- Actionable States Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+            <!-- Ready to Hatch Panel -->
+            <div class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
+                <div class="flex justify-between items-start mb-6">
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-800">Ready to Hatch</h3>
+                        <p class="text-sm text-gray-500 mt-1">Eggs that are warmed and ready for hatching</p>
+                    </div>
+                    
+                    <div class="h-10 w-10 rounded-full bg-amber-50 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-amber-500" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 22C8.5 22 5 18.5 5 13.5C5 8.5 8 3 12 3C16 3 19 8.5 19 13.5C19 18.5 15.5 22 12 22Z"></path>
+                        </svg>
+                    </div>
                 </div>
-                <div class="p-6">
-                    <?php
-                    // Get creatures that are currently growing (not eggs and not mythicals)
-                    $growingCreatures = array_filter($creatures, function($creature) {
-                        return $creature['stage'] !== 'egg' && $creature['stage'] !== 'mythical';
-                    });
-                    
-                    // Sort by growth progress
-                    usort($growingCreatures, function($a, $b) {
-                        // Calculate percentage
-                        $aPercentage = ($a['growth_progress'] / 200) * 100;
-                        $bPercentage = ($b['growth_progress'] / 200) * 100;
-                        
-                        // Sort by percentage in descending order
-                        return $bPercentage <=> $aPercentage;
-                    });
-                    
-                    // Get the top 3 growing
-                    $topGrowing = array_slice($growingCreatures, 0, 3);
-                    ?>
-                    
-                    <?php if (empty($topGrowing)): ?>
-                        <div class="flex flex-col items-center justify-center py-6">
-                            <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 mb-4">
-                                <i class="fas fa-seedling text-2xl"></i>
-                            </div>
-                            <h4 class="text-gray-700 font-medium mb-1">No Growing Creatures</h4>
-                            <p class="text-gray-500 text-sm text-center mb-3">Hatch an egg to start growing your first creature</p>
-                            <a href="<?= $baseUrl ?>/focus" class="px-4 py-2 bg-green-600 text-sm text-white rounded-lg hover:bg-green-700 transition-colors">
-                                <i class="fas fa-clock mr-1"></i> Start Focus Session
-                            </a>
+                
+                <?php
+                // Get eggs that are ready to hatch (growth progress >= 100)
+                $readyToHatchEggs = array_filter($organized['eggs'] ?? [], function($egg) {
+                    return $egg['growth_progress'] >= 100;
+                });
+                ?>
+                
+                <?php if (empty($readyToHatchEggs)): ?>
+                    <div class="bg-gray-50 rounded-xl p-8 text-center">
+                        <div class="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center text-gray-400 mb-3">
+                            <svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 22C8.5 22 5 18.5 5 13.5C5 8.5 8 3 12 3C16 3 19 8.5 19 13.5C19 18.5 15.5 22 12 22Z"></path>
+                            </svg>
                         </div>
-                    <?php else: ?>
-                        <div class="space-y-4">
-                            <?php foreach ($topGrowing as $creature): ?>
-                                <div class="bg-gray-50 rounded-lg p-3">
+                        <h4 class="text-gray-700 font-medium mb-2">No Eggs Ready Yet</h4>
+                        <p class="text-gray-500 text-sm max-w-xs mx-auto mb-4">Continue focusing to warm your eggs until they're ready to hatch.</p>
+                        <a href="<?= $baseUrl ?>/focus" class="inline-flex items-center px-4 py-2 rounded-full bg-amber-500 text-white font-medium text-sm hover:bg-amber-600 transition-colors">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Focus to Warm Eggs
+                        </a>
+                    </div>
+                <?php else: ?>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                        <?php foreach ($readyToHatchEggs as $egg): ?>
+                            <a href="<?= $baseUrl ?>/creatures/hatch/<?= $egg['id'] ?>" class="group">
+                                <div class="bg-amber-50 rounded-xl p-4 text-center hover:bg-amber-100 transition-colors group">
+                                    <div class="w-16 h-16 mx-auto bg-white rounded-full flex items-center justify-center mb-3 relative">
+                                        <svg class="w-8 h-8 text-amber-400" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M12 22C8.5 22 5 18.5 5 13.5C5 8.5 8 3 12 3C16 3 19 8.5 19 13.5C19 18.5 15.5 22 12 22Z"></path>
+                                        </svg>
+                                        <!-- Pulsing effect -->
+                                        <span class="absolute w-full h-full rounded-full bg-amber-400 opacity-20 animate-ping"></span>
+                                    </div>
+                                    <h4 class="font-medium text-gray-800 mb-1">Mystery Egg</h4>
+                                    <p class="text-xs text-amber-600">Ready to hatch!</p>
+                                    
+                                    <div class="mt-3 px-3 py-1 bg-amber-500 text-white text-xs font-medium rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                                        Hatch Now
+                                    </div>
+                                </div>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            </div>
+            
+            <!-- Growing Creatures Panel -->
+            <div class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
+                <div class="flex justify-between items-start mb-6">
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-800">Growing Creatures</h3>
+                        <p class="text-sm text-gray-500 mt-1">Creatures ready to evolve or nearing evolution</p>
+                    </div>
+                    
+                    <div class="h-10 w-10 rounded-full bg-green-50 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                    </div>
+                </div>
+                
+                <?php
+                // Get creatures that are currently growing (not eggs and not mythicals)
+                $growingCreatures = array_filter($creatures, function($creature) {
+                    return $creature['stage'] !== 'egg' && $creature['stage'] !== 'mythical';
+                });
+                
+                // Sort by growth progress
+                usort($growingCreatures, function($a, $b) {
+                    // Calculate percentage
+                    $aPercentage = ($a['growth_progress'] / 200) * 100;
+                    $bPercentage = ($b['growth_progress'] / 200) * 100;
+                    
+                    // Sort by percentage in descending order
+                    return $bPercentage <=> $aPercentage;
+                });
+                
+                // Get the top 3 growing
+                $topGrowing = array_slice($growingCreatures, 0, 3);
+                ?>
+                
+                <?php if (empty($topGrowing)): ?>
+                    <div class="bg-gray-50 rounded-xl p-8 text-center">
+                        <div class="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center text-gray-400 mb-3">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <h4 class="text-gray-700 font-medium mb-2">No Growing Creatures</h4>
+                        <p class="text-gray-500 text-sm max-w-xs mx-auto mb-4">Hatch an egg to start growing your first creature.</p>
+                        <a href="<?= $baseUrl ?>/focus" class="inline-flex items-center px-4 py-2 rounded-full bg-green-500 text-white font-medium text-sm hover:bg-green-600 transition-colors">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Start Focus Session
+                        </a>
+                    </div>
+                <?php else: ?>
+                    <div class="space-y-3">
+                        <?php foreach ($topGrowing as $creature): ?>
+                            <?php 
+                                // Calculate growth percentage 
+                                $growthPercentage = min(100, ($creature['growth_progress'] / 200) * 100);
+                                
+                                // Determine habitat color class based on type
+                                $habitatColor = 'green';
+                                switch ($creature['habitat_type'] ?? '') {
+                                    case 'forest': $habitatColor = 'green'; break;
+                                    case 'ocean': $habitatColor = 'blue'; break;
+                                    case 'mountain': $habitatColor = 'red'; break;
+                                    case 'sky': $habitatColor = 'sky'; break;
+                                    case 'cosmic': $habitatColor = 'purple'; break;
+                                    case 'enchanted': $habitatColor = 'pink'; break;
+                                }
+                            ?>
+                            <a href="<?= $baseUrl ?>/creatures/view/<?= $creature['id'] ?>" class="block group">
+                                <div class="bg-white rounded-xl p-4 border border-gray-100 hover:border-<?= $habitatColor ?>-200 hover:bg-<?= $habitatColor ?>-50 transition-colors">
                                     <div class="flex items-center">
-                                        <div class="w-12 h-12 bg-<?= $creature['habitat_type'] ?? 'green' ?>-100 rounded-full flex items-center justify-center mr-3">
+                                        <div class="w-12 h-12 bg-<?= $habitatColor ?>-100 rounded-lg flex items-center justify-center mr-4 group-hover:scale-105 transition-transform">
                                             <img src="<?= $baseUrl ?>/images/creatures/<?= $creature['species_id'] ?>_<?= $creature['stage'] ?>.png" alt="<?= $creature['name'] ?>" class="h-8 w-8 object-contain">
                                         </div>
-                                        <div class="flex-1 min-w-0">
+                                        <div class="flex-1">
                                             <div class="flex justify-between items-center">
                                                 <h4 class="text-sm font-medium text-gray-800 truncate" title="<?= htmlspecialchars($creature['name'] ?? 'Unnamed') ?>">
                                                     <?= htmlspecialchars($creature['name'] ?? 'Unnamed') ?>
                                                 </h4>
-                                                <span class="text-xs bg-<?= $creature['habitat_type'] ?? 'green' ?>-100 text-<?= $creature['habitat_type'] ?? 'green' ?>-800 px-2 py-0.5 rounded-full capitalize">
+                                                <span class="text-xs bg-<?= $habitatColor ?>-100 text-<?= $habitatColor ?>-800 px-2 py-0.5 rounded-full capitalize">
                                                     <?= $creature['stage'] ?>
                                                 </span>
                                             </div>
                                             
                                             <!-- Growth Progress -->
-                                            <?php 
-                                                // Calculate growth percentage 
-                                                $growthPercentage = min(100, ($creature['growth_progress'] / 200) * 100);
-                                            ?>
                                             <div class="mt-2">
                                                 <div class="flex justify-between text-xs text-gray-500 mb-1">
-                                                    <span><?= $creature['growth_progress'] ?>/200 growth points</span>
+                                                    <span><?= $creature['growth_progress'] ?>/200</span>
                                                     <span><?= round($growthPercentage) ?>%</span>
                                                 </div>
-                                                <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
-                                                    <div class="h-full bg-<?= $creature['habitat_type'] ?? 'green' ?>-500 rounded-full" style="width: <?= $growthPercentage ?>%"></div>
+                                                <div class="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                                                    <div class="h-full bg-<?= $habitatColor ?>-500 rounded-full" style="width: <?= $growthPercentage ?>%"></div>
                                                 </div>
                                             </div>
                                             
                                             <?php if ($growthPercentage >= 100): ?>
-                                                <div class="mt-2 text-xs text-green-600 flex items-center">
-                                                    <i class="fas fa-arrow-up-right-dots mr-1"></i> Ready to evolve!
+                                                <div class="mt-1 text-xs text-green-600 flex items-center justify-end">
+                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+                                                    </svg>
+                                                    Ready to evolve
                                                 </div>
                                             <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
-                            <?php endforeach; ?>
-                            
-                            <?php if (count($growingCreatures) > 3): ?>
-                                <div class="text-center">
-                                    <button class="text-green-600 hover:text-green-800 text-sm font-medium" id="show-more-growing">
-                                        Show <?= count($growingCreatures) - 3 ?> more growing
-                                    </button>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-                    <?php endif; ?>
-                </div>
-            </div>
-            
-            <!-- Ready to Hatch -->
-            <div class="bg-white rounded-xl shadow-md overflow-hidden">
-                <div class="bg-gradient-to-r from-amber-500 to-amber-600 px-6 py-4">
-                    <h3 class="text-lg font-bold text-white">Ready to Hatch</h3>
-                </div>
-                <div class="p-6">
-                    <?php
-                    // Get eggs that are ready to hatch (growth progress >= 100)
-                    $readyToHatchEggs = array_filter($organized['eggs'] ?? [], function($egg) {
-                        return $egg['growth_progress'] >= 100;
-                    });
-                    ?>
-                    
-                    <?php if (empty($readyToHatchEggs)): ?>
-                        <div class="flex flex-col items-center justify-center py-6">
-                            <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 mb-4">
-                                <i class="fas fa-egg text-2xl"></i>
-                            </div>
-                            <h4 class="text-gray-700 font-medium mb-1">No Eggs Ready to Hatch</h4>
-                            <p class="text-gray-500 text-sm text-center mb-3">Keep focusing to warm your eggs</p>
-                            <a href="<?= $baseUrl ?>/focus" class="px-4 py-2 bg-amber-500 text-sm text-white rounded-lg hover:bg-amber-600 transition-colors">
-                                <i class="fas fa-clock mr-1"></i> Focus to Warm Eggs
                             </a>
-                        </div>
-                    <?php else: ?>
-                        <div class="grid grid-cols-2 gap-4">
-                            <?php foreach ($readyToHatchEggs as $egg): ?>
-                                <a href="<?= $baseUrl ?>/creatures/hatch/<?= $egg['id'] ?>" class="group">
-                                    <div class="bg-amber-50 border border-amber-100 rounded-lg p-4 text-center hover:border-amber-300 hover:shadow-md transition-all">
-                                        <div class="w-16 h-16 mx-auto bg-white rounded-full border-2 border-amber-200 flex items-center justify-center mb-3 group-hover:animate-pulse">
-                                            <i class="fas fa-egg text-amber-400 text-2xl"></i>
-                                        </div>
-                                        <h4 class="font-medium text-gray-800 mb-1">Mystery Egg</h4>
-                                        <p class="text-xs text-amber-600">Ready to hatch!</p>
-                                        
-                                        <div class="mt-3 px-3 py-1 bg-amber-500 text-white text-xs font-medium rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
-                                            Hatch Now
-                                        </div>
-                                    </div>
+                        <?php endforeach; ?>
+                        
+                        <?php if (count($growingCreatures) > 3): ?>
+                            <div class="text-center pt-2">
+                                <a href="<?= $baseUrl ?>/creatures?filter=growing" class="text-[#4D724D] hover:text-[#3D5D3D] text-sm font-medium inline-flex items-center">
+                                    View <?= count($growingCreatures) - 3 ?> more growing creatures
+                                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
                                 </a>
-                            <?php endforeach; ?>
-                        </div>
-                    <?php endif; ?>
-                </div>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
         
-        <!-- Creatures Filter and Grid -->
-        <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
-            <div class="bg-gradient-to-r from-violet-600 to-purple-600 px-6 py-4 flex justify-between items-center">
-                <h3 class="text-lg font-bold text-white">All Creatures</h3>
+        <!-- All Creatures Section -->
+        <div class="mb-16">
+            <div class="flex flex-wrap justify-between items-center mb-6">
+                <h2 class="text-2xl font-medium text-gray-900">All Creatures</h2>
                 
-                <!-- Total Count Badge -->
-                <span class="px-3 py-1 bg-white text-purple-700 text-sm font-medium rounded-full">
-                    <?= count($creatures) ?> creatures
-                </span>
-            </div>
-            
-            <div class="p-6">
-                <?php if (empty($creatures)): ?>
-                    <div class="text-center py-10">
-                        <div class="w-20 h-20 mx-auto bg-gray-100 rounded-full flex items-center justify-center text-gray-400 mb-4">
-                            <i class="fas fa-dragon text-3xl"></i>
+                <!-- Search and Filter -->
+                <div class="flex flex-wrap items-center gap-3 mt-4 sm:mt-0">
+                    <!-- Search -->
+                    <div class="relative">
+                        <input type="text" placeholder="Search creatures..." class="pl-10 pr-4 py-2 rounded-full text-sm border-gray-300 focus:ring-[#4D724D] focus:border-[#4D724D]">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
                         </div>
-                        <h3 class="text-xl font-medium text-gray-800 mb-2">No creatures found</h3>
-                        <p class="text-gray-600 mb-6 max-w-md mx-auto">Complete focus sessions to incubate eggs and build your mythical creature collection.</p>
-                        <a href="<?= $baseUrl ?>/focus" class="inline-flex items-center px-6 py-3 bg-purple-600 text-white font-medium rounded-lg hover:bg-purple-700 transition-colors">
-                            <i class="fas fa-clock mr-2"></i> Start Focus Session
-                        </a>
                     </div>
-                <?php else: ?>
-                    <!-- Filters -->
-                    <div class="mb-6" x-data="{ showFilters: false }">
-                        <div class="flex justify-between items-center mb-4">
-                            <button @click="showFilters = !showFilters" class="flex items-center text-sm font-medium text-purple-600 hover:text-purple-800">
-                                <i class="fas fa-sliders mr-2"></i>
-                                <span x-text="showFilters ? 'Hide Filters' : 'Show Filters'">Show Filters</span>
-                                <i class="fas fa-chevron-down ml-1 transition-transform" :class="showFilters ? 'rotate-180' : ''"></i>
-                            </button>
-                            
-                            <!-- Sort Options -->
-                            <div class="flex items-center">
-                                <label for="sort-by" class="text-sm text-gray-600 mr-2">Sort:</label>
-                                <select id="sort-by" class="text-sm border-gray-300 rounded-lg focus:border-purple-500 focus:ring-purple-500">
-                                    <option value="newest">Newest First</option>
-                                    <option value="oldest">Oldest First</option>
-                                    <option value="stage">By Stage</option>
-                                    <option value="growth">By Growth Progress</option>
-                                    <option value="name">By Name</option>
-                                </select>
-                            </div>
-                        </div>
+                    
+                    <!-- Sort Dropdown -->
+                    <div class="relative" x-data="{ open: false }">
+                        <button @click="open = !open" type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                            <svg class="h-5 w-5 text-gray-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path>
+                            </svg>
+                            Sort
+                        </button>
                         
-                        <!-- Filter Panel (toggleable) -->
-                        <div x-show="showFilters" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" class="bg-gray-50 rounded-lg p-4 mb-4">
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <!-- Stage Filter -->
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Stage</label>
-                                    <div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
-                                        <button type="button" class="filter-btn stage-filter active px-3 py-1.5 text-sm border rounded-lg flex items-center justify-center" data-filter="all">
-                                            All
-                                        </button>
-                                        <button type="button" class="filter-btn stage-filter px-3 py-1.5 text-sm border rounded-lg flex items-center justify-center" data-filter="egg">
-                                            <i class="fas fa-egg text-gray-500 mr-1.5"></i> Eggs
-                                        </button>
-                                        <button type="button" class="filter-btn stage-filter px-3 py-1.5 text-sm border rounded-lg flex items-center justify-center" data-filter="baby">
-                                            <i class="fas fa-baby text-gray-500 mr-1.5"></i> Baby
-                                        </button>
-                                        <button type="button" class="filter-btn stage-filter px-3 py-1.5 text-sm border rounded-lg flex items-center justify-center" data-filter="juvenile">
-                                            <i class="fas fa-dragon text-gray-500 mr-1.5"></i> Juvenile
-                                        </button>
-                                        <button type="button" class="filter-btn stage-filter px-3 py-1.5 text-sm border rounded-lg flex items-center justify-center" data-filter="adult">
-                                            <i class="fas fa-paw text-gray-500 mr-1.5"></i> Adult
-                                        </button>
-                                        <button type="button" class="filter-btn stage-filter px-3 py-1.5 text-sm border rounded-lg flex items-center justify-center md:col-start-1" data-filter="mythical">
-                                            <i class="fas fa-crown text-gray-500 mr-1.5"></i> Mythical
-                                        </button>
-                                    </div>
-                                </div>
-                                
-                                <!-- Habitat Filter -->
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Habitat Type</label>
-                                    <div class="grid grid-cols-2 gap-2">
-                                        <button type="button" class="filter-btn habitat-filter active px-3 py-1.5 text-sm border rounded-lg flex items-center justify-center" data-filter="all">
-                                            All Habitats
-                                        </button>
-                                        <button type="button" class="filter-btn habitat-filter px-3 py-1.5 text-sm border rounded-lg flex items-center justify-center bg-forest-50 text-forest-700 border-forest-200" data-filter="forest">
-                                            <i class="fas fa-tree mr-1.5"></i> Forest
-                                        </button>
-                                        <button type="button" class="filter-btn habitat-filter px-3 py-1.5 text-sm border rounded-lg flex items-center justify-center bg-ocean-50 text-ocean-700 border-ocean-200" data-filter="ocean">
-                                            <i class="fas fa-water mr-1.5"></i> Ocean
-                                        </button>
-                                        <button type="button" class="filter-btn habitat-filter px-3 py-1.5 text-sm border rounded-lg flex items-center justify-center bg-mountain-50 text-mountain-700 border-mountain-200" data-filter="mountain">
-                                            <i class="fas fa-mountain mr-1.5"></i> Mountain
-                                        </button>
-                                        <button type="button" class="filter-btn habitat-filter px-3 py-1.5 text-sm border rounded-lg flex items-center justify-center bg-sky-50 text-sky-700 border-sky-200" data-filter="sky">
-                                            <i class="fas fa-cloud mr-1.5"></i> Sky
-                                        </button>
-                                        <button type="button" class="filter-btn habitat-filter px-3 py-1.5 text-sm border rounded-lg flex items-center justify-center bg-enchanted-50 text-enchanted-700 border-enchanted-200" data-filter="enchanted">
-                                            <i class="fas fa-sparkles mr-1.5"></i> Enchanted
-                                        </button>
-                                    </div>
-                                </div>
-                                
-                                <!-- Status Filter -->
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                                    <div class="grid grid-cols-2 gap-2">
-                                        <button type="button" class="filter-btn status-filter active px-3 py-1.5 text-sm border rounded-lg flex items-center justify-center" data-filter="all">
-                                            All Status
-                                        </button>
-                                        <button type="button" class="filter-btn status-filter px-3 py-1.5 text-sm border rounded-lg flex items-center justify-center bg-green-50 text-green-700 border-green-200" data-filter="ready">
-                                            <i class="fas fa-arrow-up mr-1.5"></i> Ready to Evolve
-                                        </button>
-                                        <button type="button" class="filter-btn status-filter px-3 py-1.5 text-sm border rounded-lg flex items-center justify-center bg-amber-50 text-amber-700 border-amber-200" data-filter="growing">
-                                            <i class="fas fa-seedling mr-1.5"></i> Currently Growing
-                                        </button>
-                                        <button type="button" class="filter-btn status-filter px-3 py-1.5 text-sm border rounded-lg flex items-center justify-center bg-gray-50 text-gray-700 border-gray-200" data-filter="maxed">
-                                            <i class="fas fa-star mr-1.5"></i> Max Level
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Active Filters & Clear -->
-                            <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-200">
-                                <div class="flex items-center flex-wrap gap-2" id="active-filters">
-                                    <div class="text-sm text-gray-500 mr-1">Active Filters:</div>
-                                    <span class="text-sm bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full flex items-center" id="filter-all">
-                                        All <button class="ml-1 text-purple-600 hover:text-purple-800"><i class="fas fa-times"></i></button>
-                                    </span>
-                                </div>
-                                <button id="clear-filters" class="text-sm text-purple-600 hover:text-purple-800 font-medium">
-                                    Clear All Filters
-                                </button>
+                        <div x-show="open" @click.away="open = false" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
+                            <div class="py-1" role="menu" aria-orientation="vertical">
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Newest First</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Oldest First</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">By Stage</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">By Growth Progress</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">By Name</a>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Creatures Grid -->
-                    <div id="creatures-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                        <?php foreach ($creatures as $creature): ?>
-                            <div class="creature-card" 
-                                 data-stage="<?= $creature['stage'] ?>" 
-                                 data-habitat="<?= $creature['habitat_type'] ?? 'none' ?>"
-                                 data-status="<?php 
-                                    if ($creature['stage'] === 'mythical') {
-                                        echo 'maxed';
-                                    } else if ($creature['stage'] === 'egg' && $creature['growth_progress'] >= 100) {
-                                        echo 'ready';
-                                    } else if ($creature['stage'] !== 'egg' && $creature['growth_progress'] >= 200) {
-                                        echo 'ready';
-                                    } else if ($creature['stage'] !== 'mythical') {
-                                        echo 'growing';
-                                    } else {
-                                        echo 'none';
-                                    }
-                                 ?>"
-                             >
-                                <div class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-all group relative">
+                    <!-- Filter Button -->
+                    <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                        <svg class="h-5 w-5 text-gray-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                        </svg>
+                        Filter
+                    </button>
+                </div>
+            </div>
+            
+            <?php if (empty($creatures)): ?>
+                <div class="bg-white rounded-2xl p-12 text-center shadow-sm border border-gray-100">
+                    <div class="w-20 h-20 mx-auto bg-gray-100 rounded-full flex items-center justify-center text-gray-400 mb-4">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-medium text-gray-800 mb-2">Your collection is empty</h3>
+                    <p class="text-gray-600 mb-6 max-w-md mx-auto">Complete focus sessions to incubate eggs and build your mythical creature collection.</p>
+                    <a href="<?= $baseUrl ?>/focus" class="inline-flex items-center px-6 py-3 rounded-full bg-[#4D724D] text-white font-medium hover:bg-[#3D5D3D] transition-colors shadow-sm">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Start Focus Session
+                    </a>
+                </div>
+            <?php else: ?>
+                <!-- Creatures Grid with Anthropic-inspired styling -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+                    <?php foreach ($creatures as $creature): ?>
+                        <div class="creature-card" 
+                             data-stage="<?= $creature['stage'] ?>" 
+                             data-habitat="<?= $creature['habitat_type'] ?? 'none' ?>"
+                             data-status="<?php 
+                                if ($creature['stage'] === 'mythical') {
+                                    echo 'maxed';
+                                } else if ($creature['stage'] === 'egg' && $creature['growth_progress'] >= 100) {
+                                    echo 'ready';
+                                } else if ($creature['stage'] !== 'egg' && $creature['growth_progress'] >= 200) {
+                                    echo 'ready';
+                                } else if ($creature['stage'] !== 'mythical') {
+                                    echo 'growing';
+                                } else {
+                                    echo 'none';
+                                }
+                             ?>"
+                         >
+                            <?php 
+                                // Determine habitat color class based on type
+                                $habitatColor = 'green';
+                                switch ($creature['habitat_type'] ?? '') {
+                                    case 'forest': $habitatColor = 'green'; break;
+                                    case 'ocean': $habitatColor = 'blue'; break;
+                                    case 'mountain': $habitatColor = 'red'; break;
+                                    case 'sky': $habitatColor = 'sky'; break;
+                                    case 'cosmic': $habitatColor = 'purple'; break;
+                                    case 'enchanted': $habitatColor = 'pink'; break;
+                                }
+                            ?>
+                            <a href="<?= $baseUrl ?>/creatures/view/<?= $creature['id'] ?>" class="group">
+                                <div class="bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-md hover:border-<?= $habitatColor ?>-200 transition-all h-full flex flex-col">
                                     <!-- Creature Image -->
-                                    <div class="aspect-square p-4 flex items-center justify-center bg-<?= $creature['habitat_type'] ?? 'gray' ?>-50 border-b border-gray-100 group-hover:bg-<?= $creature['habitat_type'] ?? 'gray' ?>-100 transition-colors relative">
+                                    <div class="aspect-square p-6 flex items-center justify-center bg-<?= $habitatColor ?>-50 group-hover:bg-<?= $habitatColor ?>-100 transition-colors relative">
                                         <?php if ($creature['stage'] === 'egg'): ?>
-                                            <i class="fas fa-egg text-<?= $creature['habitat_type'] ?? 'gray' ?>-400 text-5xl group-hover:animate-pulse"></i>
+                                            <div class="w-24 h-24 flex items-center justify-center">
+                                                <svg class="w-16 h-16 text-<?= $habitatColor ?>-400 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M12 22C8.5 22 5 18.5 5 13.5C5 8.5 8 3 12 3C16 3 19 8.5 19 13.5C19 18.5 15.5 22 12 22Z"></path>
+                                                </svg>
+                                            </div>
                                             <?php if ($creature['growth_progress'] >= 100): ?>
-                                                <div class="absolute bottom-2 right-2 w-6 h-6 bg-amber-500 rounded-full text-white flex items-center justify-center animate-pulse">
-                                                    <i class="fas fa-bolt text-xs"></i>
+                                                <div class="absolute bottom-3 right-3 w-6 h-6 bg-amber-500 rounded-full text-white flex items-center justify-center animate-pulse">
+                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                                                    </svg>
                                                 </div>
                                             <?php endif; ?>
                                         <?php else: ?>
-                                            <img src="<?= $baseUrl ?>/images/creatures/<?= $creature['species_id'] ?>_<?= $creature['stage'] ?>.png" alt="<?= $creature['name'] ?>" class="h-24 w-24 object-contain transform group-hover:scale-110 transition-transform">
+                                            <img src="<?= $baseUrl ?>/images/creatures/<?= $creature['species_id'] ?>_<?= $creature['stage'] ?>.png" alt="<?= $creature['name'] ?>" class="h-32 w-32 object-contain transform group-hover:scale-110 transition-transform">
                                             <?php if ($creature['stage'] !== 'mythical' && $creature['growth_progress'] >= 200): ?>
-                                                <div class="absolute bottom-2 right-2 w-6 h-6 bg-green-500 rounded-full text-white flex items-center justify-center animate-pulse">
-                                                    <i class="fas fa-arrow-up text-xs"></i>
+                                                <div class="absolute bottom-3 right-3 w-6 h-6 bg-green-500 rounded-full text-white flex items-center justify-center animate-pulse">
+                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+                                                    </svg>
                                                 </div>
                                             <?php endif; ?>
                                         <?php endif; ?>
                                     </div>
                                     
                                     <!-- Creature Info -->
-                                    <div class="p-4">
+                                    <div class="p-4 flex-1 flex flex-col">
                                         <div class="flex justify-between items-start mb-1">
                                             <h4 class="font-medium text-gray-800 truncate" title="<?= htmlspecialchars($creature['name'] ?? 'Unnamed') ?>">
                                                 <?= htmlspecialchars($creature['name'] ?? 'Unnamed') ?>
                                             </h4>
-                                            <span class="text-xs bg-<?= $creature['habitat_type'] ?? 'gray' ?>-100 text-<?= $creature['habitat_type'] ?? 'gray' ?>-700 px-1.5 py-0.5 rounded capitalize">
+                                            <span class="text-xs bg-<?= $habitatColor ?>-100 text-<?= $habitatColor ?>-800 px-2 py-0.5 rounded-full capitalize">
                                                 <?= $creature['stage'] ?>
                                             </span>
                                         </div>
@@ -430,8 +488,8 @@
                                         
                                         <?php if ($creature['stage'] !== 'mythical'): ?>
                                             <!-- Growth Progress -->
-                                            <div class="mb-3">
-                                                <div class="h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                                            <div class="mt-auto">
+                                                <div class="h-1.5 bg-gray-100 rounded-full overflow-hidden">
                                                     <?php 
                                                     // Calculate growth percentage
                                                     $growthPercentage = 0;
@@ -441,121 +499,140 @@
                                                         $growthPercentage = min(100, ($creature['growth_progress'] / 200) * 100);
                                                     }
                                                     ?>
-                                                    <div class="h-full bg-<?= $creature['habitat_type'] ?? 'gray' ?>-500 rounded-full" style="width: <?= $growthPercentage ?>%"></div>
+                                                    <div class="h-full bg-<?= $habitatColor ?>-500 rounded-full" style="width: <?= $growthPercentage ?>%"></div>
                                                 </div>
                                                 <div class="flex justify-between mt-1 text-xs text-gray-500">
-                                                    <span>Growth: <?= $creature['growth_progress'] ?>/<?= $creature['stage'] === 'egg' ? '100' : '200' ?></span>
-                                                    <span><?= round($growthPercentage) ?>%</span>
+                                                    <span>Progress: <?= round($growthPercentage) ?>%</span>
                                                 </div>
                                             </div>
                                         <?php else: ?>
                                             <!-- Mythical Badge -->
-                                            <div class="flex items-center justify-center space-x-1 mb-3">
+                                            <div class="flex items-center justify-center space-x-1 mt-auto">
                                                 <?php for($i = 0; $i < 5; $i++): ?>
-                                                    <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                                    <svg class="w-3 h-3 text-amber-400" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+                                                    </svg>
                                                 <?php endfor; ?>
                                             </div>
                                         <?php endif; ?>
-                                        
-                                        <!-- Action Button -->
-                                        <a href="<?= $baseUrl ?>/creatures/view/<?= $creature['id'] ?>" class="block w-full text-center py-2 bg-<?= $creature['habitat_type'] ?? 'purple' ?>-600 text-white text-sm font-medium rounded-lg hover:bg-<?= $creature['habitat_type'] ?? 'purple' ?>-700 transition-colors">
-                                            <?php if ($creature['stage'] === 'egg' && $creature['growth_progress'] >= 100): ?>
-                                                Hatch Now
-                                            <?php elseif ($creature['stage'] !== 'egg' && $creature['stage'] !== 'mythical' && $creature['growth_progress'] >= 200): ?>
-                                                Evolve Now
-                                            <?php else: ?>
-                                                View Details
-                                            <?php endif; ?>
-                                        </a>
                                     </div>
                                 </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                <?php endif; ?>
-            </div>
+                            </a>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
         </div>
         
-        <!-- Habitat Selection -->
-        <div class="bg-white rounded-xl shadow-md overflow-hidden">
-            <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">
-                <h3 class="text-lg font-bold text-white">Creature Habitats</h3>
+        <!-- Habitats Section -->
+        <div>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-medium text-gray-900">Creature Habitats</h2>
+                <a href="<?= $baseUrl ?>/habitats" class="text-[#4D724D] hover:text-[#3D5D3D] text-sm font-medium inline-flex items-center">
+                    View All Habitats
+                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
             </div>
             
-            <div class="p-6">
-                <?php if (empty($habitats)): ?>
-                    <div class="text-center py-6">
-                        <div class="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center text-gray-400 mb-4">
-                            <i class="fas fa-tree text-2xl"></i>
-                        </div>
-                        <h4 class="text-gray-700 font-medium mb-2">No habitats created yet!</h4>
-                        <p class="text-gray-500 mb-4">Create your first habitat to house your creatures.</p>
-                        <a href="<?= $baseUrl ?>/habitats/create" class="inline-flex items-center px-4 py-2 bg-blue-600 text-sm text-white rounded-md hover:bg-blue-700">
-                            Create Habitat
-                        </a>
+            <?php if (empty($habitats)): ?>
+                <div class="bg-white rounded-2xl p-12 text-center shadow-sm border border-gray-100">
+                    <div class="w-20 h-20 mx-auto bg-gray-100 rounded-full flex items-center justify-center text-gray-400 mb-4">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
                     </div>
-                <?php else: ?>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <?php foreach ($habitats as $habitat): 
-                            // Count creatures in this habitat
-                            $habitatCreatures = array_filter($creatures, function($creature) use ($habitat) {
-                                return isset($creature['habitat_id']) && $creature['habitat_id'] == $habitat['id'];
-                            });
-                            $creatureCount = count($habitatCreatures);
-                        ?>
-                            <div class="relative overflow-hidden rounded-xl border border-gray-200 transition-all hover:shadow-md group">
+                    <h3 class="text-xl font-medium text-gray-800 mb-2">No habitats created yet</h3>
+                    <p class="text-gray-600 mb-6 max-w-md mx-auto">Create your first habitat to provide a home for your creatures.</p>
+                    <a href="<?= $baseUrl ?>/habitats/create" class="inline-flex items-center px-6 py-3 rounded-full bg-[#4D724D] text-white font-medium hover:bg-[#3D5D3D] transition-colors shadow-sm">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        Create First Habitat
+                    </a>
+                </div>
+            <?php else: ?>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <?php foreach ($habitats as $habitat): 
+                        // Count creatures in this habitat
+                        $habitatCreatures = array_filter($creatures, function($creature) use ($habitat) {
+                            return isset($creature['habitat_id']) && $creature['habitat_id'] == $habitat['id'];
+                        });
+                        $creatureCount = count($habitatCreatures);
+                        
+                        // Determine habitat color
+                        $habitatColor = 'green';
+                        switch ($habitat['type']) {
+                            case 'forest': $habitatColor = 'green'; break;
+                            case 'ocean': $habitatColor = 'blue'; break;
+                            case 'mountain': $habitatColor = 'red'; break;
+                            case 'sky': $habitatColor = 'sky'; break;
+                            case 'cosmic': $habitatColor = 'purple'; break;
+                            case 'enchanted': $habitatColor = 'pink'; break;
+                        }
+                    ?>
+                        <div class="group">
+                            <div class="bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-md hover:border-<?= $habitatColor ?>-200 transition-all h-full">
                                 <!-- Habitat Background -->
-                                <div class="h-32 bg-gradient-to-br 
-                                    <?php
-                                    switch ($habitat['type']) {
-                                        case 'forest': echo 'from-green-100 to-green-200'; break;
-                                        case 'ocean': echo 'from-blue-100 to-blue-200'; break;
-                                        case 'mountain': echo 'from-red-100 to-red-200'; break;
-                                        case 'sky': echo 'from-cyan-100 to-cyan-200'; break;
-                                        case 'cosmic': echo 'from-purple-100 to-purple-200'; break;
-                                        case 'enchanted': echo 'from-pink-100 to-pink-200'; break;
-                                        default: echo 'from-gray-100 to-gray-200';
-                                    }
-                                    ?> p-4">
-                                    <div class="flex justify-between">
+                                <div class="h-40 bg-gradient-to-br from-<?= $habitatColor ?>-50 to-<?= $habitatColor ?>-100 p-6 relative overflow-hidden">
+                                    <!-- Subtle pattern overlay -->
+                                    <div class="absolute inset-0 opacity-10">
+                                        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" class="absolute inset-0">
+                                            <defs>
+                                                <pattern id="habitat-pattern-<?= $habitat['id'] ?>" width="30" height="30" patternUnits="userSpaceOnUse">
+                                                    <?php if ($habitat['type'] === 'forest'): ?>
+                                                        <path d="M15,5 Q25,10 15,20 Q5,15 15,5" fill="none" stroke="currentColor" stroke-width="0.8"/>
+                                                    <?php elseif ($habitat['type'] === 'ocean'): ?>
+                                                        <path d="M0,15 Q7.5,10 15,15 Q22.5,20 30,15" fill="none" stroke="currentColor" stroke-width="0.8"/>
+                                                    <?php elseif ($habitat['type'] === 'mountain'): ?>
+                                                        <path d="M0,30 L15,5 L30,30" fill="none" stroke="currentColor" stroke-width="0.8"/>
+                                                    <?php elseif ($habitat['type'] === 'sky'): ?>
+                                                        <circle cx="15" cy="15" r="5" fill="none" stroke="currentColor" stroke-width="0.8"/>
+                                                    <?php elseif ($habitat['type'] === 'cosmic'): ?>
+                                                        <circle cx="15" cy="15" r="2" fill="currentColor"/>
+                                                        <circle cx="5" cy="5" r="1" fill="currentColor"/>
+                                                        <circle cx="25" cy="25" r="1" fill="currentColor"/>
+                                                    <?php else: ?>
+                                                        <path d="M15,0 Q25,15 15,30 Q5,15 15,0" fill="none" stroke="currentColor" stroke-width="0.8"/>
+                                                    <?php endif; ?>
+                                                </pattern>
+                                            </defs>
+                                            <rect width="100%" height="100%" fill="url(#habitat-pattern-<?= $habitat['id'] ?>)"/>
+                                        </svg>
+                                    </div>
+                                    
+                                    <!-- Habitat Header -->
+                                    <div class="flex justify-between relative z-10">
                                         <div>
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-white text-<?= $habitat['type'] ?>-800 uppercase">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-white text-<?= $habitatColor ?>-800 uppercase">
                                                 <?= $habitat['type'] ?>
                                             </span>
-                                            <h4 class="text-<?= $habitat['type'] ?>-800 text-lg font-medium mt-1">
+                                            <h4 class="text-<?= $habitatColor ?>-800 text-lg font-medium mt-1">
                                                 <?= ucfirst($habitat['type']) ?> Haven
                                             </h4>
                                         </div>
-                                        <div class="bg-white bg-opacity-70 px-2 py-1 rounded-full flex items-center text-xs font-medium text-<?= $habitat['type'] ?>-800">
-                                            <i class="fas fa-layer-group mr-1"></i> Level <?= $habitat['level'] ?>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="p-4 bg-white">
-                                    <!-- Habitat Stats -->
-                                    <div class="flex justify-between text-sm mb-4">
-                                        <div class="flex items-center">
-                                            <i class="fas fa-dragon text-gray-400 mr-1.5"></i>
-                                            <span class="text-gray-700"><?= $creatureCount ?> creatures</span>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <i class="fas fa-expand text-gray-400 mr-1.5"></i>
-                                            <span class="text-gray-700">Size <?= $habitat['expansion_level'] ?>/5</span>
+                                        <div class="bg-white bg-opacity-70 px-2 py-1 rounded-full flex items-center text-xs font-medium text-<?= $habitatColor ?>-800">
+                                            <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                            </svg>
+                                            Level <?= $habitat['level'] ?>
                                         </div>
                                     </div>
                                     
                                     <!-- Habitat Creatures Preview -->
-                                    <?php if ($creatureCount > 0): ?>
-                                        <div class="flex items-center mb-4 -space-x-2 overflow-hidden">
+                                    <div class="absolute bottom-4 right-4 flex items-center space-x-1">
+                                        <div class="flex -space-x-2">
                                             <?php 
-                                            $displayCount = min(5, $creatureCount);
+                                            $displayCount = min(3, $creatureCount);
                                             $displayedCreatures = array_slice($habitatCreatures, 0, $displayCount);
                                             foreach ($displayedCreatures as $creature): 
                                             ?>
-                                                <div class="w-8 h-8 rounded-full ring-2 ring-white overflow-hidden bg-<?= $creature['habitat_type'] ?? 'gray' ?>-100 flex items-center justify-center">
+                                                <div class="w-8 h-8 rounded-full border-2 border-white overflow-hidden bg-<?= $habitatColor ?>-100 flex items-center justify-center">
                                                     <?php if ($creature['stage'] === 'egg'): ?>
-                                                        <i class="fas fa-egg text-<?= $creature['habitat_type'] ?? 'gray' ?>-400 text-xs"></i>
+                                                        <svg class="w-4 h-4 text-<?= $habitatColor ?>-400" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M12 22C8.5 22 5 18.5 5 13.5C5 8.5 8 3 12 3C16 3 19 8.5 19 13.5C19 18.5 15.5 22 12 22Z"></path>
+                                                        </svg>
                                                     <?php else: ?>
                                                         <img src="<?= $baseUrl ?>/images/creatures/<?= $creature['species_id'] ?>_<?= $creature['stage'] ?>.png" alt="<?= $creature['name'] ?>" class="h-6 w-6 object-contain">
                                                     <?php endif; ?>
@@ -563,264 +640,93 @@
                                             <?php endforeach; ?>
                                             
                                             <?php if ($creatureCount > $displayCount): ?>
-                                                <div class="w-8 h-8 rounded-full ring-2 ring-white bg-gray-200 flex items-center justify-center text-xs font-medium text-gray-600">
+                                                <div class="w-8 h-8 rounded-full border-2 border-white bg-white flex items-center justify-center text-xs font-medium text-gray-600">
                                                     +<?= $creatureCount - $displayCount ?>
                                                 </div>
                                             <?php endif; ?>
                                         </div>
-                                    <?php else: ?>
-                                        <div class="text-sm text-gray-500 mb-4">No creatures in this habitat</div>
-                                    <?php endif; ?>
+                                    </div>
+                                </div>
+                                
+                                <div class="p-5">
+                                    <!-- Habitat Stats -->
+                                    <div class="grid grid-cols-2 gap-3 mb-4">
+                                        <div class="bg-gray-50 p-3 rounded-xl">
+                                            <p class="text-xs text-gray-500">Creatures</p>
+                                            <p class="font-medium"><?= $creatureCount ?></p>
+                                        </div>
+                                        <div class="bg-gray-50 p-3 rounded-xl">
+                                            <p class="text-xs text-gray-500">Expansion</p>
+                                            <p class="font-medium"><?= $habitat['expansion_level'] ?>/5</p>
+                                        </div>
+                                    </div>
                                     
+                                    <!-- Actions -->
                                     <div class="flex justify-between">
-                                        <a href="<?= $baseUrl ?>/habitats/view/<?= $habitat['id'] ?>" class="text-<?= $habitat['type'] ?>-600 hover:text-<?= $habitat['type'] ?>-800 text-sm font-medium">
+                                        <a href="<?= $baseUrl ?>/habitats/view/<?= $habitat['id'] ?>" class="text-<?= $habitatColor ?>-600 hover:text-<?= $habitatColor ?>-800 text-sm font-medium">
                                             View Habitat
                                         </a>
-                                        <a href="<?= $baseUrl ?>/creatures/move-habitat/<?= $habitat['id'] ?>" class="text-<?= $habitat['type'] ?>-600 hover:text-<?= $habitat['type'] ?>-800 text-sm font-medium">
-                                            Move Creatures
+                                        <a href="<?= $baseUrl ?>/habitats/edit/<?= $habitat['id'] ?>" class="text-<?= $habitatColor ?>-600 hover:text-<?= $habitatColor ?>-800 text-sm font-medium">
+                                            Manage
                                         </a>
                                     </div>
                                 </div>
                             </div>
-                        <?php endforeach; ?>
+                        </div>
+                    <?php endforeach; ?>
+                    
+                    <!-- Create New Habitat Card -->
+                    <div>
+                        <div class="relative overflow-hidden rounded-2xl border border-dashed border-gray-300 flex flex-col items-center justify-center p-8 bg-gray-50 text-center hover:bg-gray-100 transition h-full">
+                            <div class="w-16 h-16 rounded-full bg-[#E9F0E9] flex items-center justify-center mb-4">
+                                <svg class="w-8 h-8 text-[#4D724D]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
+                            </div>
+                            <h4 class="font-medium text-gray-800 mb-2">Create Habitat</h4>
+                            <p class="text-sm text-gray-500 mb-4">Build a new home for your mythical creatures</p>
+                            <a href="<?= $baseUrl ?>/habitats/create" class="px-4 py-2 bg-[#4D724D] text-white rounded-full font-medium text-sm shadow-sm hover:bg-[#3D5D3D] transition-colors">
+                                Create Habitat
+                            </a>
+                        </div>
                     </div>
-                <?php endif; ?>
-            </div>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>
 
-<!-- Add Alpine.js for interactive components -->
-<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-
-<!-- JavaScript for Creatures Page -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Filter functionality
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const creaturesGrid = document.getElementById('creatures-grid');
-    const creatureCards = document.querySelectorAll('.creature-card');
-    const activeFiltersContainer = document.getElementById('active-filters');
-    const clearFiltersButton = document.getElementById('clear-filters');
+    // Filtering and sorting functionality can be implemented here
+    // This will use the data attributes on the creature cards
     
-    // Current filters state
-    let activeFilters = {
-        stage: 'all',
-        habitat: 'all',
-        status: 'all'
+    // Add smooth scroll behavior
+    document.documentElement.style.scrollBehavior = 'smooth';
+    
+    // Add fade-in animation to sections
+    const sections = document.querySelectorAll('.mb-16');
+    
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
     };
     
-    // Sort functionality
-    const sortSelect = document.getElementById('sort-by');
-    
-    if (sortSelect) {
-        sortSelect.addEventListener('change', function() {
-            sortCreatures(this.value);
-        });
-    }
-    
-    function sortCreatures(sortType) {
-        if (!creaturesGrid) return;
-        
-        const cards = Array.from(creatureCards);
-        
-        cards.sort((a, b) => {
-            switch (sortType) {
-                case 'newest':
-                    // Would need creation date data attributes
-                    return 0; // Default to no change for this example
-                case 'oldest':
-                    // Would need creation date data attributes
-                    return 0; // Default to no change for this example
-                case 'stage':
-                    // Define stage order
-                    const stageOrder = {'egg': 0, 'baby': 1, 'juvenile': 2, 'adult': 3, 'mythical': 4};
-                    return stageOrder[a.dataset.stage] - stageOrder[b.dataset.stage];
-                case 'growth':
-                    // Would need growth percentage data attributes
-                    return 0; // Default to no change for this example
-                case 'name':
-                    // Would need name data attributes
-                    return 0; // Default to no change for this example
-                default:
-                    return 0;
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('opacity-100');
+                entry.target.classList.remove('opacity-0', 'translate-y-8');
+                observer.unobserve(entry.target);
             }
         });
-        
-        // Re-append sorted items
-        cards.forEach(card => {
-            creaturesGrid.appendChild(card);
-        });
-    }
+    }, observerOptions);
     
-    // Filter functionality
-    if (filterButtons.length > 0) {
-        filterButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const filterType = this.classList.contains('stage-filter') ? 'stage' : 
-                                   this.classList.contains('habitat-filter') ? 'habitat' : 'status';
-                const filterValue = this.dataset.filter;
-                
-                // Update active state for this filter type
-                document.querySelectorAll(`.${filterType}-filter`).forEach(btn => {
-                    btn.classList.remove('bg-gray-200', 'border-gray-300', 'font-medium');
-                    btn.classList.remove('active');
-                });
-                
-                this.classList.add('bg-gray-200', 'border-gray-300', 'font-medium');
-                this.classList.add('active');
-                
-                // Update active filters
-                activeFilters[filterType] = filterValue;
-                
-                // Apply filters
-                applyFilters();
-                
-                // Update active filters display
-                updateActiveFiltersDisplay();
-            });
-        });
-    }
-    
-    // Clear all filters
-    if (clearFiltersButton) {
-        clearFiltersButton.addEventListener('click', function() {
-            // Reset filter state
-            activeFilters = {
-                stage: 'all',
-                habitat: 'all',
-                status: 'all'
-            };
-            
-            // Reset filter buttons
-            filterButtons.forEach(button => {
-                if (button.dataset.filter === 'all') {
-                    button.classList.add('bg-gray-200', 'border-gray-300', 'font-medium');
-                    button.classList.add('active');
-                } else {
-                    button.classList.remove('bg-gray-200', 'border-gray-300', 'font-medium');
-                    button.classList.remove('active');
-                }
-            });
-            
-            // Apply filters
-            applyFilters();
-            
-            // Update active filters display
-            updateActiveFiltersDisplay();
-        });
-    }
-    
-    function applyFilters() {
-        if (!creaturesGrid) return;
-        
-        // Filter creature cards
-        creatureCards.forEach(card => {
-            const stageMatch = activeFilters.stage === 'all' || card.dataset.stage === activeFilters.stage;
-            const habitatMatch = activeFilters.habitat === 'all' || card.dataset.habitat === activeFilters.habitat;
-            const statusMatch = activeFilters.status === 'all' || card.dataset.status === activeFilters.status;
-            
-            if (stageMatch && habitatMatch && statusMatch) {
-                card.style.display = '';
-            } else {
-                card.style.display = 'none';
-            }
-        });
-        
-        // Check if any cards are visible
-        let visibleCards = 0;
-        creatureCards.forEach(card => {
-            if (card.style.display !== 'none') {
-                visibleCards++;
-            }
-        });
-        
-        // Show no results message if needed
-        let noResultsMessage = document.getElementById('no-results-message');
-        if (visibleCards === 0) {
-            if (!noResultsMessage) {
-                noResultsMessage = document.createElement('div');
-                noResultsMessage.id = 'no-results-message';
-                noResultsMessage.className = 'text-center py-8';
-                noResultsMessage.innerHTML = `
-                    <div class="w-12 h-12 mx-auto bg-gray-100 rounded-full flex items-center justify-center text-gray-400 mb-2">
-                        <i class="fas fa-search text-lg"></i>
-                    </div>
-                    <p class="text-gray-500">No creatures match your filters</p>
-                `;
-                creaturesGrid.appendChild(noResultsMessage);
-            }
-        } else if (noResultsMessage) {
-            noResultsMessage.remove();
-        }
-    }
-    
-    function updateActiveFiltersDisplay() {
-        if (!activeFiltersContainer) return;
-        
-        // Clear current filters
-        activeFiltersContainer.innerHTML = '<div class="text-sm text-gray-500 mr-1">Active Filters:</div>';
-        
-        // If all filters are 'all', show one "All" filter
-        if (activeFilters.stage === 'all' && activeFilters.habitat === 'all' && activeFilters.status === 'all') {
-            const allFilter = document.createElement('span');
-            allFilter.className = 'text-sm bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full flex items-center';
-            allFilter.innerHTML = 'All <button class="ml-1 text-purple-600 hover:text-purple-800"><i class="fas fa-times"></i></button>';
-            activeFiltersContainer.appendChild(allFilter);
-            return;
-        }
-        
-        // Add active stage filter
-        if (activeFilters.stage !== 'all') {
-            const stageFilter = document.createElement('span');
-            stageFilter.className = 'text-sm bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full flex items-center';
-            stageFilter.innerHTML = `Stage: ${activeFilters.stage} <button class="ml-1 text-purple-600 hover:text-purple-800"><i class="fas fa-times"></i></button>`;
-            stageFilter.querySelector('button').addEventListener('click', function() {
-                document.querySelector('.stage-filter[data-filter="all"]').click();
-            });
-            activeFiltersContainer.appendChild(stageFilter);
-        }
-        
-        // Add active habitat filter
-        if (activeFilters.habitat !== 'all') {
-            const habitatFilter = document.createElement('span');
-            habitatFilter.className = 'text-sm bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full flex items-center';
-            habitatFilter.innerHTML = `Habitat: ${activeFilters.habitat} <button class="ml-1 text-purple-600 hover:text-purple-800"><i class="fas fa-times"></i></button>`;
-            habitatFilter.querySelector('button').addEventListener('click', function() {
-                document.querySelector('.habitat-filter[data-filter="all"]').click();
-            });
-            activeFiltersContainer.appendChild(habitatFilter);
-        }
-        
-        // Add active status filter
-        if (activeFilters.status !== 'all') {
-            const statusFilter = document.createElement('span');
-            statusFilter.className = 'text-sm bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full flex items-center';
-            statusFilter.innerHTML = `Status: ${activeFilters.status} <button class="ml-1 text-purple-600 hover:text-purple-800"><i class="fas fa-times"></i></button>`;
-            statusFilter.querySelector('button').addEventListener('click', function() {
-                document.querySelector('.status-filter[data-filter="all"]').click();
-            });
-            activeFiltersContainer.appendChild(statusFilter);
-        }
-    }
-    
-    // Initialize with default sort
-    if (sortSelect) {
-        sortCreatures(sortSelect.value);
-    }
-    
-    // Initialize with default filters
-    applyFilters();
-    updateActiveFiltersDisplay();
-    
-    // "Show more growing" button functionality
-    const showMoreGrowingBtn = document.getElementById('show-more-growing');
-    if (showMoreGrowingBtn) {
-        showMoreGrowingBtn.addEventListener('click', function() {
-            // This would show a modal with all growing creatures
-            alert('This would open a modal showing all growing creatures.');
-        });
-    }
+    sections.forEach((section, index) => {
+        section.classList.add('transition-all', 'duration-700', 'opacity-0', 'translate-y-8');
+        section.style.transitionDelay = `${index * 100}ms`;
+        observer.observe(section);
+    });
 });
 </script>
 

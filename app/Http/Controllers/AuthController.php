@@ -102,7 +102,7 @@ class AuthController extends Controller
             return;
         }
         */
-        
+
         // Login successful - create session
         $this->createUserSession($user);
         
@@ -231,7 +231,7 @@ class AuthController extends Controller
         $this->emailVerification->sendVerificationEmail($email, $verificationToken);
         
         // Redirect to login with success message
-        $this->setFlashMessage('Registration successful! Please check your email to verify your account.', 'success');
+        // $this->setFlashMessage('Registration successful! Please check your email to verify your account.', 'success');
         $this->redirect('/auth/login');
     }
     
