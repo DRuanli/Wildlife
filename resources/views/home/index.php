@@ -1,6 +1,6 @@
 <?php require_once ROOT_PATH . '/resources/views/layouts/header.php'; ?>
 
-<!-- Inline Styles & Font Imports: Feel free to move these to your main CSS file -->
+<!-- Inline Styles & Font Imports (move to your main CSS file as desired) -->
 <style>
   /* Import Google Fonts */
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@400;500&display=swap');
@@ -114,331 +114,45 @@
     padding: 2rem;
   }
 
-  /* Creature Gallery Cards */
-  .creature-card {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden;
-    width: 300px;
-    margin: 0 auto;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  /* ADVANCED FOCUS TIMER WITH RADIAL PROGRESS */
+  #focus-timer {
+    text-align: center;
   }
-  .creature-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+  #focus-timer svg {
+    transform: rotate(-90deg);
   }
-  .creature-card img {
-    width: 100%;
-    height: auto;
+  #timerDisplay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(90deg);
+    font-family: 'Courier New', monospace;
+    font-size: 2rem;
+    pointer-events: none;
   }
-  .creature-card .card-content {
-    padding: 1rem;
+  #timerInput {
+    width: 60px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 0.25rem;
   }
-</style>
 
-<main>
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-content">
-      <h1 class="headline">Meet Wildlife Haven</h1>
-      <p class="body-text" style="font-size:1.25rem;">
-        Transform your focus into a force for conservation. Nurture mythical creatures while making a real impact.
-      </p>
-      <div>
-        <a href="<?= $baseUrl ?>/auth/register" class="btn btn-primary" aria-label="Get Started">Get Started</a>
-        <a href="#features" class="btn btn-secondary" aria-label="Learn More" style="margin-left:1rem;">Learn More</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Features Section -->
-  <section class="section" id="features">
-    <h2 class="sub-headline">Innovative Focus Tools</h2>
-    <p class="body-text">
-      Experience a cutting-edge focus timer, dynamic creature gallery, and immersive testimonials—all designed to elevate your productivity and passion for conservation.
-    </p>
-  </section>
-
-  <!-- ADVANCED FOCUS TIMER WITH RADIAL PROGRESS -->
-<section class="section" id="focus-timer" style="text-align:center;">
-  <h2 class="sub-headline" style="margin-bottom: 1rem;">Interactive Focus Timer</h2>
-  
-  <!-- Timer Container -->
-  <div style="display: inline-block; position: relative; margin-bottom: 2rem;">
-    <!-- SVG Radial Progress -->
-    <svg id="timerRing" width="200" height="200" style="transform: rotate(-90deg);">
-      <circle
-        id="timerCircleBg"
-        cx="100"
-        cy="100"
-        r="90"
-        fill="none"
-        stroke="#e5e5e5"
-        stroke-width="15"
-      ></circle>
-      <circle
-        id="timerCircle"
-        cx="100"
-        cy="100"
-        r="90"
-        fill="none"
-        stroke="#CE6246"
-        stroke-width="15"
-        stroke-linecap="round"
-        stroke-dasharray="565.48"  <!-- Circumference of r=90: 2πr ~ 565.48 -->
-        stroke-dashoffset="565.48" <!-- Start fully offset (empty ring) -->
-      ></circle>
-    </svg>
-    <!-- Timer Text Overlaid -->
-    <div
-      id="timerDisplay"
-      style="
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) rotate(90deg);
-        font-family: 'Courier New', monospace;
-        font-size: 2rem;
-        pointer-events: none;
-      "
-    >
-      00:00
-    </div>
-  </div>
-  
-  <!-- Controls & Duration Input -->
-  <div style="margin-bottom: 1rem;">
-    <label for="timerInput" class="small-text" style="margin-right: 0.5rem;">
-      Set Focus Time (minutes):
-    </label>
-    <input
-      id="timerInput"
-      type="number"
-      min="1"
-      max="999"
-      value="25"
-      class="body-text"
-      style="
-        width: 60px;
-        text-align: center;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        padding: 0.25rem;
-      "
-    />
-  </div>
-  
-  <!-- Action Buttons -->
-  <div style="display: inline-flex; gap: 1rem;">
-    <button class="btn btn-primary" onclick="startTimer()" style="width: 100px;">Start</button>
-    <button class="btn btn-secondary" onclick="pauseTimer()" style="width: 100px;">Pause</button>
-    <button class="btn btn-secondary" onclick="resetTimer()" style="width: 100px;">Reset</button>
-  </div>
-  
-  <!-- Audio for Beep -->
-  <audio id="beepAudio" src="<?= $baseUrl ?>/audio/beep.mp3" preload="auto"></audio>
-</section>
-
-<script>
-  // ========== Radial Timer Script ==========
-  let timerInterval;
-  let remainingSeconds = 0;
-  let totalSeconds = 0;
-  
-  // For the circle ring
-  const circle = document.getElementById('timerCircle');
-  const circumference = 565.48; // For r=90
-  // Display
-  const timerDisplay = document.getElementById('timerDisplay');
-  // Audio
-  const beepAudio = document.getElementById('beepAudio');
-  
-  function updateTimerDisplay() {
-    // Update text
-    const mins = Math.floor(remainingSeconds / 60);
-    const secs = remainingSeconds % 60;
-    timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-    
-    // Update ring
-    // fraction of time used
-    const fraction = remainingSeconds / totalSeconds;
-    const offset = circumference - (fraction * circumference);
-    circle.style.strokeDashoffset = offset;
-  }
-  
-  function startTimer() {
-    // If already running, do nothing
-    if (timerInterval) return;
-    
-    // If timer is fresh or after reset, set totalSeconds from input
-    if (remainingSeconds <= 0) {
-      const inputMins = parseInt(document.getElementById('timerInput').value) || 25;
-      totalSeconds = inputMins * 60;
-      remainingSeconds = totalSeconds;
-      updateTimerDisplay();
-    }
-    
-    timerInterval = setInterval(() => {
-      remainingSeconds--;
-      updateTimerDisplay();
-      if (remainingSeconds <= 0) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-        remainingSeconds = 0;
-        // Play beep sound
-        beepAudio.currentTime = 0;
-        beepAudio.play().catch(err => console.log(err));
-      }
-    }, 1000);
-  }
-  
-  function pauseTimer() {
-    clearInterval(timerInterval);
-    timerInterval = null;
-  }
-  
-  function resetTimer() {
-    pauseTimer();
-    remainingSeconds = 0;
-    circle.style.strokeDashoffset = circumference; // reset ring
-    timerDisplay.textContent = '00:00';
-  }
-</script>
-
-
-  <!-- BEGIN ADVANCED CARDS -->
-<section class="section" id="value-props" style="text-align: left;">
-  <div style="max-width: 1200px; margin: 0 auto;">
-    <h2 class="sub-headline" style="margin-bottom: 1rem;">Our Commitments</h2>
-    <p class="body-text" style="margin-bottom: 2rem;">
-      We uphold these core principles to ensure a secure, trustworthy, and ever-evolving platform for our users.
-    </p>
-    
-    <!-- Grid Container -->
-    <div class="advanced-grid-container">
-      <!-- Card 1 -->
-      <div class="advanced-card">
-        <div class="advanced-card-content">
-          <!-- Front Face -->
-          <div class="advanced-card-front">
-            <img 
-              src="<?= $baseUrl ?>/images/icon-secure.png" 
-              alt="Secure Icon" 
-              class="card-icon" 
-            />
-            <h3 class="sub-headline card-title">Secure</h3>
-            <p class="body-text card-desc">
-              With robust security practices—SOC 2 Type II certification, HIPAA compliance options, and more—we ensure your focus sessions and data remain protected.
-            </p>
-          </div>
-          <!-- Back Face -->
-          <div class="advanced-card-back">
-            <h4 class="sub-headline" style="margin-bottom: 0.5rem;">Featured Post</h4>
-            <p class="small-text">
-              <em>Constitutional Classifiers: Defending Against Universal Jailbreaks</em><br />
-              Learn how we protect user data from sophisticated security threats.
-            </p>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Card 2 -->
-      <div class="advanced-card">
-        <div class="advanced-card-content">
-          <div class="advanced-card-front">
-            <img 
-              src="<?= $baseUrl ?>/images/icon-trust.png" 
-              alt="Trust Icon" 
-              class="card-icon" 
-            />
-            <h3 class="sub-headline card-title">Trustworthy</h3>
-            <p class="body-text card-desc">
-              We combine best-in-class LLM risk mitigation with rigorous testing to protect your brand and community from harm.
-            </p>
-          </div>
-          <div class="advanced-card-back">
-            <h4 class="sub-headline" style="margin-bottom: 0.5rem;">Featured Post</h4>
-            <p class="small-text">
-              <em>Challenges in Red Teaming AI Systems</em><br />
-              Discover how we continually test and refine our defenses against AI vulnerabilities.
-            </p>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Card 3 -->
-      <div class="advanced-card">
-        <div class="advanced-card-content">
-          <div class="advanced-card-front">
-            <img 
-              src="<?= $baseUrl ?>/images/icon-learning.png" 
-              alt="Learning Icon" 
-              class="card-icon" 
-            />
-            <h3 class="sub-headline card-title">Continuous Learning</h3>
-            <p class="body-text card-desc">
-              Our platform evolves alongside user feedback, ensuring advanced model fine-tuning and seamless improvements for your productivity.
-            </p>
-          </div>
-          <div class="advanced-card-back">
-            <h4 class="sub-headline" style="margin-bottom: 0.5rem;">Featured Paper</h4>
-            <p class="small-text">
-              <em>Red Teaming Language Models to Reduce Harm</em><br />
-              A deeper look into how we identify and address emerging risks in real time.
-            </p>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Card 4 -->
-      <div class="advanced-card">
-        <div class="advanced-card-content">
-          <div class="advanced-card-front">
-            <img 
-              src="<?= $baseUrl ?>/images/icon-evolving.png" 
-              alt="Evolving Icon" 
-              class="card-icon" 
-            />
-            <h3 class="sub-headline card-title">Evolving</h3>
-            <p class="body-text card-desc">
-              We refine our approach constantly—building a more inclusive, transparent AI experience with every iteration.
-            </p>
-          </div>
-          <div class="advanced-card-back">
-            <h4 class="sub-headline" style="margin-bottom: 0.5rem;">Featured Paper</h4>
-            <p class="small-text">
-              <em>Evaluating and Mitigating Discrimination in Language Model Decisions</em><br />
-              How we foster fairness and accountability in AI-driven environments.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- END ADVANCED CARDS -->
-
-<style>
-  /* =============================
-     ADVANCED INTERACTIVE CARDS
-     ============================= */
-
+  /* ADVANCED CREATURE GALLERY CARDS (Interactive Flip Cards) */
   .advanced-grid-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;
   }
-
   .advanced-card {
     position: relative;
-    perspective: 1000px; /* Enables 3D space for flip */
+    perspective: 1000px; /* Enables 3D space */
     border-radius: 12px;
     border: 1px solid #E5E5E5;
-    height: 350px; /* Adjust as needed */
+    height: 350px;
     overflow: hidden;
+    cursor: pointer;
   }
-
   .advanced-card-content {
     width: 100%;
     height: 100%;
@@ -446,8 +160,6 @@
     transform-style: preserve-3d;
     position: relative;
   }
-
-  /* Front Face */
   .advanced-card-front,
   .advanced-card-back {
     position: absolute;
@@ -461,89 +173,28 @@
     justify-content: center;
     border-radius: 12px;
   }
-
   .advanced-card-front {
-    background-color: #FAF6EE; /* Light background for front */
+    background-color: #FAF6EE;
     z-index: 2;
-    transform: rotateY(0deg);
   }
-
   .advanced-card-back {
-    background-color: #FFF9F4; /* Slightly different color for back */
+    background-color: #FFF9F4;
     transform: rotateY(180deg);
     z-index: 1;
   }
-
-  /* Flip Effect on Hover */
-  .advanced-card:hover .advanced-card-content {
-    transform: rotateY(180deg);
-  }
-
-  /* Icon in the Front Face */
-  .card-icon {
-    height: 50px;
-    width: 50px;
-    margin-bottom: 1rem;
-  }
-
-  /* Titles and Descriptions */
-  .card-title {
-    font-size: 1.25rem;
-    margin-bottom: 0.5rem;
-    color: var(--text-dark);
-  }
-  .card-desc {
-    margin-bottom: 1rem;
-  }
-</style>
-v
-
-
-  <!-- BEGIN ADVANCED TESTIMONIALS -->
-<section class="section" id="testimonials" style="text-align: center;">
-  <h2 class="sub-headline" style="margin-bottom: 1rem;">What Our Users Say</h2>
-  <p class="body-text" style="margin-bottom: 2rem;">
-    Discover how Wildlife Haven has revolutionized focus sessions, blending productivity with conservation seamlessly.
-  </p>
-
-  <!-- Carousel Container -->
-  <div class="testimonial-carousel">
-    <!-- Slides Wrapper -->
-    <div class="testimonial-slides">
-      <!-- Slides are generated dynamically by JS -->
-    </div>
-    
-    <!-- Navigation Controls -->
-    <button class="carousel-btn prev-btn" aria-label="Previous testimonial">
-      <i class="fa fa-chevron-left"></i>
-    </button>
-    <button class="carousel-btn next-btn" aria-label="Next testimonial">
-      <i class="fa fa-chevron-right"></i>
-    </button>
-
-    <!-- Dots (Pagination) -->
-    <div class="carousel-dots"></div>
-  </div>
-</section>
-
-<style>
-  /* ==============================
-     TESTIMONIAL CAROUSEL STYLES
-     ============================== */
+  
+  /* ADVANCED TESTIMONIALS CAROUSEL STYLES */
   .testimonial-carousel {
     position: relative;
     max-width: 700px;
     margin: 0 auto;
     overflow: hidden;
   }
-
   .testimonial-slides {
     position: relative;
     width: 100%;
-    height: 200px; /* Adjust as needed for your content */
+    height: 200px;
   }
-
-  /* Each slide */
   .testimonial-slide {
     position: absolute;
     top: 0;
@@ -559,7 +210,6 @@ v
     opacity: 1;
     z-index: 1;
   }
-
   .testimonial-quote {
     font-size: 1.25rem;
     line-height: 1.6;
@@ -567,13 +217,10 @@ v
     font-style: italic;
     margin-bottom: 1rem;
   }
-
   .testimonial-author {
-    font-size: 0.875rem; /* small-text */
+    font-size: 0.875rem;
     color: #555;
   }
-
-  /* Navigation Buttons */
   .carousel-btn {
     position: absolute;
     top: 50%;
@@ -584,23 +231,17 @@ v
     height: 40px;
     border-radius: 50%;
     cursor: pointer;
-    font-size: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: background-color 0.2s ease;
+    font-size: 1rem;
   }
   .carousel-btn:hover {
     background: rgba(255,255,255,1);
   }
-  .prev-btn {
-    left: -20px; /* Adjust if needed */
-  }
-  .next-btn {
-    right: -20px; /* Adjust if needed */
-  }
-
-  /* Dots (Pagination) */
+  .prev-btn { left: -20px; }
+  .next-btn { right: -20px; }
   .carousel-dots {
     display: flex;
     justify-content: center;
@@ -614,27 +255,306 @@ v
     border-radius: 50%;
     cursor: pointer;
   }
-  .carousel-dot.active {
-    background: var(--primary-color);
-  }
+  .carousel-dot.active { background: var(--primary-color); }
 
-  /* Responsive adjustments */
+  /* Responsive adjustments for carousel buttons */
   @media (max-width: 768px) {
-    .carousel-btn {
-      width: 32px;
-      height: 32px;
-    }
-    .prev-btn {
-      left: 5px;
-    }
-    .next-btn {
-      right: 5px;
-    }
+    .carousel-btn { width: 32px; height: 32px; }
+    .prev-btn { left: 5px; }
+    .next-btn { right: 5px; }
   }
 </style>
 
+<!-- AlpineJS for interactivity -->
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+<main>
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1 class="headline">Meet Wildlife Haven</h1>
+      <p class="body-text" style="font-size:1.25rem;">
+        Transform your focus into a force for conservation. Nurture mythical creatures while making a real impact.
+      </p>
+      <div>
+        <a href="<?= $baseUrl ?>/auth/register" class="btn btn-primary" aria-label="Get Started">Get Started</a>
+        <a href="#features" class="btn btn-secondary" aria-label="Learn More" style="margin-left:1rem;">Learn More</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES SECTION -->
+  <section class="section" id="features">
+    <h2 class="sub-headline">Innovative Focus Tools</h2>
+    <p class="body-text">
+      Experience a cutting-edge focus timer, dynamic creature gallery, and immersive testimonials—all designed to elevate your productivity and passion for conservation.
+    </p>
+  </section>
+
+  <!-- ADVANCED FOCUS TIMER WITH RADIAL PROGRESS -->
+  <section class="section" id="focus-timer">
+    <h2 class="sub-headline" style="margin-bottom: 1rem;">Interactive Focus Timer</h2>
+    
+    <!-- Timer Container -->
+    <div style="display: inline-block; position: relative; margin-bottom: 2rem;">
+      <svg id="timerRing" width="200" height="200">
+        <circle
+          id="timerCircleBg"
+          cx="100"
+          cy="100"
+          r="90"
+          fill="none"
+          stroke="#e5e5e5"
+          stroke-width="15"
+        ></circle>
+        <circle
+          id="timerCircle"
+          cx="100"
+          cy="100"
+          r="90"
+          fill="none"
+          stroke="#CE6246"
+          stroke-width="15"
+          stroke-linecap="round"
+          stroke-dasharray="565.48"
+          stroke-dashoffset="565.48"
+        ></circle>
+      </svg>
+      <div id="timerDisplay">00:00</div>
+    </div>
+    
+    <!-- Controls & Duration Input -->
+    <div style="margin-bottom: 1rem;">
+      <label for="timerInput" class="small-text" style="margin-right: 0.5rem;">
+        Set Focus Time (minutes):
+      </label>
+      <input id="timerInput" type="number" min="1" max="999" value="25" />
+    </div>
+    
+    <!-- Action Buttons -->
+    <div style="display: inline-flex; gap: 1rem;">
+      <button class="btn btn-primary" onclick="startTimer()" style="width: 100px;">Start</button>
+      <button class="btn btn-secondary" onclick="pauseTimer()" style="width: 100px;">Pause</button>
+      <button class="btn btn-secondary" onclick="resetTimer()" style="width: 100px;">Reset</button>
+    </div>
+    
+    <!-- Audio for Beep -->
+    <audio id="beepAudio" src="<?= $baseUrl ?>/audio/beep.mp3" preload="auto"></audio>
+  </section>
+
+  <!-- ADVANCED CARDS SECTION (Our Commitments) -->
+  <section class="section" id="value-props" style="text-align: left;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <h2 class="sub-headline" style="margin-bottom: 1rem;">Our Commitments</h2>
+      <p class="body-text" style="margin-bottom: 2rem;">
+        We uphold these core principles to ensure a secure, trustworthy, and ever-evolving platform for our users.
+      </p>
+      
+      <!-- Grid Container -->
+      <div class="advanced-grid-container">
+        <!-- Each card uses AlpineJS for flip effect on click -->
+        <div class="advanced-card" x-data="{ flipped: false }" @click="flipped = !flipped">
+          <div class="advanced-card-content" :style="{ transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }">
+            <!-- Front Face -->
+            <div class="advanced-card-front">
+              <img src="<?= $baseUrl ?>/images/icon-secure.png" alt="Secure Icon" class="card-icon" />
+              <h3 class="sub-headline card-title">Giant Panda (Ailuropoda melanoleuca)</h3>
+              <p class="body-text card-desc">
+                With robust security practices—SOC 2 Type II certification, HIPAA compliance options, and more—we ensure your focus sessions and data remain protected.
+              </p>
+            </div>
+            <!-- Back Face -->
+            <div class="advanced-card-back">
+              <h4 class="sub-headline" style="margin-bottom: 0.5rem;">Featured Post</h4>
+              <p class="small-text">
+                <em>Constitutional Classifiers: Defending Against Universal Jailbreaks</em>
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="advanced-card" x-data="{ flipped: false }" @click="flipped = !flipped">
+          <div class="advanced-card-content" :style="{ transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }">
+            <div class="advanced-card-front">
+              <img src="<?= $baseUrl ?>/images/icon-trust.png" alt="Trust Icon" class="card-icon" />
+              <h3 class="sub-headline card-title">Trustworthy</h3>
+              <p class="body-text card-desc">
+                We combine best-in-class LLM risk mitigation with rigorous testing to protect your brand and community from harm.
+              </p>
+            </div>
+            <div class="advanced-card-back">
+              <h4 class="sub-headline" style="margin-bottom: 0.5rem;">Featured Post</h4>
+              <p class="small-text">
+                <em>Challenges in Red Teaming AI Systems</em><br />
+                Discover how we continually test and refine our defenses against AI vulnerabilities.
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="advanced-card" x-data="{ flipped: false }" @click="flipped = !flipped">
+          <div class="advanced-card-content" :style="{ transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }">
+            <div class="advanced-card-front">
+              <img src="<?= $baseUrl ?>/images/icon-learning.png" alt="Learning Icon" class="card-icon" />
+              <h3 class="sub-headline card-title">Continuous Learning</h3>
+              <p class="body-text card-desc">
+                Our platform evolves alongside user feedback, ensuring advanced model fine-tuning and seamless improvements for your productivity.
+              </p>
+            </div>
+            <div class="advanced-card-back">
+              <h4 class="sub-headline" style="margin-bottom: 0.5rem;">Featured Paper</h4>
+              <p class="small-text">
+                <em>Red Teaming Language Models to Reduce Harm</em><br />
+                A deeper look into how we identify and address emerging risks in real time.
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="advanced-card" x-data="{ flipped: false }" @click="flipped = !flipped">
+          <div class="advanced-card-content" :style="{ transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }">
+            <div class="advanced-card-front">
+              <img src="<?= $baseUrl ?>/images/icon-evolving.png" alt="Evolving Icon" class="card-icon" />
+              <h3 class="sub-headline card-title">Evolving</h3>
+              <p class="body-text card-desc">
+                We refine our approach constantly—building a more inclusive, transparent AI experience with every iteration.
+              </p>
+            </div>
+            <div class="advanced-card-back">
+              <h4 class="sub-headline" style="margin-bottom: 0.5rem;">Featured Paper</h4>
+              <p class="small-text">
+                <em>Evaluating and Mitigating Discrimination in Language Model Decisions</em><br />
+                How we foster fairness and accountability in AI-driven environments.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="advanced-card" x-data="{ flipped: false }" @click="flipped = !flipped">
+          <div class="advanced-card-content" :style="{ transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }">
+            <div class="advanced-card-front">
+              <img src="<?= $baseUrl ?>/images/icon-evolving.png" alt="Evolving Icon" class="card-icon" />
+              <h3 class="sub-headline card-title">Evolving</h3>
+              <p class="body-text card-desc">
+                We refine our approach constantly—building a more inclusive, transparent AI experience with every iteration.
+              </p>
+            </div>
+            <div class="advanced-card-back">
+              <h4 class="sub-headline" style="margin-bottom: 0.5rem;">Featured Paper</h4>
+              <p class="small-text">
+                <em>Evaluating and Mitigating Discrimination in Language Model Decisions</em><br />
+                How we foster fairness and accountability in AI-driven environments.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="advanced-card" x-data="{ flipped: false }" @click="flipped = !flipped">
+          <div class="advanced-card-content" :style="{ transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }">
+            <div class="advanced-card-front">
+              <img src="<?= $baseUrl ?>/images/icon-evolving.png" alt="Evolving Icon" class="card-icon" />
+              <h3 class="sub-headline card-title">Evolving</h3>
+              <p class="body-text card-desc">
+                We refine our approach constantly—building a more inclusive, transparent AI experience with every iteration.
+              </p>
+            </div>
+            <div class="advanced-card-back">
+              <h4 class="sub-headline" style="margin-bottom: 0.5rem;">Featured Paper</h4>
+              <p class="small-text">
+                <em>Evaluating and Mitigating Discrimination in Language Model Decisions</em><br />
+                How we foster fairness and accountability in AI-driven environments.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ADVANCED TESTIMONIALS CAROUSEL -->
+  <section class="section" id="testimonials" style="text-align: center;">
+    <h2 class="sub-headline" style="margin-bottom: 1rem;">What Our Users Say</h2>
+    <p class="body-text" style="margin-bottom: 2rem;">
+      Discover how Wildlife Haven has revolutionized focus sessions, blending productivity with conservation seamlessly.
+    </p>
+
+    <!-- Carousel Container -->
+    <div class="testimonial-carousel">
+      <div class="testimonial-slides">
+        <!-- Slides will be generated dynamically -->
+      </div>
+      
+      <!-- Navigation Controls -->
+      <button class="carousel-btn prev-btn" aria-label="Previous testimonial">
+        <i class="fa fa-chevron-left"></i>
+      </button>
+      <button class="carousel-btn next-btn" aria-label="Next testimonial">
+        <i class="fa fa-chevron-right"></i>
+      </button>
+      
+      <!-- Dots (Pagination) -->
+      <div class="carousel-dots"></div>
+    </div>
+  </section>
+</main>
+
+<!-- JavaScript for Radial Timer -->
 <script>
-  // ============ ADVANCED TESTIMONIALS CAROUSEL ============
+  let timerInterval;
+  let remainingSeconds = 0;
+  let totalSeconds = 0;
+  
+  const circle = document.getElementById('timerCircle');
+  const circumference = 565.48;
+  const timerDisplay = document.getElementById('timerDisplay');
+  const beepAudio = document.getElementById('beepAudio');
+
+  function updateTimerDisplay() {
+    const mins = Math.floor(remainingSeconds / 60);
+    const secs = remainingSeconds % 60;
+    timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    const fraction = remainingSeconds / totalSeconds;
+    const offset = circumference - (fraction * circumference);
+    circle.style.strokeDashoffset = offset;
+  }
+  
+  function startTimer() {
+    if (timerInterval) return;
+    if (remainingSeconds <= 0) {
+      const inputMins = parseInt(document.getElementById('timerInput').value) || 25;
+      totalSeconds = inputMins * 60;
+      remainingSeconds = totalSeconds;
+      updateTimerDisplay();
+    }
+    timerInterval = setInterval(() => {
+      remainingSeconds--;
+      updateTimerDisplay();
+      if (remainingSeconds <= 0) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        remainingSeconds = 0;
+        beepAudio.currentTime = 0;
+        beepAudio.play().catch(err => console.log(err));
+      }
+    }, 1000);
+  }
+  
+  function pauseTimer() {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
+  
+  function resetTimer() {
+    pauseTimer();
+    remainingSeconds = 0;
+    circle.style.strokeDashoffset = circumference;
+    timerDisplay.textContent = '00:00';
+  }
+</script>
+
+<!-- JavaScript for Testimonials Carousel -->
+<script>
   const testimonialsData = [
     {
       quote: "Wildlife Haven revolutionized my productivity, blending focus with conservation seamlessly.",
@@ -648,12 +568,11 @@ v
       quote: "Such a unique idea—combining real conservation with daily productivity is brilliant.",
       author: "Emily R., Entrepreneur"
     }
-    // Add more testimonials here...
   ];
 
   let currentSlide = 0;
-  let slides = [];
-  let dots = [];
+  const slides = [];
+  const dots = [];
   let autoSlideInterval;
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -662,23 +581,16 @@ v
     const prevBtn = document.querySelector(".prev-btn");
     const nextBtn = document.querySelector(".next-btn");
 
-    // Create slides dynamically
     testimonialsData.forEach((t, index) => {
-      // Slide element
       const slideEl = document.createElement("div");
-      slideEl.className = "testimonial-slide";
-      if (index === 0) slideEl.classList.add("active"); // show first by default
-
-      // Slide content
+      slideEl.className = "testimonial-slide" + (index === 0 ? " active" : "");
       slideEl.innerHTML = `
         <blockquote class="testimonial-quote">${t.quote}</blockquote>
         <p class="testimonial-author">- ${t.author}</p>
       `;
-
       slidesWrapper.appendChild(slideEl);
       slides.push(slideEl);
 
-      // Dot for each slide
       const dotEl = document.createElement("span");
       dotEl.className = "carousel-dot" + (index === 0 ? " active" : "");
       dotEl.addEventListener("click", () => goToSlide(index));
@@ -686,14 +598,10 @@ v
       dots.push(dotEl);
     });
 
-    // Buttons
     prevBtn.addEventListener("click", prevSlide);
     nextBtn.addEventListener("click", nextSlide);
 
-    // Auto-rotation
-    autoSlideInterval = setInterval(() => {
-      nextSlide();
-    }, 5000); // 5 seconds
+    autoSlideInterval = setInterval(nextSlide, 5000);
   });
 
   function goToSlide(index) {
@@ -714,37 +622,6 @@ v
     let newIndex = currentSlide + 1;
     if (newIndex >= slides.length) newIndex = 0;
     goToSlide(newIndex);
-  }
-</script>
-<!-- END ADVANCED TESTIMONIALS -->
-
-
-<script>
-  // Simple JavaScript timer (front-end only)
-  let timerInterval;
-  let seconds = 0;
-  function updateTimer() {
-    const timerEl = document.getElementById('timer');
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    timerEl.textContent = String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
-  }
-  function startTimer() {
-    if (!timerInterval) {
-      timerInterval = setInterval(() => {
-        seconds++;
-        updateTimer();
-      }, 1000);
-    }
-  }
-  function pauseTimer() {
-    clearInterval(timerInterval);
-    timerInterval = null;
-  }
-  function resetTimer() {
-    pauseTimer();
-    seconds = 0;
-    updateTimer();
   }
 </script>
 
