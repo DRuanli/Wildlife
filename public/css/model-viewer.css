@@ -1,0 +1,74 @@
+.model-viewer-container {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.model-viewer-container canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.model-controls {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+  padding: 8px 16px;
+  gap: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.model-controls button {
+  background-color: #6B5CA5;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  padding: 5px 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.model-controls button:hover {
+  background-color: #5D4F91;
+}
+
+.model-controls button.active {
+  background-color: #4C417D;
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.2);
+}
+
+.model-viewer-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(240, 240, 240, 0.8);
+  z-index: 10;
+}
+
+.model-viewer-loading span {
+  display: inline-block;
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(107, 92, 165, 0.3);
+  border-radius: 50%;
+  border-top-color: #6B5CA5;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

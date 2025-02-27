@@ -545,4 +545,48 @@ class ShopController extends Controller
             'baseUrl' => '/Wildlife' // Base URL for assets
         ]);
     }
+
+    /**
+     * Display a 3D preview of an item
+     * 
+     * @param array $params Route parameters
+     * @return void
+     */
+    public function modelPreview($params = [])
+    {
+        // Require authentication to access models
+        $this->requireAuth();
+        
+        $itemId = $params['id'] ?? null;
+        $userId = $_SESSION['user_id'];
+        
+        if (!$itemId) {
+            $this->setFlashMessage('Item not found', 'danger');
+            $this->redirect('/shop');
+            return;
+        }
+        
+        // Get item details
+        $item = $this->itemModel->findById($itemId);
+        
+        if (!$item) {
+            $this->setFlashMessage('Item not found', 'danger');
+            $this->redirect('/shop');
+            return;
+        }
+        
+        // Get user's coin balance
+        $user = $this->userModel->findById($userId);
+        $userCoins = $user['coins_balance'] ?? 0;
+        
+        // Record that user viewed this item
+        $this->itemModel->recordItemView($userId, $itemId);
+        
+        // Render the model preview view
+        $this->render('shop/model-preview', [
+            'item' => $item,
+            'userCoins' => $userCoins,
+            'baseUrl' => '/Wildlife' // Base URL for assets
+        ]);
+    }
 }

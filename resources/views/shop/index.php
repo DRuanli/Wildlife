@@ -284,27 +284,32 @@
         
         <!-- Regular Item 1 -->
         <div class="bg-white rounded-lg shadow-sm border border-[var(--neutral-light)] overflow-hidden group hover:shadow-md transition-all duration-300 shop-item">
-          <div class="relative">
-            <div class="bg-[var(--primary-bg)] h-48 flex items-center justify-center p-4 transition-all duration-300 group-hover:bg-[#F5F2E9]">
-              <img src="<?= $baseUrl ?>/images/shop/magic-crystal.png" alt="Magic Crystal" class="h-32 w-auto object-contain item-image transform transition-transform duration-300 group-hover:scale-105">
+            <div class="relative">
+                <div class="bg-[var(--primary-bg)] h-48 flex items-center justify-center p-4 transition-all duration-300 group-hover:bg-[#F5F2E9]">
+                <img src="<?= $baseUrl ?>/images/shop/arctic-shimmer-hare.png" alt="Arctic Shimmer Hare" class="h-32 w-auto object-contain item-image transform transition-transform duration-300 group-hover:scale-105">
+                </div>
+                <div class="absolute top-3 right-3 badge-rare text-xs font-medium px-2 py-1 rounded-full">
+                Rare
+                </div>
             </div>
-            <div class="absolute top-3 right-3 badge-rare text-xs font-medium px-2 py-1 rounded-full">
-              Rare
-            </div>
-          </div>
-          <div class="p-5">
-            <h3 class="font-medium text-[var(--primary-text)] mb-1">Magic Crystal</h3>
-            <p class="text-sm text-[var(--neutral-dark)] mb-3">Accelerates creature growth when placed in a habitat</p>
-            <div class="flex justify-between items-center">
-              <div class="flex items-center">
-                <span class="font-bold text-[var(--primary-text)] mr-1">450</span>
-                <i class="fas fa-coins text-yellow-500 text-sm"></i>
-              </div>
-              <button class="bg-[var(--accent-primary)] hover:bg-[#5D4F91] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors duration-300 flex items-center">
-                <i class="fas fa-shopping-cart mr-2"></i> Add
-              </button>
-            </div>
-          </div>
+            <div class="p-5">
+                <h3 class="font-medium text-[var(--primary-text)] mb-1">Arctic Shimmer Hare</h3>
+                <p class="text-sm text-[var(--neutral-dark)] mb-3">A magical egg containing a rare mountain creature</p>
+                <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <span class="font-bold text-[var(--primary-text)] mr-1">650</span>
+                    <i class="fas fa-coins text-yellow-500 text-sm"></i>
+                </div>
+                <div class="flex space-x-2">
+                    <a href="<?= $baseUrl ?>/shop/model-preview/100" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-3 py-2 rounded-lg transition-colors inline-flex items-center">
+                    <i class="fas fa-cube mr-1"></i> 3D View
+                    </a>
+                    <button class="bg-[var(--accent-primary)] hover:bg-[#5D4F91] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors flex items-center">
+                    <i class="fas fa-shopping-cart mr-2"></i> Add
+                    </button>
+                </div>
+                </div>
+            </div>  
         </div>
         
         <!-- Regular Item 2 -->
