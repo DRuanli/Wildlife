@@ -21,6 +21,26 @@ function getRoutes() {
         '/auth/apple/callback' => 'AuthController@appleCallback',
         '/dashboard' => 'DashboardController@index',
         '/dashboard/profile' => 'DashboardController@profile',
-        '/dashboard/settings' => 'DashboardController@settings'
+        '/dashboard/settings' => 'DashboardController@settings',
+        
+        // Focus controller routes
+        '/focus' => 'FocusController@index',
+        '/focus/start' => 'FocusController@startSession',
+        '/focus/complete' => 'FocusController@completeSession',
+        '/focus/cancel' => 'FocusController@cancelSession',
+        '/focus/summary/:id' => 'FocusController@summary',
+        '/focus/history' => 'FocusController@history',
+        '/focus/stats' => 'FocusController@getStats',
+
+        // Creature controller routes
+        '/creatures' => 'CreatureController@index',
+        '/creatures/view/:id' => 'CreatureController@view',
+        '/creatures/hatch/:id' => 'CreatureController@hatch',
+        '/creatures/hatch' => 'CreatureController@hatchEgg',
+        '/creatures/evolve' => 'CreatureController@evolveCreature',
+        '/creatures/feed' => 'CreatureController@feedCreature',
+        '/creatures/play' => 'CreatureController@playWithCreature',
+        '/creatures/rename' => 'CreatureController@renameCreature',
+        '/creatures/habitat' => 'CreatureController@moveToHabitat',
     ];
 }
