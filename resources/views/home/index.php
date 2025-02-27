@@ -530,6 +530,117 @@
 </script>
 
 
+<!-- ADVANCED CARDS SECTION (Our Commitments) -->
+<section class="section" id="value-props" style="text-align: left;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <h2 class="sub-headline" style="margin-bottom: 1rem;">Our Commitments</h2>
+      <p class="body-text" style="margin-bottom: 2rem;">
+        We uphold these core principles to ensure a secure, trustworthy, and ever-evolving platform for our users.
+      </p>
+      
+      <!-- Grid Container -->
+      <div class="advanced-grid-container">
+        <!-- Each card uses AlpineJS for flip effect on click -->
+        <div class="advanced-card" x-data="{ flipped: false }" @click="flipped = !flipped">
+          <div class="advanced-card-content" :style="{ transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }">
+            <!-- Front Face -->
+            <div class="advanced-card-front">
+              <img src="<?= $baseUrl ?>/public/img/panda.jpg" alt="Secure Icon" class="card-icon" />
+            </div>
+            <!-- Back Face -->
+            <div class="advanced-card-back">
+              <h4 class="sub-headline" style="margin-bottom: 0.5rem;">Giant Panda (Ailuropoda melanoleuca)</h4>
+              <p class="small-text">
+                <em>An iconic species of China, the giant panda is famous for its black-and-white fur and a diet primarily consisting of bamboo. Their population is limited and strictly protected.</em>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="advanced-card" x-data="{ flipped: false }" @click="flipped = !flipped">
+          <div class="advanced-card-content" :style="{ transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }">
+            <!-- Front Face -->
+            <div class="advanced-card-front">
+              <img src="<?= $baseUrl ?>/public/img/snow_leopard.png" alt="Secure Icon" class="card-icon" />
+            </div>
+            <!-- Back Face -->
+            <div class="advanced-card-back">
+              <h4 class="sub-headline" style="margin-bottom: 0.5rem;">Snow Leopard (Panthera uncia)</h4>
+              <p class="small-text">
+                <em>Inhabiting the high mountains of Central Asia, the snow leopard is a symbol of strength but is at risk due to illegal hunting and habitat loss.</em>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="advanced-card" x-data="{ flipped: false }" @click="flipped = !flipped">
+          <div class="advanced-card-content" :style="{ transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }">
+            <!-- Front Face -->
+            <div class="advanced-card-front">
+              <img src="<?= $baseUrl ?>/public/img/whale.png" alt="Secure Icon" class="card-icon" />
+            </div>
+            <!-- Back Face -->
+            <div class="advanced-card-back">
+              <h4 class="sub-headline" style="margin-bottom: 0.5rem;">Blue Whale (Balaenoptera musculus)</h4>
+              <p class="small-text">
+                <em>As the largest animal on Earth, the blue whale is under severe pressure from hunting and ocean pollution, making it extremely rare.</em>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="advanced-card" x-data="{ flipped: false }" @click="flipped = !flipped">
+          <div class="advanced-card-content" :style="{ transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }">
+            <!-- Front Face -->
+            <div class="advanced-card-front">
+              <img src="<?= $baseUrl ?>/public/img/ele.png" alt="Secure Icon" class="card-icon" />
+            </div>
+            <!-- Back Face -->
+            <div class="advanced-card-back">
+              <h4 class="sub-headline" style="margin-bottom: 0.5rem;">Asian Elephant (Elephas maximus)</h4>
+              <p class="small-text">
+                <em>Asian elephants are severely threatened by habitat loss and human-wildlife conflict. They play a vital role in maintaining the biodiversity of Asian forests.</em>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="advanced-card" x-data="{ flipped: false }" @click="flipped = !flipped">
+          <div class="advanced-card-content" :style="{ transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }">
+            <!-- Front Face -->
+            <div class="advanced-card-front">
+              <img src="<?= $baseUrl ?>/public/img/rhino.png" alt="Secure Icon" class="card-icon" />
+            </div>
+            <!-- Back Face -->
+            <div class="advanced-card-back">
+              <h4 class="sub-headline" style="margin-bottom: 0.5rem;">Sumatran Rhinoceros (Dicerorhinus sumatrensis)</h4>
+              <p class="small-text">
+                <em>This species is one of the smallest and rarest rhinoceroses in the world. It is critically endangered due to poaching and habitat destruction.</em>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="advanced-card" x-data="{ flipped: false }" @click="flipped = !flipped">
+          <div class="advanced-card-content" :style="{ transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }">
+            <!-- Front Face -->
+            <div class="advanced-card-front">
+              <img src="<?= $baseUrl ?>/public/img/IndochineseTiger.jpg" alt="Secure Icon" class="card-icon" />
+            </div>
+            <!-- Back Face -->
+            <div class="advanced-card-back">
+              <h4 class="sub-headline" style="margin-bottom: 0.5rem;">Indochinese Tiger (Panthera tigris corbetti)</h4>
+              <p class="small-text">
+                <em>One of the most endangered tiger species, the Indochinese tiger faces habitat loss and illegal poaching. It plays a crucial role in the tropical forest ecosystem of Southeast Asia.</em>
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
   
   <!-- ADVANCED TESTIMONIALS CAROUSEL -->
   <section class="section" id="testimonials" style="text-align: center;">
