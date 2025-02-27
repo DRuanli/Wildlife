@@ -1,5 +1,7 @@
 <?php require_once ROOT_PATH . '/resources/views/layouts/header.php'; ?>
 
+<script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
 <div class="gallery-exhibition" x-data="galleryApp">
   <!-- Exhibition Header -->
   <div class="exhibition-header">
