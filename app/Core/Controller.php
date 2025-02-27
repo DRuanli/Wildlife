@@ -57,11 +57,6 @@ class Controller
      */
     protected function redirect($url)
     {
-        // If URL starts with a slash, prepend the base path
-        if (strpos($url, '/') === 0) {
-            $url = BASE_URL . $url;
-        }
-        
         header("Location: {$url}");
         exit;
     }

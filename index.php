@@ -13,10 +13,6 @@
 // Define root path constant for consistent file referencing
 define('ROOT_PATH', __DIR__);
 
-// Define base URL for consistent path handling across the application
-$basePath = $config['app']['base_path'] ?? '/Wildlife';
-define('BASE_URL', $basePath);
-
 // Load composer autoloader for class management
 require_once ROOT_PATH . '/vendor/autoload.php';
 
