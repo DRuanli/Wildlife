@@ -1,35 +1,55 @@
 <?php require_once ROOT_PATH . '/resources/views/layouts/header.php'; ?>
 
-<div class="bg-gradient-to-b from-green-50 to-transparent min-h-screen py-12">
-  <div class="container mx-auto px-4">
-    <!-- Page Header -->
-    <div class="text-center mb-12">
-      <h1 class="headline headline-large mb-4 text-gray-900">Creature Gallery</h1>
-      <p class="max-w-3xl mx-auto text-lg text-gray-600">Discover mythical creatures inspired by endangered wildlife. Each creature you nurture through focus helps support real-world conservation efforts.</p>
+<div class="gallery-exhibition" x-data="galleryApp">
+  <!-- Exhibition Header -->
+  <div class="exhibition-header">
+    <div class="container mx-auto px-4 py-16 text-center">
+      <h1 class="text-4xl md:text-5xl font-serif font-light mb-6 tracking-wide text-gray-900">Wildlife Haven Exhibition</h1>
+      <p class="max-w-3xl mx-auto text-lg text-gray-600 leading-relaxed">
+        Explore our collection of mythical creatures inspired by endangered wildlife. Each creature tells a story of beauty, resilience, and the delicate balance of our natural world.
+      </p>
+      
+      <!-- Audio Controls -->
+      <div class="mt-8">
+        <button @click="toggleAmbientSound" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          <template x-if="!isPlaying">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z" clip-rule="evenodd" />
+            </svg>
+          </template>
+          <template x-if="isPlaying">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM12.293 7.293a1 1 0 011.414 0L15 8.586l1.293-1.293a1 1 0 111.414 1.414L16.414 10l1.293 1.293a1 1 0 01-1.414 1.414L15 11.414l-1.293 1.293a1 1 0 01-1.414-1.414L13.586 10l-1.293-1.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </template>
+          <span x-text="isPlaying ? 'Mute Ambient Sound' : 'Play Ambient Sound'"></span>
+        </button>
+      </div>
     </div>
+  </div>
 
-    <!-- Gallery Controls -->
-    <div x-data="galleryControls()" class="mb-10">
-      <!-- Search & Filter Controls -->
-      <div class="flex flex-col md:flex-row gap-4 mb-6">
-        <!-- Search Bar -->
-        <div class="relative flex-grow">
+  <!-- Exhibition Controls -->
+  <div class="bg-gray-50 border-t border-b border-gray-200">
+    <div class="container mx-auto px-4 py-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <!-- Search -->
+        <div class="relative flex-grow max-w-lg">
           <input 
             type="text" 
-            x-model="searchQuery" 
-            placeholder="Search creatures..." 
-            class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+            placeholder="Search the exhibition..." 
+            x-model="searchQuery"
+            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
           >
-          <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-            <i class="fas fa-search"></i>
-          </span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
         </div>
-
-        <!-- Filter Dropdown -->
-        <div class="relative w-full md:w-48">
+        
+        <!-- Filters -->
+        <div class="flex flex-wrap gap-2">
           <select 
-            x-model="activeFilter" 
-            class="w-full py-3 px-4 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 appearance-none"
+            x-model="habitatFilter" 
+            class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
           >
             <option value="all">All Habitats</option>
             <option value="forest">Forest</option>
@@ -39,31 +59,22 @@
             <option value="cosmic">Cosmic</option>
             <option value="enchanted">Enchanted</option>
           </select>
-          <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
-            <i class="fas fa-chevron-down"></i>
-          </span>
-        </div>
-
-        <!-- Ownership Filter -->
-        <div class="relative w-full md:w-48">
+          
           <select 
-            x-model="ownershipFilter" 
-            class="w-full py-3 px-4 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 appearance-none"
+            x-model="rarityFilter" 
+            class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
           >
-            <option value="all">All Creatures</option>
-            <option value="owned">Owned Only</option>
-            <option value="unowned">Unowned Only</option>
+            <option value="all">All Rarities</option>
+            <option value="common">Common</option>
+            <option value="uncommon">Uncommon</option>
+            <option value="rare">Rare</option>
+            <option value="legendary">Legendary</option>
+            <option value="mythical">Mythical</option>
           </select>
-          <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
-            <i class="fas fa-chevron-down"></i>
-          </span>
-        </div>
-
-        <!-- Stage Filter -->
-        <div class="relative w-full md:w-48">
+          
           <select 
             x-model="stageFilter" 
-            class="w-full py-3 px-4 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 appearance-none"
+            class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
           >
             <option value="all">All Stages</option>
             <option value="egg">Egg</option>
@@ -72,1114 +83,458 @@
             <option value="adult">Adult</option>
             <option value="mythical">Mythical</option>
           </select>
-          <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
-            <i class="fas fa-chevron-down"></i>
-          </span>
-        </div>
-      </div>
-
-      <!-- Gallery Navigation/Sort -->
-      <div class="flex flex-wrap justify-between items-center">
-        <!-- Gallery Stats -->
-        <div class="text-gray-600 mb-4 lg:mb-0">
-          <template x-if="filteredCreatures.length === 1">
-            <span>Showing <span class="font-semibold" x-text="filteredCreatures.length"></span> creature</span>
-          </template>
-          <template x-if="filteredCreatures.length !== 1">
-            <span>Showing <span class="font-semibold" x-text="filteredCreatures.length"></span> creatures</span>
-          </template>
-        </div>
-
-        <!-- Sort Controls -->
-        <div class="flex items-center space-x-2">
-          <span class="text-gray-600">Sort by:</span>
-          <button 
-            @click="sortBy('name')" 
-            :class="sortField === 'name' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'"
-            class="px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-50 transition"
-          >
-            Name
-            <template x-if="sortField === 'name' && !sortAsc">
-              <i class="fas fa-arrow-down ml-1"></i>
-            </template>
-            <template x-if="sortField === 'name' && sortAsc">
-              <i class="fas fa-arrow-up ml-1"></i>
-            </template>
-          </button>
-          <button 
-            @click="sortBy('rarity')" 
-            :class="sortField === 'rarity' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'"
-            class="px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-50 transition"
-          >
-            Rarity
-            <template x-if="sortField === 'rarity' && !sortAsc">
-              <i class="fas fa-arrow-down ml-1"></i>
-            </template>
-            <template x-if="sortField === 'rarity' && sortAsc">
-              <i class="fas fa-arrow-up ml-1"></i>
-            </template>
-          </button>
-          <button 
-            @click="toggleFavorites()" 
-            :class="showOnlyFavorites ? 'bg-amber-100 text-amber-800' : 'bg-gray-100 text-gray-600'"
-            class="px-4 py-2 rounded-lg text-sm font-medium hover:bg-amber-50 transition"
-          >
-            <i class="fas fa-heart mr-1"></i> Favorites
-          </button>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Gallery Grid -->
-    <div 
-      x-data="galleryData()" 
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-    >
-      <!-- Creature Cards -->
-      <template x-for="creature in filteredCreatures" :key="creature.id">
-        <div 
-          class="creature-card group rounded-xl overflow-hidden bg-white shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
-          :class="[
-            getHabitatClasses(creature.habitat_type),
-            {'opacity-100': creature.owned, 'opacity-60 grayscale': !creature.owned}
-          ]"
-        >
-          <!-- Card Header with Habitat Type & Favorite Button -->
-          <div class="flex justify-between items-center px-4 py-2 border-b border-gray-100">
-            <span 
-              class="text-xs font-medium px-2 py-1 rounded-full capitalize" 
-              :class="getHabitatBadgeClasses(creature.habitat_type)"
-              x-text="creature.habitat_type">
-            </span>
-            
-            <button 
-              @click.stop="toggleFavorite(creature.id)" 
-              class="h-8 w-8 rounded-full flex items-center justify-center transition-colors"
-              :class="isFavorite(creature.id) ? 'text-red-500 hover:text-red-400' : 'text-gray-300 hover:text-gray-400'"
+  <!-- Exhibition Gallery -->
+  <div class="exhibition-gallery py-12 bg-white">
+    <div class="container mx-auto px-4">
+      <!-- Gallery Stats -->
+      <div class="flex justify-between items-center mb-8">
+        <p class="text-gray-600">
+          <span x-text="filteredCreatures.length"></span> creatures on display
+        </p>
+        
+        <button @click="resetFilters" class="text-indigo-600 hover:text-indigo-800 font-medium">
+          Reset Filters
+        </button>
+      </div>
+      
+      <!-- Gallery Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        <template x-for="creature in filteredCreatures" :key="creature.id">
+          <div class="exhibition-item" :class="getHabitatClass(creature.habitat_type)">
+            <!-- Artwork Frame -->
+            <div 
+              class="artwork-frame bg-white border rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300"
+              @click="openCreatureModal(creature)"
             >
-              <i class="fas fa-heart"></i>
-            </button>
-          </div>
-
-          <!-- Creature Image Container -->
-          <div 
-            @click="openModal(creature.id)"
-            class="relative h-48 overflow-hidden flex items-center justify-center cursor-pointer"
-            :class="getHabitatBgClasses(creature.habitat_type)"
-          >
-            <!-- Animated background elements based on habitat -->
-            <div class="absolute inset-0 opacity-20" x-html="getHabitatDecoration(creature.habitat_type)"></div>
-            
-            <!-- Creature Image -->
-            <img 
-              :src="getImagePath(creature.id, creature.stage)" 
-              :alt="creature.name" 
-              class="h-40 w-40 object-contain z-10 transition-transform group-hover:scale-110 duration-300"
-            >
-            
-            <!-- Egg wobble or special effects based on stage -->
-            <template x-if="creature.stage === 'egg'">
-              <div class="absolute -top-1 -right-1 h-3 w-3 bg-green-400 rounded-full animate-ping"></div>
-            </template>
-          </div>
-
-          <!-- Card Content -->
-          <div class="p-4" :class="{'opacity-100': creature.owned, 'opacity-80': !creature.owned}">
-            <!-- Creature Name & Stage -->
-            <div class="flex justify-between items-start mb-2">
-              <h3 class="font-medium" :class="{'text-gray-900': creature.owned, 'text-gray-600': !creature.owned}" x-text="creature.name"></h3>
-              <div class="flex items-center space-x-1">
-                <template x-if="creature.owned">
-                  <span class="text-xs px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full">Owned</span>
-                </template>
-                <span 
-                  class="text-xs px-2 py-1 rounded-full capitalize" 
-                  :class="getStageBadgeClasses(creature.stage)"
-                  x-text="creature.stage">
-                </span>
-              </div>
-            </div>
-            
-            <!-- Rarity -->
-            <div class="flex items-center mb-3">
-              <template x-for="i in getRarityStars(creature.rarity)" :key="i">
-                <i class="fas fa-star text-amber-400 text-xs"></i>
-              </template>
-              <span class="text-xs text-gray-500 ml-1 capitalize" x-text="creature.rarity"></span>
-            </div>
-            
-            <!-- Species Description (truncated) -->
-            <p class="text-sm text-gray-600 line-clamp-2 mb-3" x-text="creature.description"></p>
-            
-            <!-- Growth Progress (if not mythical) -->
-            <template x-if="creature.stage !== 'mythical'">
-              <div class="mt-2">
-                <div class="flex justify-between text-xs text-gray-500 mb-1">
-                  <span>Growth Progress</span>
-                  <span x-text="creature.growth_progress + '%'"></span>
+              <!-- Creature Image -->
+              <div class="relative aspect-square overflow-hidden bg-gray-100">
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <img 
+                    :src="getCreatureImage(creature)" 
+                    :alt="creature.name"
+                    class="object-contain h-full w-full transform hover:scale-105 transition-transform duration-500"
+                  >
                 </div>
-                <div class="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                  <div 
-                    class="h-full rounded-full" 
-                    :class="getProgressBarColor(creature.stage)"
-                    :style="'width: ' + creature.growth_progress + '%'"
-                  ></div>
+                
+                <!-- Rarity Badge -->
+                <div class="absolute top-3 right-3">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" :class="getRarityClass(creature.rarity)">
+                    <span x-text="capitalizeFirstLetter(creature.rarity)"></span>
+                  </span>
                 </div>
               </div>
-            </template>
-            
-            <!-- View Details Button -->
-            <button 
-              @click="openModal(creature.id)"
-              class="w-full mt-4 py-2 text-sm font-medium text-center rounded-lg transition-colors"
-              :class="getHabitatButtonClasses(creature.habitat_type)"
-            >
-              View Details
-            </button>
+              
+              <!-- Artwork Info -->
+              <div class="p-4">
+                <h3 class="text-lg font-medium text-gray-900 mb-1" x-text="creature.name"></h3>
+                <p class="text-sm text-gray-500 mb-2" x-text="creature.species_name"></p>
+                
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-medium px-2 py-1 rounded-full capitalize" :class="getHabitatBadgeClass(creature.habitat_type)" x-text="creature.habitat_type"></span>
+                  <span class="text-xs font-medium px-2 py-1 rounded-full capitalize" :class="getStageBadgeClass(creature.stage)" x-text="creature.stage"></span>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </template>
-
-      <!-- Empty State - No Results -->
+        </template>
+      </div>
+      
+      <!-- Empty State -->
       <template x-if="filteredCreatures.length === 0">
-        <div class="col-span-1 sm:col-span-2 md:col-span-3 lg:col-span-4 py-16 text-center">
-          <div class="w-20 h-20 mx-auto bg-gray-100 rounded-full flex items-center justify-center text-gray-400 mb-4">
-            <i class="fas fa-dragon text-3xl"></i>
-          </div>
-          <h3 class="text-xl font-medium text-gray-800 mb-2">No creatures found</h3>
-          <p class="text-gray-600 mb-6">Try adjusting your filters or search terms</p>
-          <button 
-            @click="resetFilters()" 
-            class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-          >
+        <div class="text-center py-16">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+          </svg>
+          <h3 class="text-lg font-medium text-gray-900 mb-2">No creatures found</h3>
+          <p class="text-gray-500 mb-4">Try adjusting your search or filters</p>
+          <button @click="resetFilters" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
             Reset Filters
           </button>
         </div>
       </template>
     </div>
+  </div>
 
-    <!-- Creature Detail Modal -->
-    <div 
-      x-data="modalData()" 
-      x-show="isOpen" 
-      x-transition:enter="transition ease-out duration-300"
-      x-transition:enter-start="opacity-0 transform scale-95"
-      x-transition:enter-end="opacity-100 transform scale-100"
-      x-transition:leave="transition ease-in duration-200"
-      x-transition:leave-start="opacity-100 transform scale-100"
-      x-transition:leave-end="opacity-0 transform scale-95"
-      @keydown.escape.window="closeModal()"
-      class="fixed inset-0 z-50 overflow-y-auto"
-      style="display: none;"
-    >
-      <!-- Modal Backdrop -->
+  <!-- Creature Detail Modal -->
+  <div 
+    x-show="selectedCreature !== null" 
+    x-transition:enter="transition ease-out duration-300"
+    x-transition:enter-start="opacity-0 transform scale-95"
+    x-transition:enter-end="opacity-100 transform scale-100"
+    x-transition:leave="transition ease-in duration-200"
+    x-transition:leave-start="opacity-100 transform scale-100"
+    x-transition:leave-end="opacity-0 transform scale-95"
+    class="fixed inset-0 z-50 overflow-y-auto" 
+    @keydown.escape.window="closeCreatureModal"
+    style="display: none;"
+  >
+    <!-- Modal Backdrop -->
+    <div class="fixed inset-0 bg-black bg-opacity-75 transition-opacity" @click="closeCreatureModal"></div>
+    
+    <!-- Modal Content -->
+    <div class="relative min-h-screen flex items-center justify-center p-4">
       <div 
-        class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" 
-        @click="closeModal()"
-      ></div>
-      
-      <!-- Modal Content -->
-      <div class="relative min-h-screen flex items-center justify-center p-4">
-        <div 
-          class="relative bg-white rounded-2xl shadow-xl w-full max-w-4xl overflow-hidden max-h-[90vh] flex flex-col"
-          @click.stop
-        >
+        class="relative bg-white rounded-lg max-w-5xl w-full max-h-[90vh] overflow-hidden shadow-xl" 
+        @click.stop
+      >
+        <template x-if="selectedCreature">
           <!-- Modal Header -->
-          <div 
-            class="flex justify-between items-center p-6 border-b"
-            :class="selectedCreature ? getHabitatBorderClasses(selectedCreature.habitat_type) : ''"
-          >
-            <h3 class="text-2xl font-medium text-gray-900 flex items-center">
-              <template x-if="selectedCreature">
-                <span x-text="selectedCreature.name"></span>
-              </template>
-              <template x-if="selectedCreature">
-                <span 
-                  class="ml-3 text-xs px-2 py-1 rounded-full capitalize"
-                  :class="selectedCreature ? getStageBadgeClasses(selectedCreature.stage) : ''"
-                  x-text="selectedCreature ? selectedCreature.stage : ''"
-                ></span>
-              </template>
-            </h3>
-            <button @click="closeModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
-              <i class="fas fa-times text-xl"></i>
+          <div class="flex justify-between items-center p-6 border-b border-gray-200">
+            <h2 class="text-2xl font-serif font-light text-gray-900" x-text="selectedCreature.name"></h2>
+            <button @click="closeCreatureModal" class="text-gray-400 hover:text-gray-500">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
             </button>
           </div>
           
           <!-- Modal Body -->
-          <div class="p-6 overflow-y-auto flex-grow">
-            <template x-if="selectedCreature">
-              <div class="flex flex-col md:flex-row gap-8">
-                <!-- Creature Image & Details -->
-                <div class="w-full md:w-2/5">
-                  <!-- Creature Image Container -->
-                  <div 
-                    class="relative h-64 overflow-hidden rounded-xl flex items-center justify-center mb-4"
-                    :class="getHabitatBgClasses(selectedCreature.habitat_type)"
+          <div class="p-6 overflow-y-auto max-h-[calc(90vh-12rem)]">
+            <div class="flex flex-col lg:flex-row gap-8">
+              <!-- Creature Image Section -->
+              <div class="w-full lg:w-1/2">
+                <div class="relative aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                  <!-- Creature Image -->
+                  <img 
+                    :src="getCreatureImage(selectedCreature)" 
+                    :alt="selectedCreature.name"
+                    class="object-contain h-full w-full"
                   >
-                    <!-- Animated background elements based on habitat -->
-                    <div class="absolute inset-0 opacity-20" x-html="getHabitatDecoration(selectedCreature.habitat_type)"></div>
-                    
-                    <!-- Creature Image -->
-                    <img 
-                      :src="getImagePath(selectedCreature.id, selectedCreature.stage)" 
-                      :alt="selectedCreature.name" 
-                      class="h-52 w-52 object-contain z-10 animate-float"
-                    >
-                  </div>
                   
-                  <!-- Species Information -->
-                  <div class="bg-gray-50 rounded-xl p-4">
-                    <h4 class="font-medium text-gray-800 mb-2">Species Information</h4>
-                    <div class="space-y-3">
-                      <!-- Species -->
-                      <div class="flex justify-between">
-                        <span class="text-sm text-gray-500">Species</span>
-                        <span class="text-sm font-medium text-gray-800" x-text="selectedCreature.species_name"></span>
-                      </div>
-                      
-                      <!-- Habitat -->
-                      <div class="flex justify-between">
-                        <span class="text-sm text-gray-500">Habitat</span>
+                  <!-- Habitat Decoration -->
+                  <div class="absolute inset-0 pointer-events-none opacity-20 z-0" x-html="getHabitatDecoration(selectedCreature.habitat_type)"></div>
+                </div>
+                
+                <!-- Audio Player -->
+                <div class="mt-4">
+                  <button 
+                    @click="toggleCreatureSound" 
+                    class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  >
+                    <template x-if="!isCreatureSoundPlaying">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+                      </svg>
+                    </template>
+                    <template x-if="isCreatureSoundPlaying">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1V8a1 1 0 00-1-1H8z" clip-rule="evenodd" />
+                      </svg>
+                    </template>
+                    <span x-text="isCreatureSoundPlaying ? 'Pause Creature Sound' : 'Play Creature Sound'"></span>
+                  </button>
+                </div>
+                
+                <!-- Creature Stats -->
+                <div class="mt-6 bg-gray-50 rounded-lg p-4">
+                  <h3 class="text-lg font-medium text-gray-900 mb-4">Creature Information</h3>
+                  
+                  <!-- Species & Stage -->
+                  <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <span class="block text-sm font-medium text-gray-500">Species</span>
+                      <span class="block mt-1 text-sm text-gray-900" x-text="selectedCreature.species_name"></span>
+                    </div>
+                    <div>
+                      <span class="block text-sm font-medium text-gray-500">Stage</span>
+                      <div class="mt-1">
                         <span 
-                          class="text-sm font-medium capitalize"
-                          :class="getHabitatTextClasses(selectedCreature.habitat_type)"
+                          class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize" 
+                          :class="getStageBadgeClass(selectedCreature.stage)" 
+                          x-text="selectedCreature.stage"
+                        ></span>
+                      </div>
+                    </div>
+                    <div>
+                      <span class="block text-sm font-medium text-gray-500">Habitat</span>
+                      <div class="mt-1">
+                        <span 
+                          class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize" 
+                          :class="getHabitatBadgeClass(selectedCreature.habitat_type)" 
                           x-text="selectedCreature.habitat_type"
                         ></span>
                       </div>
-                      
-                      <!-- Rarity -->
-                      <div class="flex justify-between">
-                        <span class="text-sm text-gray-500">Rarity</span>
-                        <div class="flex items-center">
-                          <template x-for="i in getRarityStars(selectedCreature.rarity)" :key="i">
-                            <i class="fas fa-star text-amber-400 text-xs"></i>
-                          </template>
-                          <span class="text-sm text-gray-800 ml-1 capitalize" x-text="selectedCreature.rarity"></span>
-                        </div>
-                      </div>
-                      
-                      <!-- Growth Progress (if not mythical) -->
-                      <template x-if="selectedCreature.stage !== 'mythical'">
-                        <div>
-                          <div class="flex justify-between text-sm text-gray-500 mb-1">
-                            <span>Growth Progress</span>
-                            <span x-text="selectedCreature.growth_progress + '%'"></span>
-                          </div>
-                          <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
-                            <div 
-                              class="h-full rounded-full" 
-                              :class="getProgressBarColor(selectedCreature.stage)"
-                              :style="'width: ' + selectedCreature.growth_progress + '%'"
-                            ></div>
-                          </div>
-                          <div class="text-xs text-gray-500 mt-1" x-text="getGrowthStatusText(selectedCreature)"></div>
-                        </div>
-                      </template>
                     </div>
-                  </div>
-                </div>
-                
-                <!-- Creature Description & Stats -->
-                <div class="w-full md:w-3/5">
-                  <!-- Species Description -->
-                  <div class="mb-6">
-                    <h4 class="font-medium text-gray-800 mb-2">Description</h4>
-                    <p class="text-gray-600" x-text="selectedCreature.description"></p>
-                  </div>
-                  
-                  <!-- Conservation Connection -->
-                  <div class="mb-6">
-                    <h4 class="font-medium text-gray-800 mb-2">Real-World Connection</h4>
-                    <div class="bg-amber-50 rounded-xl p-4 relative overflow-hidden">
-                      <!-- Decorative icon -->
-                      <div class="absolute right-0 bottom-0 opacity-5 transform translate-x-1/4 translate-y-1/4">
-                        <i class="fas fa-leaf text-9xl text-amber-800"></i>
-                      </div>
-                      
-                      <div class="relative z-10">
-                        <p class="italic mb-3">"<span x-text="selectedCreature.real_world_inspiration"></span>"</p>
-                        <p class="text-gray-700" x-text="selectedCreature.conservation_fact"></p>
+                    <div>
+                      <span class="block text-sm font-medium text-gray-500">Rarity</span>
+                      <div class="mt-1">
+                        <span 
+                          class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize" 
+                          :class="getRarityClass(selectedCreature.rarity)" 
+                          x-text="selectedCreature.rarity"
+                        ></span>
                       </div>
                     </div>
                   </div>
                   
-                  <!-- Creature Stats & Care -->
-                  <div>
-                    <h4 class="font-medium text-gray-800 mb-2">Care & Status</h4>
-                    <div class="grid grid-cols-2 gap-4">
-                      <!-- Health -->
-                      <div class="bg-gray-50 rounded-xl p-4">
-                        <div class="flex justify-between items-center mb-2">
-                          <span class="text-sm text-gray-500">Health</span>
-                          <span class="text-sm font-medium text-gray-800" x-text="selectedCreature.health + '%'"></span>
-                        </div>
-                        <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
-                          <div 
-                            class="h-full bg-red-500 rounded-full"
-                            :style="'width: ' + selectedCreature.health + '%'"
-                          ></div>
-                        </div>
+                  <!-- Health & Happiness -->
+                  <div class="mb-4">
+                    <div class="mb-2">
+                      <div class="flex justify-between items-center mb-1">
+                        <span class="text-sm font-medium text-gray-500">Health</span>
+                        <span class="text-sm font-medium text-gray-900" x-text="selectedCreature.health + '%'"></span>
                       </div>
-                      
-                      <!-- Happiness -->
-                      <div class="bg-gray-50 rounded-xl p-4">
-                        <div class="flex justify-between items-center mb-2">
-                          <span class="text-sm text-gray-500">Happiness</span>
-                          <span class="text-sm font-medium text-gray-800" x-text="selectedCreature.happiness + '%'"></span>
-                        </div>
-                        <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
-                          <div 
-                            class="h-full bg-yellow-500 rounded-full"
-                            :style="'width: ' + selectedCreature.happiness + '%'"
-                          ></div>
-                        </div>
+                      <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-green-600 h-2 rounded-full" :style="`width: ${selectedCreature.health}%`"></div>
                       </div>
                     </div>
                     
-                    <!-- Last Interaction -->
-                    <div class="mt-4 text-sm text-gray-500">
-                      <template x-if="selectedCreature.last_interaction_at">
-                        <div>Last interaction: <span x-text="formatDate(selectedCreature.last_interaction_at)"></span></div>
-                      </template>
-                      <template x-if="!selectedCreature.last_interaction_at">
-                        <div>No interactions yet</div>
-                      </template>
+                    <div>
+                      <div class="flex justify-between items-center mb-1">
+                        <span class="text-sm font-medium text-gray-500">Happiness</span>
+                        <span class="text-sm font-medium text-gray-900" x-text="selectedCreature.happiness + '%'"></span>
+                      </div>
+                      <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-yellow-500 h-2 rounded-full" :style="`width: ${selectedCreature.happiness}%`"></div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Growth Progress -->
+                  <template x-if="selectedCreature.stage !== 'mythical'">
+                    <div>
+                      <div class="flex justify-between items-center mb-1">
+                        <span class="text-sm font-medium text-gray-500">Growth Progress</span>
+                        <span class="text-sm font-medium text-gray-900" x-text="selectedCreature.growth_progress + '%'"></span>
+                      </div>
+                      <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-indigo-600 h-2 rounded-full" :style="`width: ${selectedCreature.growth_progress}%`"></div>
+                      </div>
+                      <p class="mt-1 text-xs text-gray-500" x-text="getGrowthStatusText(selectedCreature)"></p>
+                    </div>
+                  </template>
+                </div>
+              </div>
+              
+              <!-- Creature Description Section -->
+              <div class="w-full lg:w-1/2">
+                <!-- Exhibition Note -->
+                <div class="bg-gray-50 rounded-lg p-6 mb-6">
+                  <h3 class="text-lg font-medium text-gray-900 mb-2">Exhibition Note</h3>
+                  <p class="italic text-gray-600" x-text="selectedCreature.exhibition_note"></p>
+                </div>
+                
+                <!-- Description -->
+                <div class="mb-6">
+                  <h3 class="text-lg font-medium text-gray-900 mb-2">Description</h3>
+                  <p class="text-gray-600" x-text="selectedCreature.description"></p>
+                </div>
+                
+                <!-- Real World Connection -->
+                <div class="mb-6">
+                  <h3 class="text-lg font-medium text-gray-900 mb-2">Real World Inspiration</h3>
+                  <p class="text-gray-600 italic" x-text="selectedCreature.real_world_inspiration"></p>
+                </div>
+                
+                <!-- Conservation Note -->
+                <div class="bg-amber-50 rounded-lg p-6">
+                  <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <div class="ml-3">
+                      <h3 class="text-lg font-medium text-amber-800 mb-2">Conservation Status</h3>
+                      <p class="text-gray-700" x-text="selectedCreature.conservation_fact"></p>
                     </div>
                   </div>
                 </div>
               </div>
-            </template>
+            </div>
           </div>
           
           <!-- Modal Footer -->
-          <div class="p-6 border-t border-gray-200 flex justify-between">
+          <div class="bg-gray-50 px-6 py-4 flex justify-end">
             <button 
-              @click="closeModal()" 
-              class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              @click="closeCreatureModal" 
+              class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Close
             </button>
-            
-            <template x-if="selectedCreature">
-              <div class="flex gap-2">
-                <template x-if="selectedCreature.stage !== 'egg'">
-                  <button
-                    @click="interactWithCreature('feed')"
-                    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center"
-                  >
-                    <i class="fas fa-apple-alt mr-2"></i>
-                    Feed
-                  </button>
-                </template>
-                
-                <template x-if="selectedCreature.stage !== 'egg'">
-                  <button
-                    @click="interactWithCreature('play')"
-                    class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center"
-                  >
-                    <i class="fas fa-gamepad mr-2"></i>
-                    Play
-                  </button>
-                </template>
-                
-                <template x-if="selectedCreature.stage === 'egg' && selectedCreature.growth_progress >= 100">
-                  <button
-                    @click="interactWithCreature('hatch')"
-                    class="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors flex items-center"
-                  >
-                    <i class="fas fa-egg mr-2"></i>
-                    Hatch
-                  </button>
-                </template>
-                
-                <template x-if="selectedCreature.stage !== 'egg' && selectedCreature.stage !== 'mythical' && selectedCreature.growth_progress >= 100">
-                  <button
-                    @click="interactWithCreature('evolve')"
-                    class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center"
-                  >
-                    <i class="fas fa-level-up-alt mr-2"></i>
-                    Evolve
-                  </button>
-                </template>
-              </div>
-            </template>
           </div>
-        </div>
+        </template>
       </div>
     </div>
   </div>
 </div>
 
-<!-- JavaScript for Interactive Features -->
+<!-- Hidden Audio Elements -->
+<audio id="ambient-sound" loop>
+  <source src="<?= $baseUrl ?>/audio/ambient_nature.mp3" type="audio/mpeg">
+</audio>
+<audio id="creature-sound">
+  <source src="" type="audio/mpeg">
+</audio>
+
 <script>
-  // Gallery Controls Component
-  function galleryControls() {
+  function galleryApp() {
     return {
+      creatures: <?= json_encode($creatures) ?>,
       searchQuery: '',
-      activeFilter: 'all',
+      habitatFilter: 'all',
+      rarityFilter: 'all',
       stageFilter: 'all',
-      ownershipFilter: 'all',
-      sortField: 'name',
-      sortAsc: true,
-      showOnlyFavorites: false,
+      selectedCreature: null,
+      isPlaying: false,
+      isCreatureSoundPlaying: false,
+      ambientSound: null,
+      creatureSound: null,
       
-      sortBy(field) {
-        if (this.sortField === field) {
-          this.sortAsc = !this.sortAsc;
-        } else {
-          this.sortField = field;
-          this.sortAsc = true;
-        }
+      init() {
+        this.ambientSound = document.getElementById('ambient-sound');
+        this.creatureSound = document.getElementById('creature-sound');
         
-        // Dispatch a custom event to notify the gallery component
-        window.dispatchEvent(new CustomEvent('gallery-sort', {
-          detail: { field: this.sortField, asc: this.sortAsc }
-        }));
+        // Preload images
+        this.creatures.forEach(creature => {
+          if (creature.image_urls) {
+            Object.values(creature.image_urls).forEach(url => {
+              const img = new Image();
+              img.src = url;
+            });
+          }
+        });
       },
       
-      toggleFavorites() {
-        this.showOnlyFavorites = !this.showOnlyFavorites;
-        
-        // Dispatch a custom event to notify the gallery component
-        window.dispatchEvent(new CustomEvent('gallery-filter-favorites', {
-          detail: { showOnlyFavorites: this.showOnlyFavorites }
-        }));
+      get filteredCreatures() {
+        return this.creatures.filter(creature => {
+          // Text search
+          if (this.searchQuery && !this.creatureMatchesSearch(creature, this.searchQuery)) {
+            return false;
+          }
+          
+          // Habitat filter
+          if (this.habitatFilter !== 'all' && creature.habitat_type !== this.habitatFilter) {
+            return false;
+          }
+          
+          // Rarity filter
+          if (this.rarityFilter !== 'all' && creature.rarity !== this.rarityFilter) {
+            return false;
+          }
+          
+          // Stage filter
+          if (this.stageFilter !== 'all' && creature.stage !== this.stageFilter) {
+            return false;
+          }
+          
+          return true;
+        });
+      },
+      
+      creatureMatchesSearch(creature, query) {
+        const searchTerm = query.toLowerCase();
+        return creature.name.toLowerCase().includes(searchTerm) || 
+               creature.species_name.toLowerCase().includes(searchTerm) || 
+               creature.description.toLowerCase().includes(searchTerm);
       },
       
       resetFilters() {
         this.searchQuery = '';
-        this.activeFilter = 'all';
+        this.habitatFilter = 'all';
+        this.rarityFilter = 'all';
         this.stageFilter = 'all';
-        this.showOnlyFavorites = false;
-        this.ownershipFilter = 'all';
-        
-        // Dispatch custom events
-        window.dispatchEvent(new CustomEvent('gallery-reset-filters'));
-      }
-    };
-  }
-
-  // Gallery Data Component
-  function galleryData() {
-    return {
-      creatures: [
-        {
-          id: 1,
-          name: "Aquaris",
-          species_name: "Water Dragon",
-          stage: "adult",
-          health: 80,
-          happiness: 90,
-          growth_progress: 60,
-          habitat_type: "ocean",
-          rarity: "rare",
-          owned: true, // This creature is owned by the user
-          description: "A majestic water dragon with scales that shimmer like the ocean surface. Known for its ability to breathe underwater and control water currents.",
-          real_world_inspiration: "Inspired by the endangered Leatherback Sea Turtle, the largest sea turtle species that can dive to depths of over 1,000 meters.",
-          conservation_fact: "Leatherback Sea Turtles are critically endangered due to plastic pollution, fishing net entanglement, and habitat loss. Their population has declined by over 80% in the last century.",
-          last_interaction_at: "2023-11-20 15:30:00"
-        },
-        {
-          id: 2,
-          name: "Starshifter",
-          species_name: "Cosmic Wyvern",
-          stage: "mythical",
-          health: 100,
-          happiness: 100,
-          growth_progress: 100,
-          habitat_type: "cosmic",
-          rarity: "mythical",
-          owned: true, // This creature is owned by the user
-          description: "A celestial dragon whose scales contain the light of distant stars. It can traverse space and time, leaving trails of stardust in its wake.",
-          real_world_inspiration: "Inspired by the Amur Leopard, one of the world's most endangered big cats with fewer than 100 individuals remaining in the wild.",
-          conservation_fact: "The Amur Leopard faces threats from poaching, habitat loss, and fragmentation. Conservation efforts include anti-poaching measures and habitat protection in Russia and China.",
-          last_interaction_at: "2023-11-21 09:15:00"
-        },
-        {
-          id: 3,
-          name: "Leafling",
-          species_name: "Forest Sprite",
-          stage: "baby",
-          health: 95,
-          happiness: 85,
-          growth_progress: 45,
-          habitat_type: "forest",
-          rarity: "common",
-          owned: true, // This creature is owned by the user
-          description: "A small woodland creature with leaves growing from its body. It can blend perfectly with forest foliage and communicate with plants.",
-          real_world_inspiration: "Inspired by the Giant Panda, a beloved symbol of wildlife conservation that relies on bamboo forests for survival.",
-          conservation_fact: "While Giant Panda populations have increased slightly in recent years thanks to conservation efforts, they remain vulnerable due to habitat fragmentation and limited bamboo resources.",
-          last_interaction_at: "2023-11-22 11:45:00"
-        },
-        {
-          id: 4,
-          name: "Mystery Egg",
-          species_name: "Unknown",
-          stage: "egg",
-          health: 100,
-          happiness: 100,
-          growth_progress: 85,
-          habitat_type: "mountain",
-          rarity: "uncommon",
-          owned: true, // This creature is owned by the user
-          description: "A mysterious egg with a tough, stone-like shell that occasionally emits a warm glow. The creature inside seems to be growing stronger.",
-          real_world_inspiration: "Inspired by the Snow Leopard, a highly elusive big cat adapted to the harsh mountain environments of Central Asia.",
-          conservation_fact: "Snow Leopards face threats from poaching, retaliatory killings by herders, and habitat loss. There are estimated to be fewer than 10,000 mature individuals left in the wild.",
-          last_interaction_at: null
-        },
-        {
-          id: 5,
-          name: "Skyweaver",
-          species_name: "Wind Serpent",
-          stage: "juvenile",
-          health: 75,
-          happiness: 92,
-          growth_progress: 70,
-          habitat_type: "sky",
-          rarity: "rare",
-          owned: false, // This creature is NOT owned by the user
-          description: "A graceful serpentine creature that glides through the air by manipulating wind currents. Its body is almost transparent with subtle blue hues.",
-          real_world_inspiration: "Inspired by the Philippine Eagle, one of the largest and most powerful birds of prey, critically endangered with fewer than 400 pairs remaining.",
-          conservation_fact: "The Philippine Eagle faces threats from deforestation, hunting, and climate change. Each breeding pair requires a large territory of old-growth forest to survive.",
-          last_interaction_at: "2023-11-19 16:20:00"
-        },
-        {
-          id: 6,
-          name: "Emberhorn",
-          species_name: "Lava Stag",
-          stage: "adult",
-          health: 88,
-          happiness: 76,
-          growth_progress: 50,
-          habitat_type: "mountain",
-          rarity: "uncommon",
-          owned: false, // This creature is NOT owned by the user
-          description: "A majestic stag with antlers of molten lava and hooves that leave smoldering footprints. Despite its fiery appearance, it's gentle and protective.",
-          real_world_inspiration: "Inspired by the Saola, often called the 'Asian unicorn' - one of the world's rarest mammals discovered only in 1992.",
-          conservation_fact: "The Saola is critically endangered and notoriously difficult to study. Scientists estimate fewer than 100 individuals remain in the forests of Vietnam and Laos.",
-          last_interaction_at: "2023-11-18 10:05:00"
-        },
-        {
-          id: 7,
-          name: "Whisperleaf",
-          species_name: "Enchanted Fern",
-          stage: "juvenile",
-          health: 92,
-          happiness: 96,
-          growth_progress: 65,
-          habitat_type: "enchanted",
-          rarity: "uncommon",
-          owned: false, // This creature is NOT owned by the user
-          description: "A sentient plant-creature that communicates through soft rustling sounds. Its leaves glow with magical light when it's happy.",
-          real_world_inspiration: "Inspired by the Venus Flytrap, one of the world's most famous carnivorous plants native to a small region in North and South Carolina.",
-          conservation_fact: "Wild Venus Flytraps are vulnerable due to habitat loss and poaching for the plant trade. They only naturally grow in a small area of about 120 square kilometers.",
-          last_interaction_at: "2023-11-17 14:30:00"
-        },
-        {
-          id: 8,
-          name: "Corallium",
-          species_name: "Reef Guardian",
-          stage: "egg",
-          health: 100,
-          happiness: 100,
-          growth_progress: 25,
-          habitat_type: "ocean",
-          rarity: "legendary",
-          owned: false, // This creature is NOT owned by the user
-          description: "This rare egg pulses with blue and pink light, and seems to be growing a protective coral-like shell. Something powerful sleeps inside.",
-          real_world_inspiration: "Inspired by coral reefs, which are living organisms that provide habitat for nearly 25% of all marine species despite covering less than 1% of the ocean floor.",
-          conservation_fact: "Coral reefs worldwide are threatened by climate change, ocean acidification, pollution, and destructive fishing practices. Some regions have lost over 50% of their coral coverage in recent decades.",
-          last_interaction_at: null
-        },
-        {
-          id: 9,
-          name: "Lunaris",
-          species_name: "Moon Owl",
-          stage: "baby",
-          health: 85,
-          happiness: 90,
-          growth_progress: 30,
-          habitat_type: "cosmic",
-          rarity: "rare",
-          owned: false, // This creature is NOT owned by the user
-          description: "A small owl with feathers that shimmer like moonlight. Its eyes appear to contain tiny galaxies, and it hoots in a musical, ethereal tone.",
-          real_world_inspiration: "Inspired by the endangered Blakiston's Fish Owl, the largest owl species which needs old-growth forests near clean rivers to survive.",
-          conservation_fact: "Blakiston's Fish Owls are endangered with only a few thousand remaining in Russia, China, and Japan. They require large territories with old trees for nesting and unpolluted rivers for fishing.",
-          last_interaction_at: "2023-11-16 18:45:00"
-        },
-        {
-          id: 10,
-          name: "Thornheart",
-          species_name: "Forest Guardian",
-          stage: "mythical",
-          health: 100,
-          happiness: 100,
-          growth_progress: 100,
-          habitat_type: "forest",
-          rarity: "legendary",
-          owned: false, // This creature is NOT owned by the user
-          description: "An ancient woodland spirit with bark-like skin and branches growing from its shoulders. It can command nearby plants and trees to protect the forest.",
-          real_world_inspiration: "Inspired by the Sumatran Orangutan, a critically endangered great ape that spends most of its life in the trees of Indonesian rainforests.",
-          conservation_fact: "Sumatran Orangutans have lost over 80% of their habitat in the last 50 years, primarily due to palm oil plantations, logging, and human encroachment.",
-          last_interaction_at: "2023-11-15 12:10:00"
-        },
-        {
-          id: 11,
-          name: "Shimmerscale",
-          species_name: "Crystal Serpent",
-          stage: "adult",
-          health: 94,
-          happiness: 88,
-          growth_progress: 75,
-          habitat_type: "enchanted",
-          rarity: "rare",
-          owned: true, // This creature is owned by the user
-          description: "A serpent with scales made of living crystal that change color with its mood. It can channel magical energies and create dazzling light displays.",
-          real_world_inspiration: "Inspired by the Chinese Giant Salamander, the world's largest amphibian that can grow up to 6 feet long.",
-          conservation_fact: "Chinese Giant Salamanders are critically endangered due to habitat destruction, pollution, and over-harvesting for traditional medicine and food. Wild populations have declined by over 80% since the 1950s.",
-          last_interaction_at: "2023-11-14 09:30:00"
-        },
-        {
-          id: 12,
-          name: "Cloudracer",
-          species_name: "Sky Dolphin",
-          stage: "juvenile",
-          health: 82,
-          happiness: 95,
-          growth_progress: 60,
-          habitat_type: "sky",
-          rarity: "uncommon",
-          owned: true, // This creature is owned by the user
-          description: "A playful creature that resembles a dolphin but swims through the air instead of water. It can create small rainclouds when excited.",
-          real_world_inspiration: "Inspired by the Vaquita, the world's most endangered marine mammal with fewer than 10 individuals remaining in the wild.",
-          conservation_fact: "The Vaquita's population has collapsed due to illegal fishing practices in the Gulf of California. Despite protection efforts, their numbers continue to decline dramatically.",
-          last_interaction_at: "2023-11-13 15:50:00"
+      },
+      
+      openCreatureModal(creature) {
+        this.selectedCreature = creature;
+        this.isCreatureSoundPlaying = false;
+      },
+      
+      closeCreatureModal() {
+        if (this.isCreatureSoundPlaying) {
+          this.toggleCreatureSound();
         }
-      ],
-      favorites: [],
-      filteredCreatures: [],
-      searchQuery: '',
-      activeFilter: 'all',
-      stageFilter: 'all',
-      ownershipFilter: 'all',
-      sortField: 'name',
-      sortAsc: true,
-      showOnlyFavorites: false,
-      
-      init() {
-        // Initialize favorites from localStorage if available
-        const storedFavorites = localStorage.getItem('wildlife_favorites');
-        if (storedFavorites) {
-          this.favorites = JSON.parse(storedFavorites);
-        }
-        
-        // Apply initial filtering and sorting
-        this.filteredCreatures = [...this.creatures];
-        this.applyFilters();
-        
-        // Listen for filter changes
-        this.$watch('searchQuery', () => this.applyFilters());
-        this.$watch('activeFilter', () => this.applyFilters());
-        this.$watch('stageFilter', () => this.applyFilters());
-        this.$watch('ownershipFilter', () => this.applyFilters());
-        
-        // Listen for custom events from other components
-        window.addEventListener('gallery-sort', (e) => {
-          this.sortField = e.detail.field;
-          this.sortAsc = e.detail.asc;
-          this.applyFilters();
-        });
-        
-        window.addEventListener('gallery-filter-favorites', (e) => {
-          this.showOnlyFavorites = e.detail.showOnlyFavorites;
-          this.applyFilters();
-        });
-        
-        window.addEventListener('gallery-reset-filters', () => {
-          this.searchQuery = '';
-          this.activeFilter = 'all';
-          this.stageFilter = 'all';
-          this.showOnlyFavorites = false;
-          this.applyFilters();
-        });
-      },
-      
-      applyFilters() {
-        let result = [...this.creatures];
-        
-        // Apply text search
-        if (this.searchQuery.trim() !== '') {
-          const query = this.searchQuery.toLowerCase();
-          result = result.filter(creature => 
-            creature.name.toLowerCase().includes(query) || 
-            creature.species_name.toLowerCase().includes(query) ||
-            creature.description.toLowerCase().includes(query)
-          );
-        }
-        
-        // Apply habitat filter
-        if (this.activeFilter !== 'all') {
-          result = result.filter(creature => creature.habitat_type === this.activeFilter);
-        }
-        
-        // Apply stage filter
-        if (this.stageFilter !== 'all') {
-          result = result.filter(creature => creature.stage === this.stageFilter);
-        }
-        
-        // Apply ownership filter
-        if (this.ownershipFilter !== 'all') {
-          const isOwned = this.ownershipFilter === 'owned';
-          result = result.filter(creature => creature.owned === isOwned);
-        }
-        
-        // Apply favorites filter
-        if (this.showOnlyFavorites) {
-          result = result.filter(creature => this.favorites.includes(creature.id));
-        }
-        
-        // Apply sorting
-        result.sort((a, b) => {
-          let comparison = 0;
-          
-          if (this.sortField === 'name') {
-            comparison = a.name.localeCompare(b.name);
-          } else if (this.sortField === 'rarity') {
-            const rarityOrder = { 'common': 1, 'uncommon': 2, 'rare': 3, 'legendary': 4, 'mythical': 5 };
-            comparison = rarityOrder[a.rarity] - rarityOrder[b.rarity];
-          }
-          
-          return this.sortAsc ? comparison : -comparison;
-        });
-        
-        this.filteredCreatures = result;
-      },
-      
-      toggleFavorite(creatureId) {
-        const index = this.favorites.indexOf(creatureId);
-        
-        if (index === -1) {
-          // Add to favorites
-          this.favorites.push(creatureId);
-        } else {
-          // Remove from favorites
-          this.favorites.splice(index, 1);
-        }
-        
-        // Save to localStorage
-        localStorage.setItem('wildlife_favorites', JSON.stringify(this.favorites));
-        
-        // Re-apply filters if we're showing only favorites
-        if (this.showOnlyFavorites) {
-          this.applyFilters();
-        }
-      },
-      
-      isFavorite(creatureId) {
-        return this.favorites.includes(creatureId);
-      },
-      
-      openModal(creatureId) {
-        // Dispatch custom event to open modal with the selected creature
-        window.dispatchEvent(new CustomEvent('open-creature-modal', {
-          detail: { creatureId }
-        }));
-      },
-      
-      // Helper functions for styling based on creature properties
-      getHabitatClasses(habitatType) {
-        return {
-          'border-l-4': true,
-          'border-forest': habitatType === 'forest',
-          'border-ocean': habitatType === 'ocean',
-          'border-mountain': habitatType === 'mountain',
-          'border-sky': habitatType === 'sky',
-          'border-cosmic': habitatType === 'cosmic',
-          'border-enchanted': habitatType === 'enchanted',
-        };
-      },
-      
-      getHabitatBgClasses(habitatType) {
-        return {
-          'bg-green-50': habitatType === 'forest',
-          'bg-blue-50': habitatType === 'ocean',
-          'bg-red-50': habitatType === 'mountain',
-          'bg-cyan-50': habitatType === 'sky',
-          'bg-purple-50': habitatType === 'cosmic',
-          'bg-pink-50': habitatType === 'enchanted',
-        };
-      },
-      
-      getHabitatBadgeClasses(habitatType) {
-        return {
-          'bg-green-100 text-green-800': habitatType === 'forest',
-          'bg-blue-100 text-blue-800': habitatType === 'ocean',
-          'bg-red-100 text-red-800': habitatType === 'mountain',
-          'bg-cyan-100 text-cyan-800': habitatType === 'sky',
-          'bg-purple-100 text-purple-800': habitatType === 'cosmic',
-          'bg-pink-100 text-pink-800': habitatType === 'enchanted',
-        };
-      },
-      
-      getHabitatButtonClasses(habitatType) {
-        return {
-          'bg-green-100 hover:bg-green-200 text-green-800': habitatType === 'forest',
-          'bg-blue-100 hover:bg-blue-200 text-blue-800': habitatType === 'ocean',
-          'bg-red-100 hover:bg-red-200 text-red-800': habitatType === 'mountain',
-          'bg-cyan-100 hover:bg-cyan-200 text-cyan-800': habitatType === 'sky',
-          'bg-purple-100 hover:bg-purple-200 text-purple-800': habitatType === 'cosmic',
-          'bg-pink-100 hover:bg-pink-200 text-pink-800': habitatType === 'enchanted',
-        };
-      },
-      
-      getStageBadgeClasses(stage) {
-        return {
-          'bg-yellow-100 text-yellow-800': stage === 'egg',
-          'bg-blue-100 text-blue-800': stage === 'baby',
-          'bg-green-100 text-green-800': stage === 'juvenile',
-          'bg-purple-100 text-purple-800': stage === 'adult',
-          'bg-red-100 text-red-800': stage === 'mythical',
-        };
-      },
-      
-      getProgressBarColor(stage) {
-        return {
-          'bg-yellow-400': stage === 'egg',
-          'bg-blue-500': stage === 'baby',
-          'bg-green-500': stage === 'juvenile',
-          'bg-purple-500': stage === 'adult',
-        };
-      },
-      
-      getHabitatTextClasses(habitatType) {
-        return {
-          'text-forest': habitatType === 'forest',
-          'text-ocean': habitatType === 'ocean',
-          'text-mountain': habitatType === 'mountain',
-          'text-sky': habitatType === 'sky',
-          'text-cosmic': habitatType === 'cosmic',
-          'text-enchanted': habitatType === 'enchanted',
-        };
-      },
-      
-      getHabitatBorderClasses(habitatType) {
-        return {
-          'border-forest': habitatType === 'forest',
-          'border-ocean': habitatType === 'ocean',
-          'border-mountain': habitatType === 'mountain',
-          'border-sky': habitatType === 'sky',
-          'border-cosmic': habitatType === 'cosmic',
-          'border-enchanted': habitatType === 'enchanted',
-        };
-      },
-      
-      getImagePath(creatureId, stage) {
-        // In a real implementation, this would return the correct image path
-        return `/Wildlife/images/creatures/${creatureId}_${stage}.png`;
-      },
-      
-      getRarityStars(rarity) {
-        const rarityStars = {
-          'common': 1,
-          'uncommon': 2,
-          'rare': 3,
-          'legendary': 4,
-          'mythical': 5
-        };
-        
-        return rarityStars[rarity] || 1;
-      },
-      
-      getHabitatDecoration(habitatType) {
-        // Return SVG decorations based on habitat type
-        switch(habitatType) {
-          case 'forest':
-            return `
-              <svg viewBox="0 0 100 100" preserveAspectRatio="none" class="h-full w-full">
-                <path d="M20,20 Q30,5 40,20 Q50,35 60,20 Q70,5 80,20" stroke="#22c55e" stroke-width="1" fill="none">
-                  <animate attributeName="d" values="M20,20 Q30,5 40,20 Q50,35 60,20 Q70,5 80,20; M20,25 Q30,10 40,25 Q50,40 60,25 Q70,10 80,25; M20,20 Q30,5 40,20 Q50,35 60,20 Q70,5 80,20" dur="8s" repeatCount="indefinite" />
-                </path>
-              </svg>
-            `;
-          case 'ocean':
-            return `
-              <svg viewBox="0 0 100 100" preserveAspectRatio="none" class="h-full w-full">
-                <path d="M0,50 Q25,40 50,50 Q75,60 100,50 L100,100 L0,100 Z" fill="#3B82F6" class="animate-pulse">
-                  <animate attributeName="d" values="M0,50 Q25,40 50,50 Q75,60 100,50 L100,100 L0,100 Z; M0,50 Q25,60 50,50 Q75,40 100,50 L100,100 L0,100 Z; M0,50 Q25,40 50,50 Q75,60 100,50 L100,100 L0,100 Z" dur="10s" repeatCount="indefinite" />
-                </path>
-              </svg>
-            `;
-          case 'mountain':
-            return `
-              <svg viewBox="0 0 100 100" preserveAspectRatio="none" class="h-full w-full">
-                <polygon points="20,80 35,30 50,65 65,20 80,80" fill="none" stroke="#ef4444" stroke-width="1">
-                  <animate attributeName="points" values="20,80 35,30 50,65 65,20 80,80; 20,80 35,35 50,60 65,25 80,80; 20,80 35,30 50,65 65,20 80,80" dur="12s" repeatCount="indefinite" />
-                </polygon>
-              </svg>
-            `;
-          case 'sky':
-            return `
-              <svg viewBox="0 0 100 100" preserveAspectRatio="none" class="h-full w-full">
-                <path d="M20,40 Q30,20 40,40 Q50,60 60,40 Q70,20 80,40" stroke="#0ea5e9" stroke-width="1" fill="none">
-                  <animate attributeName="d" values="M20,40 Q30,20 40,40 Q50,60 60,40 Q70,20 80,40; M20,45 Q30,25 40,45 Q50,65 60,45 Q70,25 80,45; M20,40 Q30,20 40,40 Q50,60 60,40 Q70,20 80,40" dur="6s" repeatCount="indefinite" />
-                </path>
-                <circle cx="30" cy="30" r="2" fill="#0ea5e9">
-                  <animate attributeName="opacity" values="0;1;0" dur="4s" repeatCount="indefinite" />
-                </circle>
-                <circle cx="70" cy="45" r="1" fill="#0ea5e9">
-                  <animate attributeName="opacity" values="0;1;0" dur="5s" repeatCount="indefinite" />
-                </circle>
-                <circle cx="50" cy="20" r="1.5" fill="#0ea5e9">
-                  <animate attributeName="opacity" values="0;1;0" dur="3s" repeatCount="indefinite" />
-                </circle>
-              </svg>
-            `;
-          case 'cosmic':
-            return `
-              <svg viewBox="0 0 100 100" preserveAspectRatio="none" class="h-full w-full">
-                <circle cx="30" cy="30" r="2" fill="#a855f7">
-                  <animate attributeName="opacity" values="0;1;0" dur="4s" repeatCount="indefinite" />
-                </circle>
-                <circle cx="70" cy="45" r="1" fill="#a855f7">
-                  <animate attributeName="opacity" values="0;1;0" dur="5s" repeatCount="indefinite" />
-                </circle>
-                <circle cx="50" cy="20" r="1.5" fill="#a855f7">
-                  <animate attributeName="opacity" values="0;1;0" dur="3s" repeatCount="indefinite" />
-                </circle>
-                <circle cx="25" cy="60" r="1" fill="#a855f7">
-                  <animate attributeName="opacity" values="0;1;0" dur="6s" repeatCount="indefinite" />
-                </circle>
-                <circle cx="80" cy="25" r="2" fill="#a855f7">
-                  <animate attributeName="opacity" values="0;1;0" dur="7s" repeatCount="indefinite" />
-                </circle>
-              </svg>
-            `;
-          case 'enchanted':
-            return `
-              <svg viewBox="0 0 100 100" preserveAspectRatio="none" class="h-full w-full">
-                <path d="M30,30 Q50,10 70,30 Q90,50 70,70 Q50,90 30,70 Q10,50 30,30" stroke="#ec4899" stroke-width="1" fill="none">
-                  <animate attributeName="d" values="M30,30 Q50,10 70,30 Q90,50 70,70 Q50,90 30,70 Q10,50 30,30; M35,35 Q50,15 65,35 Q85,50 65,65 Q50,85 35,65 Q15,50 35,35; M30,30 Q50,10 70,30 Q90,50 70,70 Q50,90 30,70 Q10,50 30,30" dur="10s" repeatCount="indefinite" />
-                </path>
-                <circle cx="50" cy="50" r="2" fill="#ec4899">
-                  <animate attributeName="r" values="2;3;2" dur="4s" repeatCount="indefinite" />
-                </circle>
-              </svg>
-            `;
-          default:
-            return '';
-        }
-      }
-    };
-  }
-
-  // Modal Component
-  function modalData() {
-    return {
-      isOpen: false,
-      selectedCreature: null,
-      
-      init() {
-        // Listen for open modal event
-        window.addEventListener('open-creature-modal', (e) => {
-          this.openModal(e.detail.creatureId);
-        });
-      },
-      
-      openModal(creatureId) {
-        // Find the creature in the gallery data
-        const galleryComponent = document.querySelector('[x-data="galleryData()"]').__x.$data;
-        this.selectedCreature = galleryComponent.creatures.find(c => c.id === creatureId);
-        
-        if (this.selectedCreature) {
-          this.isOpen = true;
-          // Prevent scrolling on body
-          document.body.style.overflow = 'hidden';
-        }
-      },
-      
-      closeModal() {
-        this.isOpen = false;
         this.selectedCreature = null;
-        // Re-enable scrolling
-        document.body.style.overflow = '';
       },
       
-      interactWithCreature(action) {
-        // This is where we would update the creature based on the action
-        // In a real application, this would call an API endpoint
-        
-        const creatureId = this.selectedCreature.id;
-        
-        switch(action) {
-          case 'feed':
-            // Increase health
-            this.selectedCreature.health = Math.min(100, this.selectedCreature.health + 10);
-            break;
-          case 'play':
-            // Increase happiness
-            this.selectedCreature.happiness = Math.min(100, this.selectedCreature.happiness + 10);
-            break;
-          case 'hatch':
-            // Change stage from egg to baby
-            this.selectedCreature.stage = 'baby';
-            this.selectedCreature.growth_progress = 0;
-            break;
-          case 'evolve':
-            // Progress to next stage
-            const stages = ['egg', 'baby', 'juvenile', 'adult', 'mythical'];
-            const currentIndex = stages.indexOf(this.selectedCreature.stage);
-            if (currentIndex < stages.length - 1) {
-              this.selectedCreature.stage = stages[currentIndex + 1];
-              this.selectedCreature.growth_progress = 0;
-            }
-            break;
+      toggleAmbientSound() {
+        if (this.isPlaying) {
+          this.ambientSound.pause();
+        } else {
+          this.ambientSound.play();
+        }
+        this.isPlaying = !this.isPlaying;
+      },
+      
+      toggleCreatureSound() {
+        if (!this.selectedCreature || !this.selectedCreature.audio_url) {
+          return;
         }
         
-        // Update last interaction time
-        this.selectedCreature.last_interaction_at = new Date().toISOString().slice(0, 19).replace('T', ' ');
-        
-        // Show a notification
-        this.showNotification(`Successfully ${action}ed ${this.selectedCreature.name}!`);
-        
-        // Update the creature in the gallery data
-        const galleryComponent = document.querySelector('[x-data="galleryData()"]').__x.$data;
-        const creatureIndex = galleryComponent.creatures.findIndex(c => c.id === creatureId);
-        if (creatureIndex !== -1) {
-          galleryComponent.creatures[creatureIndex] = {...this.selectedCreature};
-          galleryComponent.applyFilters(); // Re-filter and sort
+        // Update source if needed
+        if (this.creatureSound.src !== this.selectedCreature.audio_url) {
+          this.creatureSound.src = this.selectedCreature.audio_url;
         }
+        
+        if (this.isCreatureSoundPlaying) {
+          this.creatureSound.pause();
+        } else {
+          this.creatureSound.play();
+        }
+        this.isCreatureSoundPlaying = !this.isCreatureSoundPlaying;
       },
       
-      showNotification(message) {
-        // Create a notification element
-        const notification = document.createElement('div');
-        notification.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transition-opacity duration-500';
-        notification.textContent = message;
-        
-        // Add to the document
-        document.body.appendChild(notification);
-        
-        // Remove after a delay
-        setTimeout(() => {
-          notification.style.opacity = '0';
-          setTimeout(() => {
-            document.body.removeChild(notification);
-          }, 500);
-        }, 3000);
+      getCreatureImage(creature) {
+        if (creature.image_urls && creature.image_urls[creature.stage]) {
+          return creature.image_urls[creature.stage];
+        }
+        return `<?= $baseUrl ?>/images/creatures/${creature.id}_${creature.stage}.png`;
       },
       
-      formatDate(dateString) {
-        if (!dateString) return 'N/A';
-        
-        const date = new Date(dateString);
-        return date.toLocaleString('en-US', {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
-        });
+      getHabitatClass(habitat) {
+        const classes = {
+          'forest': 'habitat-forest',
+          'ocean': 'habitat-ocean',
+          'mountain': 'habitat-mountain',
+          'sky': 'habitat-sky',
+          'cosmic': 'habitat-cosmic',
+          'enchanted': 'habitat-enchanted'
+        };
+        return classes[habitat] || '';
+      },
+      
+      getHabitatBadgeClass(habitat) {
+        const classes = {
+          'forest': 'bg-green-100 text-green-800',
+          'ocean': 'bg-blue-100 text-blue-800',
+          'mountain': 'bg-red-100 text-red-800',
+          'sky': 'bg-cyan-100 text-cyan-800',
+          'cosmic': 'bg-purple-100 text-purple-800',
+          'enchanted': 'bg-pink-100 text-pink-800'
+        };
+        return classes[habitat] || 'bg-gray-100 text-gray-800';
+      },
+      
+      getStageBadgeClass(stage) {
+        const classes = {
+          'egg': 'bg-yellow-100 text-yellow-800',
+          'baby': 'bg-blue-100 text-blue-800',
+          'juvenile': 'bg-green-100 text-green-800',
+          'adult': 'bg-purple-100 text-purple-800',
+          'mythical': 'bg-red-100 text-red-800'
+        };
+        return classes[stage] || 'bg-gray-100 text-gray-800';
+      },
+      
+      getRarityClass(rarity) {
+        const classes = {
+          'common': 'bg-gray-100 text-gray-800',
+          'uncommon': 'bg-green-100 text-green-800',
+          'rare': 'bg-blue-100 text-blue-800',
+          'legendary': 'bg-purple-100 text-purple-800',
+          'mythical': 'bg-amber-100 text-amber-800'
+        };
+        return classes[rarity] || 'bg-gray-100 text-gray-800';
+      },
+      
+      capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
       },
       
       getGrowthStatusText(creature) {
@@ -1188,30 +543,166 @@
         }
         
         if (creature.growth_progress >= 100) {
-          const nextStage = {
+          const nextStages = {
             'egg': 'baby',
             'baby': 'juvenile',
             'juvenile': 'adult',
             'adult': 'mythical'
-          }[creature.stage];
-          
-          return `Ready to evolve to ${nextStage}!`;
+          };
+          return `Ready to evolve to ${nextStages[creature.stage]}`;
         }
         
-        return `Focus more to help ${creature.name} grow`;
+        return `${creature.growth_progress}% progress to next stage`;
       },
       
-      // Re-use helper functions from gallery component
-      getHabitatBgClasses: galleryData().getHabitatBgClasses,
-      getHabitatTextClasses: galleryData().getHabitatTextClasses,
-      getHabitatBorderClasses: galleryData().getHabitatBorderClasses,
-      getStageBadgeClasses: galleryData().getStageBadgeClasses,
-      getProgressBarColor: galleryData().getProgressBarColor,
-      getImagePath: galleryData().getImagePath,
-      getRarityStars: galleryData().getRarityStars,
-      getHabitatDecoration: galleryData().getHabitatDecoration
-    };
+      getHabitatDecoration(habitat) {
+        // SVG decorations based on habitat type
+        const decorations = {
+          'forest': `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="w-full h-full">
+              <path d="M10,80 Q25,40 40,80 T70,80" stroke="#22c55e" stroke-width="1" fill="none">
+                <animate attributeName="d" values="M10,80 Q25,40 40,80 T70,80; M10,80 Q25,30 40,80 T70,80; M10,80 Q25,40 40,80 T70,80" dur="8s" repeatCount="indefinite" />
+              </path>
+              <path d="M30,80 Q45,30 60,80 T90,80" stroke="#22c55e" stroke-width="1" fill="none">
+                <animate attributeName="d" values="M30,80 Q45,30 60,80 T90,80; M30,80 Q45,40 60,80 T90,80; M30,80 Q45,30 60,80 T90,80" dur="10s" repeatCount="indefinite" />
+              </path>
+            </svg>
+          `,
+          'ocean': `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="w-full h-full">
+              <path d="M0,50 Q25,40 50,50 Q75,60 100,50 L100,100 L0,100 Z" fill="#3b82f6">
+                <animate attributeName="d" values="M0,50 Q25,40 50,50 Q75,60 100,50 L100,100 L0,100 Z; M0,50 Q25,60 50,50 Q75,40 100,50 L100,100 L0,100 Z; M0,50 Q25,40 50,50 Q75,60 100,50 L100,100 L0,100 Z" dur="12s" repeatCount="indefinite" />
+              </path>
+            </svg>
+          `,
+          'mountain': `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="w-full h-full">
+              <polygon points="20,90 50,20 80,90" fill="#ef4444" />
+              <polygon points="10,90 30,40 50,90" fill="#ef4444" />
+              <polygon points="50,90 70,30 90,90" fill="#ef4444" />
+            </svg>
+          `,
+          'sky': `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="w-full h-full">
+              <circle cx="30" cy="30" r="8" fill="#0ea5e9">
+                <animate attributeName="opacity" values="0.3;0.7;0.3" dur="8s" repeatCount="indefinite" />
+              </circle>
+              <circle cx="70" cy="40" r="10" fill="#0ea5e9">
+                <animate attributeName="opacity" values="0.4;0.8;0.4" dur="10s" repeatCount="indefinite" />
+              </circle>
+              <circle cx="20" cy="60" r="6" fill="#0ea5e9">
+                <animate attributeName="opacity" values="0.2;0.6;0.2" dur="7s" repeatCount="indefinite" />
+              </circle>
+            </svg>
+          `,
+          'cosmic': `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="w-full h-full">
+              <circle cx="20" cy="20" r="1" fill="#a855f7">
+                <animate attributeName="r" values="1;2;1" dur="3s" repeatCount="indefinite" />
+                <animate attributeName="opacity" values="0.3;1;0.3" dur="3s" repeatCount="indefinite" />
+              </circle>
+              <circle cx="40" cy="60" r="1.5" fill="#a855f7">
+                <animate attributeName="r" values="1.5;3;1.5" dur="5s" repeatCount="indefinite" />
+                <animate attributeName="opacity" values="0.3;1;0.3" dur="5s" repeatCount="indefinite" />
+              </circle>
+              <circle cx="70" cy="30" r="1" fill="#a855f7">
+                <animate attributeName="r" values="1;2;1" dur="4s" repeatCount="indefinite" />
+                <animate attributeName="opacity" values="0.3;1;0.3" dur="4s" repeatCount="indefinite" />
+              </circle>
+              <circle cx="80" cy="70" r="1.2" fill="#a855f7">
+                <animate attributeName="r" values="1.2;2.5;1.2" dur="6s" repeatCount="indefinite" />
+                <animate attributeName="opacity" values="0.3;1;0.3" dur="6s" repeatCount="indefinite" />
+              </circle>
+              <circle cx="50" cy="40" r="1.8" fill="#a855f7">
+                <animate attributeName="r" values="1.8;3.5;1.8" dur="7s" repeatCount="indefinite" />
+                <animate attributeName="opacity" values="0.3;1;0.3" dur="7s" repeatCount="indefinite" />
+              </circle>
+            </svg>
+          `,
+          'enchanted': `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="w-full h-full">
+              <path d="M30,30 Q50,10 70,30 Q90,50 70,70 Q50,90 30,70 Q10,50 30,30" stroke="#ec4899" stroke-width="1" fill="none">
+                <animate attributeName="d" values="M30,30 Q50,10 70,30 Q90,50 70,70 Q50,90 30,70 Q10,50 30,30; M35,35 Q50,15 65,35 Q85,50 65,65 Q50,85 35,65 Q15,50 35,35; M30,30 Q50,10 70,30 Q90,50 70,70 Q50,90 30,70 Q10,50 30,30" dur="15s" repeatCount="indefinite" />
+              </path>
+              <circle cx="50" cy="50" r="3" fill="#ec4899">
+                <animate attributeName="r" values="3;5;3" dur="10s" repeatCount="indefinite" />
+                <animate attributeName="opacity" values="0.2;0.6;0.2" dur="10s" repeatCount="indefinite" />
+              </circle>
+            </svg>
+          `
+        };
+        
+        return decorations[habitat] || '';
+      }
+    }
   }
 </script>
+
+<style>
+  /* Exhibition styling */
+  .exhibition-header {
+    background-color: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  .exhibition-gallery {
+    background-color: #fff;
+  }
+  
+  .exhibition-item {
+    transition: transform 0.3s ease;
+  }
+  
+  .exhibition-item:hover {
+    transform: translateY(-5px);
+  }
+  
+  .artwork-frame {
+    position: relative;
+    cursor: pointer;
+  }
+  
+  /* Habitat-specific styling */
+  .habitat-forest .artwork-frame {
+    border-color: rgba(34, 197, 94, 0.3);
+  }
+  
+  .habitat-ocean .artwork-frame {
+    border-color: rgba(59, 130, 246, 0.3);
+  }
+  
+  .habitat-mountain .artwork-frame {
+    border-color: rgba(239, 68, 68, 0.3);
+  }
+  
+  .habitat-sky .artwork-frame {
+    border-color: rgba(14, 165, 233, 0.3);
+  }
+  
+  .habitat-cosmic .artwork-frame {
+    border-color: rgba(168, 85, 247, 0.3);
+  }
+  
+  .habitat-enchanted .artwork-frame {
+    border-color: rgba(236, 72, 153, 0.3);
+  }
+  
+  /* Animation for creature images */
+  @keyframes float {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
+  }
+  
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+</style>
 
 <?php require_once ROOT_PATH . '/resources/views/layouts/footer.php'; ?>

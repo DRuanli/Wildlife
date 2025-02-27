@@ -2,58 +2,76 @@
 // Path: app/routes.php
 
 /**
- * Application Routes
+ * Define application routes
  * 
- * Define all application routes here
+ * Format: 'route' => 'ControllerName@methodName'
+ * 
+ * @return array
  */
 function getRoutes() {
     return [
+        // Homepage routes
         '/' => 'HomeController@index',
+        
+        // Authentication routes
         '/auth/login' => 'AuthController@showLogin',
         '/auth/login/process' => 'AuthController@login',
         '/auth/register' => 'AuthController@showRegister',
         '/auth/register/process' => 'AuthController@register',
         '/auth/logout' => 'AuthController@logout',
         '/auth/verify/:token' => 'AuthController@verifyEmail',
+        
+        // OAuth routes
         '/auth/google' => 'AuthController@googleLogin',
         '/auth/google/callback' => 'AuthController@googleCallback',
         '/auth/apple' => 'AuthController@appleLogin',
         '/auth/apple/callback' => 'AuthController@appleCallback',
+        
+        // Dashboard routes
         '/dashboard' => 'DashboardController@index',
         '/dashboard/profile' => 'DashboardController@profile',
         '/dashboard/settings' => 'DashboardController@settings',
+        '/dashboard/profile/update' => 'DashboardController@updateProfile',
+        '/dashboard/password/update' => 'DashboardController@updatePassword',
         
-        // Focus controller routes
+        // Focus routes
         '/focus' => 'FocusController@index',
-        '/focus/start' => 'FocusController@startSession',
-        '/focus/complete' => 'FocusController@completeSession',
-        '/focus/cancel' => 'FocusController@cancelSession',
-        '/focus/summary/:id' => 'FocusController@summary',
+        '/focus/session/start' => 'FocusController@startSession',
+        '/focus/session/complete' => 'FocusController@completeSession',
+        '/focus/session/cancel' => 'FocusController@cancelSession',
+        '/focus/session/:id/summary' => 'FocusController@summary',
         '/focus/history' => 'FocusController@history',
         '/focus/stats' => 'FocusController@getStats',
-
-        // Creature controller routes
+        
+        // Creature routes
         '/creatures' => 'CreatureController@index',
         '/creatures/view/:id' => 'CreatureController@view',
-        '/creatures/hatch/:id' => 'CreatureController@hatch',
+        '/creatures/:id/hatch' => 'CreatureController@hatch',
         '/creatures/hatch' => 'CreatureController@hatchEgg',
         '/creatures/evolve' => 'CreatureController@evolveCreature',
         '/creatures/feed' => 'CreatureController@feedCreature',
         '/creatures/play' => 'CreatureController@playWithCreature',
+        '/creatures/move' => 'CreatureController@moveToHabitat',
         '/creatures/rename' => 'CreatureController@renameCreature',
-        '/creatures/habitat' => 'CreatureController@moveToHabitat',
-
-        // Shop controller routes
+        
+        // Shop routes
         '/shop' => 'ShopController@index',
-        '/shop/history' => 'ShopController@history',
+        '/shop/item/:id' => 'ShopController@view',
+        '/shop/purchase' => 'ShopController@purchase',
         '/shop/wishlist' => 'ShopController@wishlist',
+        '/shop/wishlist/add' => 'ShopController@addToWishlist',
+        '/shop/wishlist/remove' => 'ShopController@removeFromWishlist',
+        '/shop/history' => 'ShopController@history',
+        '/shop/get-coins' => 'ShopController@getCurrency',
         '/shop/conservation' => 'ShopController@conservation',
         '/shop/model-preview/:id' => 'ShopController@modelPreview',
-
-        // Creature gallery routes
+        
+        // Gallery routes (new)
         '/gallery' => 'GalleryController@index',
-
-        // Assisted learning routes
+        '/gallery/creature-details' => 'GalleryController@getCreatureDetails',
+        
+        // Learn routes
         '/learn/support' => 'LearnController@support',
+        '/learn/faq/:category' => 'LearnController@faq'
     ];
 }

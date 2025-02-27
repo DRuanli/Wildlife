@@ -1,1389 +1,500 @@
 <?php require_once ROOT_PATH . '/resources/views/layouts/header.php'; ?>
 
-<style>
-  :root {
-    --primary-bg: #F9F8F2;
-    --primary-text: #111111;
-    --accent-primary: #6B5CA5;
-    --accent-secondary: #8FC0A9;
-    --accent-tertiary: #C8553D;
-    --neutral-light: #F5F5F5;
-    --neutral-medium: #E0E0E0;
-    --neutral-dark: #666666;
-  }
-  
-  /* Animation classes */
-  .fade-in {
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
-  }
-  
-  .fade-in.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  
-  .hover-scale {
-    transition: transform 0.3s ease;
-  }
-  
-  .hover-scale:hover {
-    transform: scale(1.05);
-  }
-  
-  /* Remove scrollbar for horizontal scroll areas */
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-  
-  .no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  
-  /* Rarity badges */
-  .badge-common {
-    background-color: #E0E0E0;
-    color: #555555;
-  }
-  
-  .badge-uncommon {
-    background-color: #C5E1A5;
-    color: #33691E;
-  }
-  
-  .badge-rare {
-    background-color: #90CAF9;
-    color: #0D47A1;
-  }
-  
-  .badge-legendary {
-    background-color: #CE93D8;
-    color: #4A148C;
-  }
-  
-  .badge-mythical {
-    background-color: #FFD54F;
-    color: #E65100;
-  }
-  
-  /* Mini model viewer styles */
-  .mini-model-viewer {
-    position: relative;
-    overflow: hidden;
-    border-radius: 8px;
-  }
-
-  .mini-model-loading {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(240, 240, 240, 0.5);
-    z-index: 5;
-  }
-</style>
-
-<div class="min-h-screen bg-[var(--primary-bg)]">
-  <!-- Hero Section -->
-  <div class="relative overflow-hidden bg-[var(--primary-bg)] text-[var(--primary-text)]">
-    <div class="absolute opacity-10 right-0 top-0 w-full h-full">
-      <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
-        <pattern id="anthropic-pattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-          <path d="M20,0 Q40,20 20,40 Q0,20 20,0" stroke="currentColor" stroke-width="1" fill="none" />
-        </pattern>
-        <rect width="100%" height="100%" fill="url(#anthropic-pattern)" />
-      </svg>
-    </div>
-    <div class="container mx-auto px-4 py-12 relative z-10">
-      <div class="flex flex-col md:flex-row justify-between items-center">
-        <div class="mb-6 md:mb-0 max-w-xl">
-          <h1 class="font-display text-3xl md:text-4xl font-bold mb-3">Wildlife Haven Shop</h1>
-          <p class="text-[var(--neutral-dark)] text-lg font-light">Enhance your digital wildlife sanctuary with thoughtfully designed items that support real-world conservation efforts.</p>
-        </div>
-        <div class="flex items-center bg-white shadow-sm rounded-lg px-5 py-4">
-          <i class="fas fa-coins text-yellow-400 mr-3 text-xl"></i>
-          <div>
-            <span class="block text-sm text-[var(--neutral-dark)]">Your Balance</span>
-            <span class="font-bold text-xl"><?= number_format($userCoins) ?> WildCoins</span>
-          </div>
-          <a href="<?= $baseUrl ?>/shop/get-currency" class="ml-4 bg-gradient-to-r from-[var(--accent-primary)] to-[#5D4F91] hover:from-[#5D4F91] hover:to-[#4F4178] text-white text-sm font-medium px-4 py-2 rounded-lg transition-all duration-300">
-            Get More
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Main Content Container -->
-  <div class="container mx-auto px-4 pb-12">
-    <!-- Daily Deals Section -->
-    <div class="fade-in mb-8 bg-white rounded-lg shadow-sm overflow-hidden">
-      <div class="bg-gradient-to-r from-amber-500 to-amber-600 p-6">
-        <div class="flex flex-col md:flex-row justify-between items-center">
-          <div class="flex items-center mb-4 md:mb-0">
-            <div class="bg-white rounded-full p-3 mr-4 shadow-sm">
-              <i class="fas fa-bolt text-amber-500 text-xl"></i>
-            </div>
-            <div>
-              <h2 class="text-white font-bold text-2xl">Daily Deals</h2>
-              <p class="text-amber-100">Special offers refreshing in <span id="countdown-timer" class="font-bold">23:45:19</span></p>
-            </div>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full md:w-auto">
-            <!-- Daily Deal Item 1 -->
-            <div class="bg-white bg-opacity-10 rounded-lg p-3 flex items-center group hover:bg-opacity-20 transition-all cursor-pointer">
-              <div class="w-12 h-12 bg-white rounded-md flex items-center justify-center mr-3 shadow-sm">
-                <img src="<?= $baseUrl ?>/images/shop/crystal-egg.png" alt="Crystal Egg" class="w-10 h-10 object-contain">
-              </div>
-              <div class="flex-1">
-                <h3 class="text-white font-medium text-sm">Crystal Egg</h3>
-                <div class="flex items-center">
-                  <span class="text-gray-200 text-xs line-through mr-2">500</span>
-                  <span class="text-white font-bold">350</span>
-                  <i class="fas fa-coins text-yellow-300 text-xs ml-1"></i>
+<div class="min-h-screen bg-gray-50">
+    <!-- Shop Header -->
+    <div class="bg-white shadow-sm mb-6">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <h1 class="text-2xl font-bold text-gray-800">Wildlife Haven Shop</h1>
+                    <p class="text-gray-600">Enhance your sanctuary and support conservation</p>
                 </div>
-              </div>
-            </div>
-            
-            <!-- Daily Deal Item 2 -->
-            <div class="bg-white bg-opacity-10 rounded-lg p-3 flex items-center group hover:bg-opacity-20 transition-all cursor-pointer">
-              <div class="w-12 h-12 bg-white rounded-md flex items-center justify-center mr-3 shadow-sm">
-                <img src="<?= $baseUrl ?>/images/shop/golden-fountain.png" alt="Golden Fountain" class="w-10 h-10 object-contain">
-              </div>
-              <div class="flex-1">
-                <h3 class="text-white font-medium text-sm">Golden Fountain</h3>
-                <div class="flex items-center">
-                  <span class="text-gray-200 text-xs line-through mr-2">1200</span>
-                  <span class="text-white font-bold">800</span>
-                  <i class="fas fa-coins text-yellow-300 text-xs ml-1"></i>
+                <div class="flex items-center bg-gray-100 rounded-lg px-4 py-3">
+                    <i class="fas fa-coins text-yellow-500 mr-2"></i>
+                    <div>
+                        <span class="font-bold"><?= number_format($userCoins ?? 0) ?></span>
+                        <span class="text-gray-600 ml-1">WildCoins</span>
+                    </div>
+                    <a href="<?= $baseUrl ?>/shop/get-currency" class="ml-4 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium px-3 py-1.5 rounded-md transition-colors">
+                        Get More
+                    </a>
                 </div>
-              </div>
             </div>
-            
-            <!-- Daily Deal Item 3 -->
-            <div class="hidden sm:flex bg-white bg-opacity-10 rounded-lg p-3 items-center group hover:bg-opacity-20 transition-all cursor-pointer">
-              <div class="w-12 h-12 bg-white rounded-md flex items-center justify-center mr-3 shadow-sm">
-                <img src="<?= $baseUrl ?>/images/shop/sapphire-collar.png" alt="Sapphire Collar" class="w-10 h-10 object-contain">
-              </div>
-              <div class="flex-1">
-                <h3 class="text-white font-medium text-sm">Sapphire Collar</h3>
-                <div class="flex items-center">
-                  <span class="text-gray-200 text-xs line-through mr-2">750</span>
-                  <span class="text-white font-bold">550</span>
-                  <i class="fas fa-coins text-yellow-300 text-xs ml-1"></i>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
     </div>
 
-    <!-- Search and Filter Section -->
-    <div class="fade-in bg-white rounded-lg shadow-sm p-5 mb-8">
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div class="relative flex-grow max-w-md">
-          <input 
-            type="text" 
-            placeholder="Search items..." 
-            class="w-full pl-10 pr-4 py-2 bg-[var(--primary-bg)] border border-[var(--neutral-medium)] rounded-lg focus:ring-[var(--accent-primary)] focus:border-[var(--accent-primary)] transition-colors">
-          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <i class="fas fa-search text-[var(--neutral-dark)]"></i>
-          </div>
-        </div>
-        
-        <div class="flex flex-wrap gap-3">
-          <div class="relative">
-            <select class="appearance-none bg-[var(--primary-bg)] border border-[var(--neutral-medium)] rounded-lg py-2 pl-4 pr-10 focus:ring-[var(--accent-primary)] focus:border-[var(--accent-primary)] transition-colors">
-              <option value="">Sort by: Newest</option>
-              <option value="price-asc">Price: Low to High</option>
-              <option value="price-desc">Price: High to Low</option>
-              <option value="popularity">Most Popular</option>
-            </select>
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-[var(--neutral-dark)]">
-              <i class="fas fa-chevron-down text-xs"></i>
-            </div>
-          </div>
-          
-          <div class="relative">
-            <select class="appearance-none bg-[var(--primary-bg)] border border-[var(--neutral-medium)] rounded-lg py-2 pl-4 pr-10 focus:ring-[var(--accent-primary)] focus:border-[var(--accent-primary)] transition-colors">
-              <option value="">Filter by Rarity</option>
-              <option value="common">Common</option>
-              <option value="uncommon">Uncommon</option>
-              <option value="rare">Rare</option>
-              <option value="legendary">Legendary</option>
-              <option value="mythical">Mythical</option>
-            </select>
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-[var(--neutral-dark)]">
-              <i class="fas fa-chevron-down text-xs"></i>
-            </div>
-          </div>
-          
-          <button class="bg-[var(--primary-bg)] hover:bg-[var(--neutral-medium)] text-[var(--primary-text)] py-2 px-4 rounded-lg flex items-center transition-colors duration-300">
-            <i class="fas fa-sliders-h mr-2"></i> More Filters
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Shop Categories Tab Navigation -->
-    <div class="fade-in mb-8" x-data="{ activeTab: 'all' }">
-      <div class="flex flex-nowrap overflow-x-auto md:flex-wrap no-scrollbar border-b border-[var(--neutral-medium)] mb-6">
-        <button 
-          @click="activeTab = 'all'" 
-          :class="{ 'border-[var(--accent-primary)] text-[var(--accent-primary)] font-medium': activeTab === 'all', 'border-transparent text-[var(--neutral-dark)] hover:text-[var(--primary-text)]': activeTab !== 'all' }" 
-          class="px-5 py-3 border-b-2 -mb-px whitespace-nowrap transition-all duration-300">
-          All Items
-        </button>
-        <button 
-          @click="activeTab = 'creatures'" 
-          :class="{ 'border-[var(--accent-primary)] text-[var(--accent-primary)] font-medium': activeTab === 'creatures', 'border-transparent text-[var(--neutral-dark)] hover:text-[var(--primary-text)]': activeTab !== 'creatures' }" 
-          class="px-5 py-3 border-b-2 -mb-px whitespace-nowrap transition-all duration-300">
-          <i class="fas fa-dragon mr-2"></i> Creature Items
-        </button>
-        <button 
-          @click="activeTab = 'habitats'" 
-          :class="{ 'border-[var(--accent-primary)] text-[var(--accent-primary)] font-medium': activeTab === 'habitats', 'border-transparent text-[var(--neutral-dark)] hover:text-[var(--primary-text)]': activeTab !== 'habitats' }" 
-          class="px-5 py-3 border-b-2 -mb-px whitespace-nowrap transition-all duration-300">
-          <i class="fas fa-tree mr-2"></i> Habitat Decorations
-        </button>
-        <button 
-          @click="activeTab = 'eggs'" 
-          :class="{ 'border-[var(--accent-primary)] text-[var(--accent-primary)] font-medium': activeTab === 'eggs', 'border-transparent text-[var(--neutral-dark)] hover:text-[var(--primary-text)]': activeTab !== 'eggs' }" 
-          class="px-5 py-3 border-b-2 -mb-px whitespace-nowrap transition-all duration-300">
-          <i class="fas fa-egg mr-2"></i> Special Eggs
-        </button>
-        <button 
-          @click="activeTab = 'conservation'" 
-          :class="{ 'border-[var(--accent-primary)] text-[var(--accent-primary)] font-medium': activeTab === 'conservation', 'border-transparent text-[var(--neutral-dark)] hover:text-[var(--primary-text)]': activeTab !== 'conservation' }" 
-          class="px-5 py-3 border-b-2 -mb-px whitespace-nowrap transition-all duration-300">
-          <i class="fas fa-leaf mr-2"></i> Conservation
-        </button>
-        <button 
-          @click="activeTab = 'limited'" 
-          :class="{ 'border-[var(--accent-primary)] text-[var(--accent-primary)] font-medium': activeTab === 'limited', 'border-transparent text-[var(--neutral-dark)] hover:text-[var(--primary-text)]': activeTab !== 'limited' }" 
-          class="px-5 py-3 border-b-2 -mb-px whitespace-nowrap transition-all duration-300">
-          <i class="fas fa-star mr-2"></i> Limited Edition
-        </button>
-      </div>
-      
-      <!-- All Items Tab Panel -->
-      <div 
-        x-show="activeTab === 'all'" 
-        x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0 transform translate-y-4"
-        x-transition:enter-end="opacity-100 transform translate-y-0"
-        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
-        
-        <!-- Featured Item -->
-        <div class="col-span-2 lg:col-span-2 bg-gradient-to-br from-[var(--accent-primary)] to-purple-700 rounded-xl shadow-md overflow-hidden text-white relative group">
-          <div class="absolute top-3 right-3 bg-yellow-400 text-yellow-900 font-bold uppercase text-xs px-2 py-1 rounded-full z-10">
-            Featured
-          </div>
-          <div class="p-6 flex flex-col h-full relative z-0">
-            <h3 class="text-xl font-bold mb-1">Mythical Habitat Expansion</h3>
-            <p class="text-purple-100 text-sm mb-4">Double your habitat size and unlock special decoration slots</p>
-            <div class="mt-auto flex justify-between items-end">
-              <div class="flex items-center">
-                <span class="text-2xl font-bold mr-1">1,500</span>
-                <i class="fas fa-coins text-yellow-300"></i>
-              </div>
-              <button class="bg-white text-[var(--accent-primary)] font-medium px-4 py-2 rounded-lg hover:bg-purple-50 transition-colors duration-300">
-                Buy Now
-              </button>
-            </div>
-          </div>
-          <img src="<?= $baseUrl ?>/images/shop/mythical-expansion.png" alt="Mythical Habitat Expansion" class="absolute -right-8 bottom-0 h-32 transform transition-transform duration-300 group-hover:scale-110 group-hover:translate-x-2">
-        </div>
-        
-        <!-- Regular Item 1 with 3D Model -->
-        <div class="bg-white rounded-lg shadow-sm border border-[var(--neutral-light)] overflow-hidden group hover:shadow-md transition-all duration-300 shop-item">
-            <div class="relative">
-                <div class="bg-[var(--primary-bg)] h-48 flex items-center justify-center p-4 transition-all duration-300 group-hover:bg-[#F5F2E9]">
-                    <!-- 3D Model Viewer Container replaces static image -->
-                    <div id="mini-model-viewer-100" class="h-40 w-full mini-model-viewer">
-                        <!-- Model will be loaded here via JavaScript -->
-                        <div class="mini-model-loading">
-                            <span class="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></span>
+    <div class="container mx-auto px-4 pb-12">
+        <!-- Filter Section -->
+        <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="relative flex-grow max-w-md">
+                    <input 
+                        type="text" 
+                        placeholder="Search items..." 
+                        class="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-purple-500 focus:border-purple-500 transition-colors">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-search text-gray-400"></i>
+                    </div>
+                </div>
+                
+                <div class="flex flex-wrap gap-3">
+                    <div class="relative">
+                        <select class="appearance-none bg-gray-50 border border-gray-200 rounded-lg py-2 pl-4 pr-10 focus:ring-purple-500 focus:border-purple-500 transition-colors">
+                            <option value="">Sort by: Newest</option>
+                            <option value="price-asc">Price: Low to High</option>
+                            <option value="price-desc">Price: High to Low</option>
+                            <option value="popularity">Most Popular</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="relative">
+                        <select class="appearance-none bg-gray-50 border border-gray-200 rounded-lg py-2 pl-4 pr-10 focus:ring-purple-500 focus:border-purple-500 transition-colors">
+                            <option value="">All Categories</option>
+                            <option value="creature_accessory">Creature Accessories</option>
+                            <option value="habitat_decoration">Habitat Decorations</option>
+                            <option value="egg">Special Eggs</option>
+                            <option value="conservation_package">Conservation</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                            <i class="fas fa-chevron-down text-xs"></i>
                         </div>
                     </div>
                 </div>
-                <div class="absolute top-3 right-3 badge-rare text-xs font-medium px-2 py-1 rounded-full">
-                    Rare
-                </div>
-            </div>
-            <div class="p-5">
-                <h3 class="font-medium text-[var(--primary-text)] mb-1">Arctic Shimmer Hare</h3>
-                <p class="text-sm text-[var(--neutral-dark)] mb-3">A magical egg containing a rare mountain creature</p>
-                <div class="flex justify-between items-center">
-                    <div class="flex items-center">
-                        <span class="font-bold text-[var(--primary-text)] mr-1">650</span>
-                        <i class="fas fa-coins text-yellow-500 text-sm"></i>
-                    </div>
-                    <div class="flex space-x-2">
-                        <a href="<?= $baseUrl ?>/shop/model-preview/100" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-3 py-2 rounded-lg transition-colors inline-flex items-center">
-                            <i class="fas fa-cube mr-1"></i> 3D View
-                        </a>
-                        <button class="bg-[var(--accent-primary)] hover:bg-[#5D4F91] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors flex items-center">
-                            <i class="fas fa-shopping-cart mr-2"></i> Add
-                        </button>
-                    </div>
-                </div>
             </div>
         </div>
-        
-        <!-- Regular Item 2 -->
-        <div class="bg-white rounded-lg shadow-sm border border-[var(--neutral-light)] overflow-hidden group hover:shadow-md transition-all duration-300 shop-item">
-          <div class="relative">
-            <div class="bg-[var(--primary-bg)] h-48 flex items-center justify-center p-4 transition-all duration-300 group-hover:bg-[#F5F2E9]">
-              <img src="<?= $baseUrl ?>/images/shop/golden-crown.png" alt="Golden Crown" class="h-32 w-auto object-contain item-image transform transition-transform duration-300 group-hover:scale-105">
-            </div>
-            <div class="absolute top-3 right-3 badge-legendary text-xs font-medium px-2 py-1 rounded-full">
-              Legendary
-            </div>
-          </div>
-          <div class="p-5">
-            <h3 class="font-medium text-[var(--primary-text)] mb-1">Golden Crown</h3>
-            <p class="text-sm text-[var(--neutral-dark)] mb-3">Royal accessory for your mythical creatures</p>
-            <div class="flex justify-between items-center">
-              <div class="flex items-center">
-                <span class="font-bold text-[var(--primary-text)] mr-1">750</span>
-                <i class="fas fa-coins text-yellow-500 text-sm"></i>
-              </div>
-              <button class="bg-[var(--accent-primary)] hover:bg-[#5D4F91] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors duration-300 flex items-center">
-                <i class="fas fa-shopping-cart mr-2"></i> Add
-              </button>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Regular Item 3 -->
-        <div class="bg-white rounded-lg shadow-sm border border-[var(--neutral-light)] overflow-hidden group hover:shadow-md transition-all duration-300 shop-item">
-          <div class="relative">
-            <div class="bg-[var(--primary-bg)] h-48 flex items-center justify-center p-4 transition-all duration-300 group-hover:bg-[#F5F2E9]">
-              <img src="<?= $baseUrl ?>/images/shop/enchanted-fountain.png" alt="Enchanted Fountain" class="h-32 w-auto object-contain item-image transform transition-transform duration-300 group-hover:scale-105">
-            </div>
-            <div class="absolute top-3 right-3 badge-uncommon text-xs font-medium px-2 py-1 rounded-full">
-              Uncommon
-            </div>
-          </div>
-          <div class="p-5">
-            <h3 class="font-medium text-[var(--primary-text)] mb-1">Enchanted Fountain</h3>
-            <p class="text-sm text-[var(--neutral-dark)] mb-3">Boosts happiness for all creatures in a habitat</p>
-            <div class="flex justify-between items-center">
-              <div class="flex items-center">
-                <span class="font-bold text-[var(--primary-text)] mr-1">325</span>
-                <i class="fas fa-coins text-yellow-500 text-sm"></i>
-              </div>
-              <button class="bg-[var(--accent-primary)] hover:bg-[#5D4F91] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors duration-300 flex items-center">
-                <i class="fas fa-shopping-cart mr-2"></i> Add
-              </button>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Regular Item 4 -->
-        <div class="bg-white rounded-lg shadow-sm border border-[var(--neutral-light)] overflow-hidden group hover:shadow-md transition-all duration-300 shop-item">
-          <div class="relative">
-            <div class="bg-[var(--primary-bg)] h-48 flex items-center justify-center p-4 transition-all duration-300 group-hover:bg-[#F5F2E9]">
-              <img src="<?= $baseUrl ?>/images/shop/emerald-egg.png" alt="Emerald Egg" class="h-32 w-auto object-contain item-image transform transition-transform duration-300 group-hover:scale-105">
-            </div>
-            <div class="absolute top-3 right-3 badge-rare text-xs font-medium px-2 py-1 rounded-full">
-              Rare
-            </div>
-          </div>
-          <div class="p-5">
-            <h3 class="font-medium text-[var(--primary-text)] mb-1">Emerald Egg</h3>
-            <p class="text-sm text-[var(--neutral-dark)] mb-3">Contains a rare forest creature</p>
-            <div class="flex justify-between items-center">
-              <div class="flex items-center">
-                <span class="font-bold text-[var(--primary-text)] mr-1">500</span>
-                <i class="fas fa-coins text-yellow-500 text-sm"></i>
-              </div>
-              <button class="bg-[var(--accent-primary)] hover:bg-[#5D4F91] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors duration-300 flex items-center">
-                <i class="fas fa-shopping-cart mr-2"></i> Add
-              </button>
-            </div>
-          </div>
-        </div>
-        
-        <!-- More items would be populated here -->
-      </div>
-      
-      <!-- Creatures Items Tab Panel -->
-      <div 
-        x-show="activeTab === 'creatures'" 
-        x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0 transform translate-y-4"
-        x-transition:enter-end="opacity-100 transform translate-y-0"
-        class="min-h-[200px] flex items-center justify-center">
-        <div class="text-center py-8 text-[var(--neutral-dark)]">
-          <i class="fas fa-spinner fa-spin text-xl mb-3"></i>
-          <p>Loading creature items...</p>
-        </div>
-      </div>
-      
-      <!-- Other tab panels would be structured similarly -->
-    </div>
 
-    <!-- Recently Viewed Section -->
-    <div class="fade-in bg-white rounded-xl shadow-sm overflow-hidden mb-8">
-      <div class="px-6 py-4 bg-[var(--neutral-light)] border-b border-[var(--neutral-medium)]">
-        <h2 class="text-lg font-medium text-[var(--primary-text)]">Recently Viewed</h2>
-      </div>
-      <div class="p-6">
-        <div class="flex overflow-x-auto no-scrollbar space-x-4 pb-2">
-          <?php foreach ($recentlyViewed as $item): ?>
-            <div class="flex-shrink-0 w-40 bg-white rounded-lg border border-[var(--neutral-light)] overflow-hidden hover:shadow-sm transition-all duration-300">
-              <div class="bg-[var(--primary-bg)] p-3 flex items-center justify-center h-32">
-                <img src="<?= $baseUrl ?>/images/shop/<?= $item['id'] ?>.png" alt="<?= htmlspecialchars($item['name']) ?>" class="max-h-24 max-w-full object-contain hover-scale">
-              </div>
-              <div class="p-3">
-                <h3 class="font-medium text-sm text-[var(--primary-text)] mb-1 truncate"><?= htmlspecialchars($item['name']) ?></h3>
-                <div class="flex items-center">
-                  <span class="font-bold text-sm text-[var(--primary-text)] mr-1"><?= number_format($item['price']) ?></span>
-                  <i class="fas fa-coins text-yellow-500 text-xs"></i>
-                </div>
-              </div>
-            </div>
-          <?php endforeach; ?>
-          
-          <?php if (empty($recentlyViewed)): ?>
-            <!-- Placeholder items if no recent views -->
-            <div class="flex-shrink-0 w-40 bg-white rounded-lg border border-[var(--neutral-light)] overflow-hidden">
-              <div class="bg-[var(--primary-bg)] p-3 flex items-center justify-center h-32">
-                <img src="<?= $baseUrl ?>/images/shop/magic-crystal.png" alt="Magic Crystal" class="max-h-24 max-w-full object-contain hover-scale">
-              </div>
-              <div class="p-3">
-                <h3 class="font-medium text-sm text-[var(--primary-text)] mb-1 truncate">Magic Crystal</h3>
-                <div class="flex items-center">
-                  <span class="font-bold text-sm text-[var(--primary-text)] mr-1">450</span>
-                  <i class="fas fa-coins text-yellow-500 text-xs"></i>
-                </div>
-              </div>
-            </div>
-            
-            <div class="flex-shrink-0 w-40 bg-white rounded-lg border border-[var(--neutral-light)] overflow-hidden">
-              <div class="bg-[var(--primary-bg)] p-3 flex items-center justify-center h-32">
-                <img src="<?= $baseUrl ?>/images/shop/golden-crown.png" alt="Golden Crown" class="max-h-24 max-w-full object-contain hover-scale">
-              </div>
-              <div class="p-3">
-                <h3 class="font-medium text-sm text-[var(--primary-text)] mb-1 truncate">Golden Crown</h3>
-                <div class="flex items-center">
-                  <span class="font-bold text-sm text-[var(--primary-text)] mr-1">750</span>
-                  <i class="fas fa-coins text-yellow-500 text-xs"></i>
-                </div>
-              </div>
-            </div>
-          <?php endif; ?>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Community Progress Section -->
-    <div class="fade-in bg-[var(--primary-bg)] rounded-xl shadow-sm overflow-hidden mt-12">
-      <div class="px-6 py-4 bg-gradient-to-r from-[var(--accent-secondary)] to-[#7FB09A] text-white">
-        <h2 class="text-xl font-display font-bold">Community Conservation Impact</h2>
-      </div>
-      <div class="p-6">
+        <!-- Shop Items Grid -->
         <div class="mb-8">
-          <p class="text-[var(--neutral-dark)] text-center mb-6 max-w-2xl mx-auto">Together, the Wildlife Haven community is making a measurable difference in conservation efforts worldwide.</p>
-          
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-white rounded-lg p-6 shadow-sm flex flex-col items-center">
-              <div class="w-12 h-12 rounded-full bg-[#F3F0E6] flex items-center justify-center mb-4">
-                <i class="fas fa-tree text-[var(--accent-secondary)] text-xl"></i>
-              </div>
-              <span class="text-4xl font-display font-bold text-[var(--primary-text)] mb-1"><?= number_format($globalStats['trees_planted'] ?? 547) ?></span>
-              <span class="text-[var(--neutral-dark)]">Trees Planted</span>
-            </div>
-            
-            <div class="bg-white rounded-lg p-6 shadow-sm flex flex-col items-center">
-              <div class="w-12 h-12 rounded-full bg-[#F3F0E6] flex items-center justify-center mb-4">
-                <i class="fas fa-mountain text-blue-700 text-xl"></i>
-              </div>
-              <span class="text-4xl font-display font-bold text-[var(--primary-text)] mb-1"><?= number_format($globalStats['habitat_protected'] ?? 32) ?></span>
-              <span class="text-[var(--neutral-dark)]">Acres Protected</span>
-            </div>
-            
-            <div class="bg-white rounded-lg p-6 shadow-sm flex flex-col items-center">
-              <div class="w-12 h-12 rounded-full bg-[#F3F0E6] flex items-center justify-center mb-4">
-                <i class="fas fa-paw text-[var(--accent-tertiary)] text-xl"></i>
-              </div>
-              <span class="text-4xl font-display font-bold text-[var(--primary-text)] mb-1"><?= number_format($globalStats['animals_supported'] ?? 124) ?></span>
-              <span class="text-[var(--neutral-dark)]">Animals Supported</span>
-            </div>
-          </div>
+            <?php if (empty($items)): ?>
+                <div class="bg-white rounded-lg shadow-sm p-8 text-center">
+                    <div class="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center text-gray-400 mb-4">
+                        <i class="fas fa-store text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-medium text-gray-700 mb-2">No items available</h3>
+                    <p class="text-gray-500 mb-4">Check back soon for new additions to our shop!</p>
+                </div>
+            <?php else: ?>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                    <?php foreach ($items as $item): ?>
+                        <div class="bg-white rounded-lg shadow-sm overflow-hidden group hover:shadow-md transition-all duration-300 shop-item" data-item-id="<?= $item['id'] ?>">
+                            <div class="relative">
+                                <div class="bg-gray-50 h-40 flex items-center justify-center p-4 transition-all duration-300 group-hover:bg-gray-100">
+                                    <img src="<?= $baseUrl ?>/images/shop/<?= $item['id'] ?>.png" alt="<?= htmlspecialchars($item['name']) ?>" class="h-28 w-auto object-contain transform transition-transform duration-300 group-hover:scale-105">
+                                    
+                                    <!-- Model viewer container (hidden by default) -->
+                                    <div id="model-container-<?= $item['id'] ?>" class="model-viewer-container hidden w-full h-full absolute inset-0">
+                                        <!-- 3D model will be loaded here in the future -->
+                                    </div>
+                                </div>
+                                
+                                <?php if (isset($item['rarity'])): ?>
+                                    <div class="absolute top-2 right-2 text-xs font-medium px-2 py-0.5 rounded-full 
+                                        <?php switch(strtolower($item['rarity'])) {
+                                            case 'common': echo 'bg-gray-100 text-gray-800'; break;
+                                            case 'uncommon': echo 'bg-green-100 text-green-800'; break;
+                                            case 'rare': echo 'bg-blue-100 text-blue-800'; break;
+                                            case 'legendary': echo 'bg-purple-100 text-purple-800'; break;
+                                            case 'mythical': echo 'bg-yellow-100 text-yellow-800'; break;
+                                            default: echo 'bg-gray-100 text-gray-800';
+                                        } ?>">
+                                        <?= htmlspecialchars($item['rarity']) ?>
+                                    </div>
+                                <?php endif; ?>
+                                
+                                <?php if (isset($item['type'])): ?>
+                                    <div class="absolute bottom-2 left-2 bg-white bg-opacity-90 text-xs px-2 py-0.5 rounded">
+                                        <?= htmlspecialchars(str_replace('_', ' ', $item['type'])) ?>
+                                    </div>
+                                <?php endif; ?>
+                                
+                                <?php if (isset($item['is_model_available']) && $item['is_model_available']): ?>
+                                    <button class="absolute bottom-2 right-2 bg-blue-500 text-white text-xs px-2 py-0.5 rounded view-3d-btn" data-item-id="<?= $item['id'] ?>">
+                                        <i class="fas fa-cube mr-1"></i> 3D
+                                    </button>
+                                <?php endif; ?>
+                            </div>
+                            
+                            <div class="p-3">
+                                <h3 class="font-medium text-gray-800 text-sm mb-1"><?= htmlspecialchars($item['name']) ?></h3>
+                                
+                                <div class="flex justify-between items-center mt-2">
+                                    <div class="flex items-center">
+                                        <span class="font-bold text-gray-800 mr-1"><?= number_format($item['price']) ?></span>
+                                        <i class="fas fa-coins text-yellow-500 text-xs"></i>
+                                    </div>
+                                    
+                                    <button class="text-xs bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded transition-colors">
+                                        <i class="fas fa-plus mr-1"></i> Add
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
         </div>
         
-        <!-- Current Goal -->
-        <div class="bg-white rounded-lg p-6 mb-6 shadow-sm">
-          <div class="flex justify-between items-center mb-3">
-            <h3 class="font-bold text-[var(--primary-text)]">Current Community Goal: 1,000 Trees</h3>
-            <span class="text-[var(--accent-secondary)] font-medium"><?= (($globalStats['trees_planted'] ?? 547) / 1000) * 100 ?>% Complete</span>
-          </div>
-          <div class="w-full bg-[var(--neutral-light)] rounded-full h-2.5 mb-4 overflow-hidden">
-            <div class="bg-[var(--accent-secondary)] h-2.5 rounded-full" style="width: <?= (($globalStats['trees_planted'] ?? 547) / 1000) * 100 ?>%"></div>
-          </div>
-          <p class="text-sm text-[var(--neutral-dark)] mb-4">When we reach 1,000 trees, all users will receive a special Rainforest Guardian egg!</p>
-          <div class="text-center">
-            <button class="inline-flex items-center px-4 py-2 bg-[var(--accent-secondary)] hover:bg-[#7FB09A] text-white font-medium rounded-lg transition-colors duration-300">
-              <i class="fas fa-seedling mr-2"></i> Contribute Now
-            </button>
-          </div>
-        </div>
+        <!-- Recently Viewed Section -->
+        <?php if (!empty($recentlyViewed)): ?>
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden mb-8">
+                <div class="px-4 py-3 bg-gray-50 border-b border-gray-200">
+                    <h2 class="font-medium text-gray-800">Recently Viewed</h2>
+                </div>
+                <div class="p-4">
+                    <div class="flex overflow-x-auto space-x-4 pb-2">
+                        <?php foreach ($recentlyViewed as $item): ?>
+                            <div class="flex-shrink-0 w-36 bg-white rounded-lg border border-gray-100 overflow-hidden hover:shadow-sm transition-all duration-300">
+                                <div class="bg-gray-50 p-3 flex items-center justify-center h-28">
+                                    <img src="<?= $baseUrl ?>/images/shop/<?= $item['id'] ?>.png" alt="<?= htmlspecialchars($item['name']) ?>" class="max-h-20 max-w-full object-contain">
+                                </div>
+                                <div class="p-2">
+                                    <h3 class="font-medium text-xs text-gray-800 mb-1 truncate"><?= htmlspecialchars($item['name']) ?></h3>
+                                    <div class="flex items-center">
+                                        <span class="font-bold text-xs text-gray-800 mr-1"><?= number_format($item['price']) ?></span>
+                                        <i class="fas fa-coins text-yellow-500 text-xs"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
         
-        <!-- Conservation Partners -->
-        <div class="text-center">
-          <h3 class="font-medium text-[var(--primary-text)] mb-3">Our Conservation Partners</h3>
-          <div class="flex flex-wrap justify-center items-center gap-6">
-            <img src="<?= $baseUrl ?>/images/partners/rainforest-trust.png" alt="Rainforest Trust" class="h-12 opacity-70 hover:opacity-100 transition-opacity">
-            <img src="<?= $baseUrl ?>/images/partners/wwf.png" alt="World Wildlife Fund" class="h-10 opacity-70 hover:opacity-100 transition-opacity">
-            <img src="<?= $baseUrl ?>/images/partners/one-tree-planted.png" alt="One Tree Planted" class="h-12 opacity-70 hover:opacity-100 transition-opacity">
-          </div>
+        <!-- Conservation Impact Section -->
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div class="px-4 py-3 bg-green-600 text-white">
+                <h2 class="font-medium">Conservation Impact</h2>
+            </div>
+            <div class="p-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div class="bg-gray-50 rounded-lg p-4 flex flex-col items-center">
+                        <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mb-2">
+                            <i class="fas fa-tree text-green-600"></i>
+                        </div>
+                        <span class="text-2xl font-bold text-gray-800"><?= number_format($globalStats['trees_planted'] ?? 0) ?></span>
+                        <span class="text-gray-600 text-sm">Trees Planted</span>
+                    </div>
+                    
+                    <div class="bg-gray-50 rounded-lg p-4 flex flex-col items-center">
+                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mb-2">
+                            <i class="fas fa-mountain text-blue-600"></i>
+                        </div>
+                        <span class="text-2xl font-bold text-gray-800"><?= number_format($globalStats['habitat_protected'] ?? 0) ?></span>
+                        <span class="text-gray-600 text-sm">Acres Protected</span>
+                    </div>
+                    
+                    <div class="bg-gray-50 rounded-lg p-4 flex flex-col items-center">
+                        <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center mb-2">
+                            <i class="fas fa-paw text-amber-600"></i>
+                        </div>
+                        <span class="text-2xl font-bold text-gray-800"><?= number_format($globalStats['animals_supported'] ?? 0) ?></span>
+                        <span class="text-gray-600 text-sm">Animals Supported</span>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <a href="<?= $baseUrl ?>/shop/conservation" class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors">
+                        <i class="fas fa-leaf mr-2"></i> View Conservation Packages
+                    </a>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 
-<!-- Item Preview Modal -->
-<div id="item-preview-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
-  <div class="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
-    <div class="flex flex-col md:flex-row">
-      <!-- Item Preview Image -->
-      <div class="w-full md:w-1/2 bg-[var(--primary-bg)] p-6 flex items-center justify-center min-h-[300px]">
-        <div id="item-preview-display" class="w-full h-full">
-          <!-- Image will be loaded here -->
-          <img src="<?= $baseUrl ?>/images/shop/golden-crown.png" alt="Golden Crown" class="max-w-full max-h-[400px] object-contain mx-auto">
-        </div>
-      </div>
-      
-      <!-- Item Details -->
-      <div class="w-full md:w-1/2 p-6 overflow-y-auto max-h-[600px]">
-        <div class="flex justify-between items-start mb-4">
-          <div>
-            <h2 id="modal-item-name" class="text-2xl font-bold text-[var(--primary-text)]">Golden Crown</h2>
-            <div class="flex items-center mt-1">
-              <div id="modal-item-rarity" class="px-2 py-0.5 badge-legendary text-xs font-medium rounded-full">
-                Legendary
-              </div>
-              <span class="mx-2 text-[var(--neutral-dark)]">•</span>
-              <div id="modal-item-type" class="text-[var(--neutral-dark)] text-sm">
-                Creature Accessory
-              </div>
-            </div>
-          </div>
-          <button id="close-preview-btn" class="text-[var(--neutral-dark)] hover:text-[var(--primary-text)] transition-colors">
-            <i class="fas fa-times text-xl"></i>
-          </button>
-        </div>
-        
-        <div class="border-t border-[var(--neutral-light)] pt-4 mb-4">
-          <p id="modal-item-description" class="text-[var(--neutral-dark)] mb-4">
-            This majestic golden crown is crafted from enchanted materials. When worn by your mythical creatures, it increases their happiness and adds a regal appearance that impresses other creatures.
-          </p>
-          
-          <div class="mb-4">
-            <h3 class="font-medium text-[var(--primary-text)] mb-2">Effects</h3>
-            <ul id="modal-item-effects" class="space-y-2">
-              <li class="flex items-start">
-                <i class="fas fa-check-circle text-[var(--accent-secondary)] mt-0.5 mr-2"></i>
-                <span>+15% Happiness bonus for the creature wearing it</span>
-              </li>
-              <li class="flex items-start">
-                <i class="fas fa-check-circle text-[var(--accent-secondary)] mt-0.5 mr-2"></i>
-                <span>+5% Growth speed bonus</span>
-              </li>
-              <li class="flex items-start">
-                <i class="fas fa-check-circle text-[var(--accent-secondary)] mt-0.5 mr-2"></i>
-                <span>Special animations and effects in AR view</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-        
-        <div class="border-t border-[var(--neutral-light)] pt-4 mb-4">
-          <div class="flex justify-between items-center mb-4">
-            <div class="flex items-center">
-              <span id="modal-item-price" class="text-3xl font-bold text-[var(--primary-text)] mr-2">750</span>
-              <i class="fas fa-coins text-yellow-500 text-xl"></i>
+<!-- Item Detail Modal -->
+<div id="item-detail-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+    <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-hidden">
+        <div class="flex flex-col md:flex-row">
+            <!-- Item Image and Model Viewer Container -->
+            <div class="w-full md:w-1/2 bg-gray-50 p-4 flex items-center justify-center">
+                <div id="modal-item-display" class="relative w-full h-64">
+                    <!-- Item image will be displayed here -->
+                    <img id="modal-item-image" src="" alt="" class="max-h-full max-w-full object-contain mx-auto">
+                    
+                    <!-- 3D model container (hidden by default) -->
+                    <div id="modal-model-container" class="absolute inset-0 hidden">
+                        <!-- 3D model will be rendered here -->
+                    </div>
+                    
+                    <!-- 3D view toggle (only shown when model is available) -->
+                    <button id="toggle-view-btn" class="absolute bottom-2 right-2 bg-blue-600 text-white text-xs px-2 py-1 rounded hidden">
+                        <i class="fas fa-cube mr-1"></i> Toggle 3D View
+                    </button>
+                </div>
             </div>
             
-            <div class="flex items-center">
-              <div class="text-sm text-[var(--neutral-dark)] mr-4">
-                <span class="mr-1">Quantity:</span>
-                <select class="border border-[var(--neutral-medium)] rounded p-1 focus:ring-[var(--accent-primary)] focus:border-[var(--accent-primary)]">
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                </select>
-              </div>
+            <!-- Item Details -->
+            <div class="w-full md:w-1/2 p-4 overflow-y-auto max-h-[600px]">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h2 id="modal-item-name" class="text-xl font-bold text-gray-800"></h2>
+                        <div class="flex items-center mt-1">
+                            <div id="modal-item-rarity" class="px-2 py-0.5 text-xs font-medium rounded-full"></div>
+                            <span class="mx-2 text-gray-400">•</span>
+                            <div id="modal-item-type" class="text-gray-600 text-sm"></div>
+                        </div>
+                    </div>
+                    <button id="close-modal-btn" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <p id="modal-item-description" class="text-gray-600 text-sm mb-4"></p>
+                
+                <!-- Conservation Info (only shown for conservation items) -->
+                <div id="conservation-info" class="bg-green-50 p-3 rounded-lg mb-4 hidden">
+                    <h3 class="font-medium text-green-800 text-sm mb-1">Conservation Impact</h3>
+                    <p id="conservation-impact-text" class="text-green-700 text-xs"></p>
+                </div>
+                
+                <!-- Item Effects -->
+                <div id="item-effects-container" class="mb-4">
+                    <h3 class="font-medium text-gray-800 text-sm mb-1">Effects</h3>
+                    <ul id="modal-item-effects" class="text-sm text-gray-600 space-y-1"></ul>
+                </div>
+                
+                <div class="border-t border-gray-200 pt-4 mt-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center">
+                            <span id="modal-item-price" class="text-xl font-bold text-gray-800 mr-1"></span>
+                            <i class="fas fa-coins text-yellow-500"></i>
+                        </div>
+                        
+                        <div class="flex space-x-2">
+                            <button id="add-to-wishlist-btn" class="px-3 py-1.5 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors flex items-center">
+                                <i class="far fa-heart mr-1"></i> Wishlist
+                            </button>
+                            
+                            <button id="purchase-btn" class="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors flex items-center">
+                                <i class="fas fa-shopping-cart mr-1"></i> Purchase
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          
-          <div class="flex space-x-3">
-            <button id="add-to-cart-btn" class="flex-1 bg-[var(--accent-primary)] hover:bg-[#5D4F91] text-white font-medium py-3 px-4 rounded-lg transition-colors duration-300">
-              Add to Cart
-            </button>
-            <button id="add-to-wishlist-btn" class="flex items-center justify-center w-12 h-12 bg-[var(--neutral-light)] hover:bg-[var(--neutral-medium)] text-[var(--neutral-dark)] rounded-lg transition-colors duration-300">
-              <i class="far fa-heart"></i>
-            </button>
-          </div>
         </div>
-        
-        <div class="border-t border-[var(--neutral-light)] pt-4">
-          <h3 class="font-medium text-[var(--primary-text)] mb-3">Try it on your creatures</h3>
-          <div class="grid grid-cols-4 gap-2">
-            <div class="bg-[var(--primary-bg)] rounded p-2 text-center cursor-pointer hover:bg-[var(--neutral-light)] transition-colors duration-300">
-              <img src="<?= $baseUrl ?>/images/creatures/1_mythical.png" alt="Dragon" class="w-full h-12 object-contain">
-              <span class="text-xs text-[var(--neutral-dark)] block mt-1 truncate">Dragon</span>
-            </div>
-            <div class="bg-[var(--primary-bg)] rounded p-2 text-center cursor-pointer hover:bg-[var(--neutral-light)] transition-colors duration-300">
-              <img src="<?= $baseUrl ?>/images/creatures/2_mythical.png" alt="Phoenix" class="w-full h-12 object-contain">
-              <span class="text-xs text-[var(--neutral-dark)] block mt-1 truncate">Phoenix</span>
-            </div>
-            <div class="bg-[var(--primary-bg)] rounded p-2 text-center cursor-not-allowed opacity-50">
-              <img src="<?= $baseUrl ?>/images/creatures/3_adult.png" alt="Kirin" class="w-full h-12 object-contain">
-              <span class="text-xs text-[var(--neutral-dark)] block mt-1 truncate">Kirin (Adult)</span>
-            </div>
-            <div class="bg-[var(--primary-bg)] rounded p-2 text-center cursor-not-allowed opacity-50">
-              <img src="<?= $baseUrl ?>/images/creatures/4_juvenile.png" alt="Serpent" class="w-full h-12 object-contain">
-              <span class="text-xs text-[var(--neutral-dark)] block mt-1 truncate">Serpent (Youth)</span>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
 </div>
 
-<!-- Add Alpine.js for tab functionality -->
-<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-
-<!-- Load Three.js libraries if not already loaded -->
-<script>
-// Only load if not already loaded
-if (typeof THREE === 'undefined') {
-    document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"><\/script>');
-    document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"><\/script>');
-}
-</script>
-
-<!-- Shop page JavaScript -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  // Countdown timer for daily deals
-  function updateCountdown() {
-    const now = new Date();
-    // Set the end time to midnight
-    const end = new Date();
-    end.setHours(23, 59, 59, 999);
-    
-    // Calculate remaining time
-    const diff = end - now;
-    
-    // Calculate hours, minutes, seconds
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-    
-    // Format the time
-    const formattedTime = 
-      String(hours).padStart(2, '0') + ':' +
-      String(minutes).padStart(2, '0') + ':' +
-      String(seconds).padStart(2, '0');
-    
-    // Update the countdown element
-    document.getElementById('countdown-timer').textContent = formattedTime;
-  }
-  
-  // Update the countdown immediately and then every second
-  updateCountdown();
-  setInterval(updateCountdown, 1000);
-  
-  // Intersection Observer for fade-in elements
-  const fadeElements = document.querySelectorAll('.fade-in');
-  
-  if ('IntersectionObserver' in window) {
-    const fadeObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          fadeObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
-    
-    fadeElements.forEach(element => {
-      fadeObserver.observe(element);
+    // Shop item click handler
+    const shopItems = document.querySelectorAll('.shop-item');
+    shopItems.forEach(item => {
+        item.addEventListener('click', function() {
+            const itemId = this.getAttribute('data-item-id');
+            openItemDetails(itemId);
+        });
     });
-  } else {
-    // Fallback for browsers without Intersection Observer support
-    fadeElements.forEach(element => {
-      element.classList.add('visible');
-    });
-  }
-  
-  // Item preview modal
-  const previewModal = document.getElementById('item-preview-modal');
-  const closePreviewBtn = document.getElementById('close-preview-btn');
-  const addToCartBtn = document.getElementById('add-to-cart-btn');
-  const addToWishlistBtn = document.getElementById('add-to-wishlist-btn');
-  
-  // Sample function to open the preview modal
-  window.openItemPreview = function(itemId, name, description, price, rarity, type, image) {
-    // Update modal content
-    document.getElementById('modal-item-name').textContent = name;
-    document.getElementById('modal-item-description').textContent = description;
-    document.getElementById('modal-item-price').textContent = price;
-    document.getElementById('modal-item-rarity').textContent = rarity;
-    document.getElementById('modal-item-rarity').className = `px-2 py-0.5 badge-${rarity.toLowerCase()} text-xs font-medium rounded-full`;
-    document.getElementById('modal-item-type').textContent = type;
-    document.getElementById('item-preview-display').innerHTML = `<img src="${image}" alt="${name}" class="max-w-full max-h-[400px] object-contain mx-auto">`;
     
-    // Show modal
-    previewModal.classList.remove('hidden');
-    
-    // Prevent scrolling of the body when modal is open
-    document.body.style.overflow = 'hidden';
-  }
-  
-  // Close modal when clicking the close button
-  closePreviewBtn.addEventListener('click', function() {
-    previewModal.classList.add('hidden');
-    document.body.style.overflow = '';
-  });
-  
-  // Close modal when clicking outside the content
-  previewModal.addEventListener('click', function(e) {
-    if (e.target === previewModal) {
-      previewModal.classList.add('hidden');
-      document.body.style.overflow = '';
-    }
-  });
-  
-  // Add click event listeners to shop items
-  document.querySelectorAll('.shop-item').forEach(item => {
-    item.addEventListener('click', function() {
-      // Extract item details
-      const name = this.querySelector('h3').textContent;
-      const description = this.querySelector('p').textContent;
-      const price = this.querySelector('.font-bold').textContent;
-      const rarityBadge = this.querySelector('[class*="badge-"]');
-      const rarity = rarityBadge ? rarityBadge.textContent.trim() : 'Common';
-      const type = 'Shop Item'; // This would be extracted from data attributes in a real implementation
-      const image = this.querySelector('img')?.src;
-      
-      // Open the preview modal
-      window.openItemPreview(1, name, description, price, rarity, type, image);
+    // View 3D button click handler
+    const view3dButtons = document.querySelectorAll('.view-3d-btn');
+    view3dButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.stopPropagation(); // Prevent triggering parent click
+            const itemId = this.getAttribute('data-item-id');
+            openItemDetails(itemId, true);
+        });
     });
-  });
-  
-  // Event listeners for card buttons
-  addToCartBtn.addEventListener('click', function() {
-    alert('Item added to cart!');
-    previewModal.classList.add('hidden');
-    document.body.style.overflow = '';
-  });
-  
-  addToWishlistBtn.addEventListener('click', function() {
-    // Toggle heart icon
-    const heartIcon = this.querySelector('i');
-    if (heartIcon.classList.contains('far')) {
-      heartIcon.classList.remove('far');
-      heartIcon.classList.add('fas');
-      this.classList.add('text-[var(--accent-tertiary)]');
-      alert('Item added to wishlist!');
-    } else {
-      heartIcon.classList.remove('fas');
-      heartIcon.classList.add('far');
-      this.classList.remove('text-[var(--accent-tertiary)]');
-      alert('Item removed from wishlist!');
-    }
-  });
-});
-
-// Function to get color for rarity, used by PHP
-function getRarityClass(rarity) {
-  switch (rarity.toLowerCase()) {
-    case 'common':
-      return 'badge-common';
-    case 'uncommon':
-      return 'badge-uncommon';
-    case 'rare':
-      return 'badge-rare';
-    case 'legendary':
-      return 'badge-legendary';
-    case 'mythical':
-      return 'badge-mythical';
-    default:
-      return 'badge-common';
-  }
-}
-</script>
-
-<!-- Arctic Shimmer Hare Inline Model Script -->
-<script>
-// Create a script element and insert the Arctic Shimmer Hare class definition directly
-function loadArcticShimmerHareInline() {
-  // Create a script element
-  const script = document.createElement('script');
-  script.type = 'text/javascript';
-  
-  // Define the ArcticShimmerHare class directly as text content
-  script.textContent = `
-    // Arctic Shimmer Hare 3D Model implementation
-    class ArcticShimmerHare {
-      constructor(stage = 'adult') {
-        this.stage = stage; // 'egg', 'baby', 'juvenile', 'adult', or 'mythical'
-        this.model = new THREE.Group();
-        this.animations = {};
-        this.createModel();
-      }
-      
-      // Create a simplified model for the shop display
-      createModel() {
-        this.model.clear();
+    
+    // Close modal button handler
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    closeModalBtn.addEventListener('click', closeItemModal);
+    
+    // Toggle view button handler
+    const toggleViewBtn = document.getElementById('toggle-view-btn');
+    toggleViewBtn.addEventListener('click', function() {
+        const imageElem = document.getElementById('modal-item-image');
+        const modelContainer = document.getElementById('modal-model-container');
         
-        // Create a basic model based on stage
-        switch(this.stage) {
-          case 'egg':
-            this.createEgg();
-            break;
-          case 'baby':
-            this.createBaby();
-            break;
-          case 'juvenile': 
-            this.createJuvenile();
-            break;
-          case 'adult':
-            this.createAdult();
-            break;
-          case 'mythical':
-            this.createMythical();
-            break;
-          default:
-            this.createAdult();
+        if (imageElem.classList.contains('hidden')) {
+            // Switch to image view
+            modelContainer.classList.add('hidden');
+            imageElem.classList.remove('hidden');
+            this.innerHTML = '<i class="fas fa-cube mr-1"></i> View 3D';
+        } else {
+            // Switch to 3D view
+            imageElem.classList.add('hidden');
+            modelContainer.classList.remove('hidden');
+            this.innerHTML = '<i class="fas fa-image mr-1"></i> View Image';
+            
+            // Initialize 3D model if not already done
+            const itemId = this.getAttribute('data-item-id');
+            initializeModelViewer(itemId);
+        }
+    });
+    
+    // Close modal when clicking outside
+    const modal = document.getElementById('item-detail-modal');
+    modal.addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeItemModal();
+        }
+    });
+    
+    // Add to wishlist button handler
+    const wishlistBtn = document.getElementById('add-to-wishlist-btn');
+    wishlistBtn.addEventListener('click', function() {
+        const itemId = this.getAttribute('data-item-id');
+        
+        // Toggle wishlist icon
+        const heartIcon = this.querySelector('i');
+        if (heartIcon.classList.contains('far')) {
+            heartIcon.classList.remove('far');
+            heartIcon.classList.add('fas');
+            alert('Item added to wishlist');
+        } else {
+            heartIcon.classList.remove('fas');
+            heartIcon.classList.add('far');
+            alert('Item removed from wishlist');
+        }
+    });
+    
+    // Purchase button handler
+    const purchaseBtn = document.getElementById('purchase-btn');
+    purchaseBtn.addEventListener('click', function() {
+        const itemId = this.getAttribute('data-item-id');
+        alert('Purchase functionality will be implemented here');
+        closeItemModal();
+    });
+    
+    // Function to open item details modal
+    function openItemDetails(itemId, showModel = false) {
+        // Fetch item details from the server
+        // This is a placeholder - in a real implementation, you would make an AJAX request
+        
+        // For the demo, we'll extract data from the clicked item
+        const item = document.querySelector(`.shop-item[data-item-id="${itemId}"]`);
+        if (!item) return;
+        
+        const name = item.querySelector('h3').textContent;
+        const price = item.querySelector('.font-bold').textContent;
+        const image = item.querySelector('img').src;
+        const rarityElem = item.querySelector('[class*="bg-"][class*="text-"]');
+        const typeElem = item.querySelector('.absolute.bottom-2.left-2');
+        
+        // Update modal content
+        document.getElementById('modal-item-name').textContent = name;
+        document.getElementById('modal-item-price').textContent = price;
+        document.getElementById('modal-item-image').src = image;
+        document.getElementById('modal-item-image').alt = name;
+        
+        // Set rarity
+        const modalRarity = document.getElementById('modal-item-rarity');
+        if (rarityElem) {
+            modalRarity.textContent = rarityElem.textContent.trim();
+            modalRarity.className = rarityElem.className;
+        } else {
+            modalRarity.textContent = 'Common';
+            modalRarity.className = 'px-2 py-0.5 bg-gray-100 text-gray-800 text-xs font-medium rounded-full';
         }
         
-        // Add a simple frost effect
-        this.addFrostEffect();
-        
-        return this.model;
-      }
-      
-      // Egg stage
-      createEgg() {
-        const eggGeometry = new THREE.SphereGeometry(5, 32, 32);
-        eggGeometry.scale(1, 1.5, 1);
-        
-        const eggMaterial = new THREE.MeshPhysicalMaterial({
-          color: 0xd8f0ff,
-          transparent: true,
-          opacity: 0.8,
-          roughness: 0.2,
-          metalness: 0.1
-        });
-        
-        const egg = new THREE.Mesh(eggGeometry, eggMaterial);
-        this.model.add(egg);
-      }
-      
-      // Baby stage
-      createBaby() {
-        // Body
-        const bodyGeometry = new THREE.SphereGeometry(3, 32, 16);
-        bodyGeometry.scale(1, 0.8, 1.2);
-        const bodyMaterial = new THREE.MeshStandardMaterial({
-          color: 0xf0f8ff,
-          roughness: 0.8,
-          metalness: 0.1,
-        });
-        const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-        
-        // Head
-        const headGeometry = new THREE.SphereGeometry(2, 32, 16);
-        const headMaterial = new THREE.MeshStandardMaterial({
-          color: 0xffffff,
-          roughness: 0.7,
-          metalness: 0.1,
-        });
-        const head = new THREE.Mesh(headGeometry, headMaterial);
-        head.position.set(0, 0.5, 2.5);
-        
-        // Ears
-        const earGeometry = new THREE.ConeGeometry(0.7, 2, 16);
-        const earMaterial = new THREE.MeshStandardMaterial({
-          color: 0xf0f8ff,
-          roughness: 0.7,
-          metalness: 0.1,
-        });
-        
-        const leftEar = new THREE.Mesh(earGeometry, earMaterial);
-        leftEar.position.set(-1, 1.8, 2.5);
-        leftEar.rotation.x = -Math.PI/6;
-        leftEar.rotation.z = -Math.PI/8;
-        
-        const rightEar = new THREE.Mesh(earGeometry, earMaterial);
-        rightEar.position.set(1, 1.8, 2.5);
-        rightEar.rotation.x = -Math.PI/6;
-        rightEar.rotation.z = Math.PI/8;
-        
-        // Add parts to model
-        this.model.add(body, head, leftEar, rightEar);
-        
-        // Scale for baby size
-        this.model.scale.set(0.6, 0.6, 0.6);
-      }
-      
-      // Juvenile stage
-      createJuvenile() {
-        // Body
-        const bodyGeometry = new THREE.SphereGeometry(4, 32, 16);
-        bodyGeometry.scale(1, 0.8, 1.4);
-        const bodyMaterial = new THREE.MeshStandardMaterial({
-          color: 0xffffff,
-          roughness: 0.8,
-          metalness: 0.1,
-        });
-        const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-        
-        // Head
-        const headGeometry = new THREE.SphereGeometry(2.5, 32, 16);
-        const headMaterial = new THREE.MeshStandardMaterial({
-          color: 0xf8f8ff,
-          roughness: 0.7,
-          metalness: 0.1,
-        });
-        const head = new THREE.Mesh(headGeometry, headMaterial);
-        head.position.set(0, 1, 3.5);
-        
-        // Ears
-        const earGeometry = new THREE.ConeGeometry(0.8, 3, 16);
-        const earMaterial = new THREE.MeshStandardMaterial({
-          color: 0xf0f8ff,
-          roughness: 0.7,
-          metalness: 0.1,
-        });
-        
-        const leftEar = new THREE.Mesh(earGeometry, earMaterial);
-        leftEar.position.set(-1.2, 2.5, 3.5);
-        leftEar.rotation.x = -Math.PI/6;
-        leftEar.rotation.z = -Math.PI/10;
-        
-        const rightEar = new THREE.Mesh(earGeometry, earMaterial);
-        rightEar.position.set(1.2, 2.5, 3.5);
-        rightEar.rotation.x = -Math.PI/6;
-        rightEar.rotation.z = Math.PI/10;
-        
-        // Ear tips
-        const tipGeometry = new THREE.ConeGeometry(0.4, 1, 16);
-        const tipMaterial = new THREE.MeshPhysicalMaterial({
-          color: 0xadd8e6,
-          roughness: 0.2,
-          metalness: 0.8,
-          transparent: true,
-          opacity: 0.8,
-          emissive: 0x3090c7,
-          emissiveIntensity: 0.3
-        });
-        
-        const leftTip = new THREE.Mesh(tipGeometry, tipMaterial);
-        leftTip.position.set(-1.2, 4, 3);
-        leftTip.rotation.x = -Math.PI/6;
-        leftTip.rotation.z = -Math.PI/10;
-        
-        const rightTip = new THREE.Mesh(tipGeometry, tipMaterial);
-        rightTip.position.set(1.2, 4, 3);
-        rightTip.rotation.x = -Math.PI/6;
-        rightTip.rotation.z = Math.PI/10;
-        
-        // Add all parts to model
-        this.model.add(body, head, leftEar, rightEar, leftTip, rightTip);
-        
-        // Scale for juvenile size
-        this.model.scale.set(0.8, 0.8, 0.8);
-      }
-      
-      // Adult stage
-      createAdult() {
-        // Body
-        const bodyGeometry = new THREE.SphereGeometry(5, 32, 16);
-        bodyGeometry.scale(1, 0.8, 1.5);
-        const bodyMaterial = new THREE.MeshStandardMaterial({
-          color: 0xffffff,
-          roughness: 0.8,
-          metalness: 0.1,
-        });
-        const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-        
-        // Head
-        const headGeometry = new THREE.SphereGeometry(3, 32, 16);
-        const headMaterial = new THREE.MeshStandardMaterial({
-          color: 0xf8f8ff,
-          roughness: 0.7,
-          metalness: 0.1,
-        });
-        const head = new THREE.Mesh(headGeometry, headMaterial);
-        head.position.set(0, 1.5, 4.5);
-        
-        // Ears with crystalline tips
-        const earGeometry = new THREE.ConeGeometry(1, 3.5, 16);
-        const earMaterial = new THREE.MeshStandardMaterial({
-          color: 0xf0f8ff,
-          roughness: 0.7,
-          metalness: 0.1,
-        });
-        
-        const leftEar = new THREE.Mesh(earGeometry, earMaterial);
-        leftEar.position.set(-1.5, 3, 4.5);
-        leftEar.rotation.x = -Math.PI/6;
-        leftEar.rotation.z = -Math.PI/12;
-        
-        const rightEar = new THREE.Mesh(earGeometry, earMaterial);
-        rightEar.position.set(1.5, 3, 4.5);
-        rightEar.rotation.x = -Math.PI/6;
-        rightEar.rotation.z = Math.PI/12;
-        
-        // Crystalline ear tips
-        const tipGeometry = new THREE.ConeGeometry(0.6, 1.5, 16);
-        const tipMaterial = new THREE.MeshPhysicalMaterial({
-          color: 0x89cff0,
-          roughness: 0.2,
-          metalness: 0.8,
-          transparent: true,
-          opacity: 0.8,
-          emissive: 0x3090c7,
-          emissiveIntensity: 0.4
-        });
-        
-        const leftTip = new THREE.Mesh(tipGeometry, tipMaterial);
-        leftTip.position.set(-1.5, 5, 4);
-        leftTip.rotation.x = -Math.PI/6;
-        leftTip.rotation.z = -Math.PI/12;
-        
-        const rightTip = new THREE.Mesh(tipGeometry, tipMaterial);
-        rightTip.position.set(1.5, 5, 4);
-        rightTip.rotation.x = -Math.PI/6;
-        rightTip.rotation.z = Math.PI/12;
-        
-        // Add blue-silver markings
-        const markingsGeometry = new THREE.SphereGeometry(1, 16, 16);
-        markingsGeometry.scale(2, 0.2, 1);
-        const markingsMaterial = new THREE.MeshStandardMaterial({
-          color: 0x89cff0,
-          roughness: 0.5,
-          metalness: 0.5,
-          emissive: 0x3090c7,
-          emissiveIntensity: 0.4
-        });
-        
-        const backMarking = new THREE.Mesh(markingsGeometry, markingsMaterial);
-        backMarking.position.set(0, 1.5, -2);
-        
-        // Add all parts to model
-        this.model.add(body, head, leftEar, rightEar, leftTip, rightTip, backMarking);
-      }
-      
-      // Mythical stage
-      createMythical() {
-        // Body
-        const bodyGeometry = new THREE.SphereGeometry(6, 32, 16);
-        bodyGeometry.scale(1, 0.8, 1.6);
-        const bodyMaterial = new THREE.MeshPhysicalMaterial({
-          color: 0xf0f8ff,
-          roughness: 0.6,
-          metalness: 0.2,
-          clearcoat: 0.4,
-          clearcoatRoughness: 0.2,
-        });
-        const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-        
-        // Head
-        const headGeometry = new THREE.SphereGeometry(3.5, 32, 16);
-        const headMaterial = new THREE.MeshPhysicalMaterial({
-          color: 0xf8f8ff,
-          roughness: 0.6,
-          metalness: 0.2,
-          clearcoat: 0.4,
-          clearcoatRoughness: 0.2,
-        });
-        const head = new THREE.Mesh(headGeometry, headMaterial);
-        head.position.set(0, 2, 5.5);
-        
-        // Magical ears
-        const earGeometry = new THREE.ConeGeometry(1.2, 4, 16);
-        const earMaterial = new THREE.MeshPhysicalMaterial({
-          color: 0xf0f8ff,
-          roughness: 0.6,
-          metalness: 0.3,
-          clearcoat: 0.4,
-          clearcoatRoughness: 0.2,
-        });
-        
-        const leftEar = new THREE.Mesh(earGeometry, earMaterial);
-        leftEar.position.set(-1.8, 4, 5.5);
-        leftEar.rotation.x = -Math.PI/6;
-        leftEar.rotation.z = -Math.PI/12;
-        
-        const rightEar = new THREE.Mesh(earGeometry, earMaterial);
-        rightEar.position.set(1.8, 4, 5.5);
-        rightEar.rotation.x = -Math.PI/6;
-        rightEar.rotation.z = Math.PI/12;
-        
-        // Crystal ear tips
-        const tipGeometry = new THREE.ConeGeometry(0.8, 2, 16);
-        const tipMaterial = new THREE.MeshPhysicalMaterial({
-          color: 0x00bfff,
-          roughness: 0.1,
-          metalness: 0.9,
-          transparent: true,
-          opacity: 0.9,
-          emissive: 0x007fff,
-          emissiveIntensity: 0.8
-        });
-        
-        const leftTip = new THREE.Mesh(tipGeometry, tipMaterial);
-        leftTip.position.set(-1.8, 6.5, 5);
-        leftTip.rotation.x = -Math.PI/6;
-        leftTip.rotation.z = -Math.PI/12;
-        
-        const rightTip = new THREE.Mesh(tipGeometry, tipMaterial);
-        rightTip.position.set(1.8, 6.5, 5);
-        rightTip.rotation.x = -Math.PI/6;
-        rightTip.rotation.z = Math.PI/12;
-        
-        // Add parts to model
-        this.model.add(body, head, leftEar, rightEar, leftTip, rightTip);
-      }
-      
-      // Add a simplified frost effect
-      addFrostEffect() {
-        // Add a few particles
-        const particlesGeometry = new THREE.BufferGeometry();
-        const particlesMaterial = new THREE.PointsMaterial({
-          color: 0xadd8e6,
-          size: 0.2,
-          transparent: true,
-          opacity: 0.7,
-          blending: THREE.AdditiveBlending,
-        });
-        
-        const particleCount = 20;
-        const positions = new Float32Array(particleCount * 3);
-        
-        for (let i = 0; i < particleCount; i++) {
-          // Random position around the model
-          const radius = 8;
-          const theta = Math.random() * Math.PI * 2;
-          const phi = Math.random() * Math.PI;
-          
-          positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
-          positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
-          positions[i * 3 + 2] = radius * Math.cos(phi);
+        // Set item type
+        const modalType = document.getElementById('modal-item-type');
+        if (typeElem) {
+            modalType.textContent = typeElem.textContent.trim();
+        } else {
+            modalType.textContent = 'Item';
         }
         
-        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        const particles = new THREE.Points(particlesGeometry, particlesMaterial);
-        this.model.add(particles);
-      }
-      
-      // Get the model
-      getModel() {
-        return this.model;
-      }
-      
-      // Update method (can be expanded if needed)
-      update() {
-        // Animation placeholder
-      }
-      
-      // Clean up resources
-      dispose() {
-        // Dispose geometries and materials
-        this.model.traverse((object) => {
-          if (object.geometry) {
-            object.geometry.dispose();
-          }
-          
-          if (object.material) {
-            if (Array.isArray(object.material)) {
-              object.material.forEach(material => material.dispose());
+        // Set description (would be fetched from server in real implementation)
+        document.getElementById('modal-item-description').textContent = 
+            'This is a placeholder description for ' + name + '. In a real implementation, this would be fetched from the database.';
+        
+        // Set item effects (would be fetched from server in real implementation)
+        const effectsList = document.getElementById('modal-item-effects');
+        effectsList.innerHTML = '';
+        
+        // Add some placeholder effects
+        const effects = [
+            'Increases creature happiness by 10%',
+            'Adds visual enhancement to your habitat',
+            'Provides bonus coins when used during focus sessions'
+        ];
+        
+        effects.forEach(effect => {
+            const li = document.createElement('li');
+            li.className = 'flex items-start';
+            li.innerHTML = `
+                <i class="fas fa-check-circle text-green-500 mt-0.5 mr-1.5"></i>
+                <span>${effect}</span>
+            `;
+            effectsList.appendChild(li);
+        });
+        
+        // Check if item has 3D model available
+        const hasModel = item.querySelector('.view-3d-btn') !== null;
+        const toggleBtn = document.getElementById('toggle-view-btn');
+        
+        if (hasModel) {
+            toggleBtn.classList.remove('hidden');
+            toggleBtn.setAttribute('data-item-id', itemId);
+            
+            if (showModel) {
+                // Show model view immediately
+                document.getElementById('modal-item-image').classList.add('hidden');
+                document.getElementById('modal-model-container').classList.remove('hidden');
+                toggleBtn.innerHTML = '<i class="fas fa-image mr-1"></i> View Image';
+                
+                // Initialize 3D model
+                initializeModelViewer(itemId);
             } else {
-              object.material.dispose();
+                // Show image view by default
+                document.getElementById('modal-item-image').classList.remove('hidden');
+                document.getElementById('modal-model-container').classList.add('hidden');
+                toggleBtn.innerHTML = '<i class="fas fa-cube mr-1"></i> View 3D';
             }
-          }
-        });
-      }
-    }
-  `;
-  
-  // Add the script to the document
-  document.head.appendChild(script);
-}
-
-// Mini Model Viewer class for shop items
-class MiniModelViewer {
-  constructor(containerId, options = {}) {
-    this.container = document.getElementById(containerId);
-    if (!this.container) {
-      console.error(`Container with ID "${containerId}" not found.`);
-      return;
+        } else {
+            // No model available
+            toggleBtn.classList.add('hidden');
+            document.getElementById('modal-item-image').classList.remove('hidden');
+            document.getElementById('modal-model-container').classList.add('hidden');
+        }
+        
+        // Set item IDs for action buttons
+        document.getElementById('add-to-wishlist-btn').setAttribute('data-item-id', itemId);
+        document.getElementById('purchase-btn').setAttribute('data-item-id', itemId);
+        
+        // Show the modal
+        document.getElementById('item-detail-modal').classList.remove('hidden');
     }
     
-    // Default options
-    this.options = Object.assign({
-      width: this.container.clientWidth,
-      height: this.container.clientHeight,
-      backgroundColor: 0xf5f5f8,
-      autoRotate: true,
-      stage: 'adult'
-    }, options);
-    
-    this.init();
-  }
-  
-  init() {
-    // Create scene
-    this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(this.options.backgroundColor);
-    
-    // Create camera
-    this.camera = new THREE.PerspectiveCamera(
-      75, 
-      this.options.width / this.options.height, 
-      0.1, 
-      1000
-    );
-    this.camera.position.z = 20;
-    
-    // Create renderer
-    this.renderer = new THREE.WebGLRenderer({ antialias: true });
-    this.renderer.setSize(this.options.width, this.options.height);
-    this.renderer.setPixelRatio(window.devicePixelRatio);
-    
-    // Clear container and add renderer
-    while (this.container.firstChild) {
-      this.container.removeChild(this.container.firstChild);
-    }
-    this.container.appendChild(this.renderer.domElement);
-    
-    // Add lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-    this.scene.add(ambientLight);
-    
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    directionalLight.position.set(1, 1, 1);
-    this.scene.add(directionalLight);
-    
-    // Add orbit controls
-    this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
-    this.controls.enableDamping = true;
-    this.controls.dampingFactor = 0.05;
-    this.controls.autoRotate = this.options.autoRotate;
-    this.controls.autoRotateSpeed = 3.0;
-    this.controls.enableZoom = false;
-    this.controls.enablePan = false;
-    
-    // Create a simple model for testing (while actual model loads)
-    this.createSimpleModel();
-    
-    // Start animation loop
-    this.animate();
-  }
-  
-  createSimpleModel() {
-    // Create a simple sphere as placeholder
-    const geometry = new THREE.SphereGeometry(5, 32, 32);
-    const material = new THREE.MeshStandardMaterial({ 
-      color: 0xa0d8ef,
-      roughness: 0.5,
-      metalness: 0.3,
-    });
-    this.model = new THREE.Mesh(geometry, material);
-    this.scene.add(this.model);
-    
-    // If ArcticShimmerHare is available, load it
-    if (typeof ArcticShimmerHare !== 'undefined') {
-      this.scene.remove(this.model);
-      const hare = new ArcticShimmerHare(this.options.stage);
-      this.model = hare.getModel();
-      this.scene.add(this.model);
-      
-      // Adjust model position
-      this.model.position.y = -5;
-      
-      // Create a simple ambient animation
-      const animate = () => {
-        requestAnimationFrame(animate);
-        this.model.rotation.y += 0.01;
-      };
-      animate();
-    }
-  }
-  
-  animate() {
-    requestAnimationFrame(this.animate.bind(this));
-    
-    if (this.controls) {
-      this.controls.update();
+    // Function to close item modal
+    function closeItemModal() {
+        document.getElementById('item-detail-modal').classList.add('hidden');
     }
     
-    this.renderer.render(this.scene, this.camera);
-  }
-  
-  resize() {
-    if (!this.container) return;
-    
-    const width = this.container.clientWidth;
-    const height = this.container.clientHeight;
-    
-    this.camera.aspect = width / height;
-    this.camera.updateProjectionMatrix();
-    
-    this.renderer.setSize(width, height);
-  }
-}
-
-// Use this function to load the ArcticShimmerHare inline
-document.addEventListener('DOMContentLoaded', function() {
-  // Load the Arctic Shimmer Hare class definition
-  loadArcticShimmerHareInline();
-  
-  // Initialize mini model viewers after a short delay to ensure the class is defined
-  setTimeout(() => {
-    const miniViewerContainers = document.querySelectorAll('.mini-model-viewer');
-    miniViewerContainers.forEach(container => {
-      if (container.id) {
-        new MiniModelViewer(container.id, {
-          stage: 'adult'
-        });
-      }
-    });
-    
-    // Remove loading indicators
-    document.querySelectorAll('.mini-model-loading').forEach(loader => {
-      loader.style.display = 'none';
-    });
-  }, 500);
-  
-  // Handle window resize
-  window.addEventListener('resize', function() {
-    // Resize all three.js renderers
-    document.querySelectorAll('.mini-model-viewer canvas').forEach(canvas => {
-      const width = canvas.parentElement.clientWidth;
-      const height = canvas.parentElement.clientHeight;
-      canvas.width = width;
-      canvas.height = height;
-    });
-  });
+    // Function to initialize 3D model viewer
+    function initializeModelViewer(itemId) {
+        const container = document.getElementById('modal-model-container');
+        
+        // Check if viewer is already initialized
+        if (container.getAttribute('data-initialized') === 'true') {
+            return;
+        }
+        
+        // Set placeholder loading state
+        container.innerHTML = '<div class="flex items-center justify-center h-full"><i class="fas fa-spinner fa-spin text-gray-400 text-2xl"></i></div>';
+        
+        // This is where you would initialize the Three.js model viewer in the future
+        // For now, we'll just add a placeholder message after a brief delay
+        
+        setTimeout(() => {
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center h-full text-center">
+                    <i class="fas fa-cube text-gray-400 text-3xl mb-2"></i>
+                    <p class="text-sm text-gray-500">3D model viewer will be integrated here</p>
+                    <p class="text-xs text-gray-400 mt-1">Support for Blender models coming soon</p>
+                </div>
+            `;
+            container.setAttribute('data-initialized', 'true');
+        }, 1000);
+    }
 });
 </script>
 
