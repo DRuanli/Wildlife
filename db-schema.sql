@@ -366,3 +366,56 @@ CREATE TABLE IF NOT EXISTS Habitats (
 ALTER TABLE Creatures 
 ADD COLUMN habitat_id INT NULL,
 ADD FOREIGN KEY (habitat_id) REFERENCES Habitats(id);
+
+-- Create Items table if not exists
+CREATE TABLE IF NOT EXISTS Items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    type ENUM('habitat_decoration', 'creature_accessory', 'consumable', 'conservation_package', 'egg') NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    price INT NOT NULL,
+    rarity ENUM('common', 'uncommon', 'rare', 'legendary', 'mythical') DEFAULT 'common',
+    is_limited_edition BOOLEAN DEFAULT FALSE,
+    conservation_impact TEXT,
+    available_from DATETIME,
+    available_until DATETIME,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Additional tables for shop functionality
+CREATE TABLE IF NOT EXISTS FeaturedItems (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    item_id INT NOT NULL,
+    priority INT DEFAULT 0,
+    start_date DATETIME,
+    end_date DATETIME,
+    FOREIGN KEY (item_id) REFERENCES Items(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS DailyDeals (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    item_id INT NOT NULL,
+    deal_date DATE NOT NULL,
+    discount_percentage INT NOT NULL,
+    priority INT DEFAULT 0,
+    FOREIGN KEY (item_id) REFERENCES Items(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS ItemViews (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    item_id INT NOT NULL,
+    viewed_at DATETIME NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE,
+    FOREIGN KEY (item_id) REFERENCES Items(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS UserWishlist (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    item_id INT NOT NULL,
+    added_at DATETIME NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE,
+    FOREIGN KEY (item_id) REFERENCES Items(id) ON DELETE CASCADE
+);

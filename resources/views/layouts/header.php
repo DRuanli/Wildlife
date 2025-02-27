@@ -44,7 +44,7 @@ $baseUrl = '/Wildlife';
                         <a href="<?= $baseUrl ?>/focus" class="px-3 py-2 rounded hover:bg-green-700">Focus</a>
                         <a href="<?= $baseUrl ?>/creatures" class="px-3 py-2 rounded hover:bg-green-700">Creatures</a>
                         <a href="<?= $baseUrl ?>/habitats" class="px-3 py-2 rounded hover:bg-green-700">Habitats</a>
-                        <a href="<?= $baseUrl ?>/marketplace" class="px-3 py-2 rounded hover:bg-green-700">Marketplace</a>
+                        <a href="<?= $baseUrl ?>/shop" class="px-3 py-2 rounded hover:bg-green-700">Marketplace</a>
                         <a href="<?= $baseUrl ?>/conservation" class="px-3 py-2 rounded hover:bg-green-700">Conservation</a>
                         <a href="<?= $baseUrl ?>/community" class="px-3 py-2 rounded hover:bg-green-700">Community</a>
                         
@@ -93,7 +93,7 @@ $baseUrl = '/Wildlife';
                     <a href="<?= $baseUrl ?>/focus" class="block px-3 py-2 rounded hover:bg-green-700">Focus</a>
                     <a href="<?= $baseUrl ?>/creatures" class="block px-3 py-2 rounded hover:bg-green-700">Creatures</a>
                     <a href="<?= $baseUrl ?>/habitats" class="block px-3 py-2 rounded hover:bg-green-700">Habitats</a>
-                    <a href="<?= $baseUrl ?>/marketplace" class="block px-3 py-2 rounded hover:bg-green-700">Marketplace</a>
+                    <a href="<?= $baseUrl ?>/shop" class="block px-3 py-2 rounded hover:bg-green-700">Marketplace</a>
                     <a href="<?= $baseUrl ?>/conservation" class="block px-3 py-2 rounded hover:bg-green-700">Conservation</a>
                     <a href="<?= $baseUrl ?>/community" class="block px-3 py-2 rounded hover:bg-green-700">Community</a>
                     <div class="border-t border-green-700 my-2"></div>
