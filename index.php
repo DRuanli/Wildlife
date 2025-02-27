@@ -39,12 +39,16 @@ try {
 
     // Get the current URI
     $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-    
+
     // Remove base path from URI
     $basePath = '/Wildlife';
     define('BASE_URL', $basePath);
-    
-    
+
+    // Strip base path from URI if present
+    if (strpos($requestUri, $basePath) === 0) {
+        $requestUri = substr($requestUri, strlen($basePath));
+    }
+
     // Ensure URI starts with /
     if (empty($requestUri) || $requestUri[0] !== '/') {
         $requestUri = '/' . $requestUri;
