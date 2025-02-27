@@ -99,7 +99,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: url('<?= $baseUrl ?>/images/hero-bg.jpg') center/cover no-repeat;
+    background: url('<?= $baseUrl ?>/public/img/home_index.jpg') center/cover no-repeat;
     color: #fff;
   }
   .hero::after {
