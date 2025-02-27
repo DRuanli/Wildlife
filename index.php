@@ -42,9 +42,8 @@ try {
     
     // Remove base path from URI
     $basePath = '/Wildlife';
-    if (strpos($requestUri, $basePath) === 0) {
-        $requestUri = substr($requestUri, strlen($basePath));
-    }
+    define('BASE_URL', $basePath);
+    
     
     // Ensure URI starts with /
     if (empty($requestUri) || $requestUri[0] !== '/') {

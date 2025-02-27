@@ -2,27 +2,21 @@
     RewriteEngine On
     RewriteBase /Wildlife/
     
-    # Kiểm tra nếu file hoặc thư mục không tồn tại
+    # Exclude existing files and directories from rewriting
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     
-    # Điều hướng mọi yêu cầu đến index.php
+    # Rewrite all other requests to index.php
     RewriteRule ^(.*)$ index.php [QSA,L]
 </IfModule>
 
-# Chặn truy cập trực tiếp vào các thư mục
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteRule ^(app|resources|vendor|database)(/.*|)$ - [F,L]
-</IfModule>
-
-# Bảo vệ các file nhạy cảm
+# Protect sensitive files
 <FilesMatch "^\.env|composer\.json|composer\.lock|phpunit\.xml|README\.md">
     Order allow,deny
     Deny from all
 </FilesMatch>
 
-# Đặt header bảo mật
+# Set security headers
 <IfModule mod_headers.c>
     Header set X-Content-Type-Options "nosniff"
     Header set X-XSS-Protection "1; mode=block"

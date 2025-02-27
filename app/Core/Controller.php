@@ -59,7 +59,7 @@ class Controller
     {
         // If URL starts with a slash, prepend the base path
         if (strpos($url, '/') === 0) {
-            $url = '/Wildlife' . $url;
+            $url = BASE_URL . $url;
         }
         
         header("Location: {$url}");
