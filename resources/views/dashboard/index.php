@@ -213,14 +213,14 @@
           </div>
           
           <div class="flex gap-4 animate-fade-in" style="--animation-delay: 0.3s;">
-            <a href="/focus" class="focus-button relative px-6 py-3 bg-white text-emerald-700 rounded-lg font-medium shadow-lg overflow-hidden transition-all duration-300 hover:bg-emerald-50 hover:shadow-xl z-10">
+            <a href="<?= $baseUrl ?>/focus" class="focus-button relative px-6 py-3 bg-white text-emerald-700 rounded-lg font-medium shadow-lg overflow-hidden transition-all duration-300 hover:bg-emerald-50 hover:shadow-xl z-10">
               <span class="flex items-center">
                 <i class="fas fa-clock mr-2 text-lg"></i>
                 Start Focus Session
               </span>
             </a>
             
-            <a href="/shop" class="px-6 py-3 bg-emerald-900 text-white rounded-lg font-medium shadow-md overflow-hidden transition-all duration-300 hover:bg-emerald-950 hover:shadow-lg">
+            <a href="<?= $baseUrl ?>/shop" class="px-6 py-3 bg-emerald-900 text-white rounded-lg font-medium shadow-md overflow-hidden transition-all duration-300 hover:bg-emerald-950 hover:shadow-lg">
               <span class="flex items-center">
                 <i class="fas fa-coins mr-2 text-lg"></i>
                 Shop
@@ -373,7 +373,7 @@
           <!-- Coin Interactions -->
           <div class="mt-6 flex justify-between items-center relative z-10">
             <div class="text-sm text-gray-500">Available to spend</div>
-            <a href="/shop" class="text-amber-600 hover:text-amber-700 text-sm font-medium flex items-center group">
+            <a href="<?= $baseUrl ?>/shop" class="text-amber-600 hover:text-amber-700 text-sm font-medium flex items-center group">
               <span>Shop</span>
               <i class="fas fa-chevron-right ml-1 text-xs transition-transform transform group-hover:translate-x-1"></i>
             </a>
@@ -423,7 +423,7 @@
             <!-- Next milestone estimate -->
             <div class="mt-2 text-xs text-gray-400 flex justify-between">
               <span>2.5 hours more focus needed</span>
-              <a href="/conservation" class="text-teal-600 hover:underline">View impact</a>
+              <a href="<?= $baseUrl ?>/conservation" class="text-teal-600 hover:underline">View impact</a>
             </div>
           </div>
         </div>
@@ -487,7 +487,7 @@
               <div class="w-full lg:w-1/3 bg-white rounded-lg border border-gray-100 p-6">
                 <div class="flex justify-between items-center mb-4">
                   <h3 class="text-lg font-semibold text-gray-800">Recent Sessions</h3>
-                  <a href="/focus/history" class="text-emerald-600 hover:text-emerald-700 text-sm font-medium group">
+                  <a href="<?= $baseUrl ?>/focus/history" class="text-emerald-600 hover:text-emerald-700 text-sm font-medium group">
                     <span>View All</span>
                     <i class="fas fa-chevron-right ml-1 text-xs transition-transform transform group-hover:translate-x-1"></i>
                   </a>
@@ -603,7 +603,7 @@
             <div class="space-y-4">
               <div class="flex justify-between items-center">
                 <h3 class="text-lg font-semibold text-gray-800">My Creatures</h3>
-                <a href="/creatures" class="text-emerald-600 hover:text-emerald-700 text-sm font-medium group">
+                <a href="<?= $baseUrl ?>/creatures" class="text-emerald-600 hover:text-emerald-700 text-sm font-medium group">
                   <span>View All</span>
                   <i class="fas fa-chevron-right ml-1 text-xs transition-transform transform group-hover:translate-x-1"></i>
                 </a>
@@ -739,7 +739,7 @@
                 
                 <!-- View More Card -->
                 <div class="bg-gray-50 rounded-lg border border-gray-200 flex items-center justify-center">
-                  <a href="/creatures" class="text-emerald-600 hover:text-emerald-700 p-4 text-center">
+                  <a href="<?= $baseUrl ?>/creatures" class="text-emerald-600 hover:text-emerald-700 p-4 text-center">
                     <i class="fas fa-plus-circle text-2xl mb-2"></i>
                     <p class="text-sm">View 4 more</p>
                   </a>
@@ -756,7 +756,7 @@
                class="tab-content">
             <div class="flex justify-between items-center mb-4">
               <h3 class="text-lg font-semibold text-gray-800">My Habitats</h3>
-              <a href="/habitats" class="text-emerald-600 hover:text-emerald-700 text-sm font-medium group">
+              <a href="<?= $baseUrl ?>/habitats" class="text-emerald-600 hover:text-emerald-700 text-sm font-medium group">
                 <span>View All</span>
                 <i class="fas fa-chevron-right ml-1 text-xs transition-transform transform group-hover:translate-x-1"></i>
               </a>
@@ -883,7 +883,7 @@
                 </div>
                 <h4 class="font-medium text-gray-800 mb-2">Create New Habitat</h4>
                 <p class="text-sm text-gray-500 mb-4">Add a new home for your creatures</p>
-                <a href="/habitats/create" class="px-4 py-2 bg-emerald-600 text-white rounded-lg font-medium shadow-sm hover:bg-emerald-700 transition">
+                <a href="<?= $baseUrl ?>/habitats/create" class="px-4 py-2 bg-emerald-600 text-white rounded-lg font-medium shadow-sm hover:bg-emerald-700 transition">
                   Create Habitat
                 </a>
               </div>
@@ -1129,7 +1129,7 @@
             <p class="text-gray-600 mb-4">Your focus sessions have contributed to real-world conservation efforts. Keep going!</p>
             
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="/conservation" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-medium rounded-md hover:from-emerald-700 hover:to-emerald-800 transition-all shadow-sm hover:shadow">
+              <a href="<?= $baseUrl ?>/conservation" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-medium rounded-md hover:from-emerald-700 hover:to-emerald-800 transition-all shadow-sm hover:shadow">
                 <i class="fas fa-leaf mr-2"></i>
                 Learn More About Conservation
               </a>
