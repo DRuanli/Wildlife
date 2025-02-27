@@ -82,7 +82,7 @@ $baseUrl = '/Wildlife';
           <a href="<?= $baseUrl ?>/shop" class="hover:underline">Marketplace</a>
           <a href="<?= $baseUrl ?>/conservation" class="hover:underline">Conservation</a>
           <a href="<?= $baseUrl ?>/community" class="hover:underline">Community</a>
-          <a href="<?= $baseUrl ?>/creature-gallery" class="hover:underline">Gallery</a>
+          <a href="<?= $baseUrl ?>/gallery" class="hover:underline">Gallery</a>
         <?php else: ?>
           <!-- Feel free to adjust or rename these if you prefer fewer items -->
           <a href="<?= $baseUrl ?>/#features" class="hover:underline">Features</a>

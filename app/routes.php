@@ -50,6 +50,6 @@ function getRoutes() {
         '/shop/conservation' => 'ShopController@conservation',
 
         // Creature gallery routes
-        '/creature-gallery' => 'GalleryController@index',
+        '/gallery' => 'GalleryController@index',
     ];
 }

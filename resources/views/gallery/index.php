@@ -44,6 +44,21 @@
           </span>
         </div>
 
+        <!-- Ownership Filter -->
+        <div class="relative w-full md:w-48">
+          <select 
+            x-model="ownershipFilter" 
+            class="w-full py-3 px-4 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 appearance-none"
+          >
+            <option value="all">All Creatures</option>
+            <option value="owned">Owned Only</option>
+            <option value="unowned">Unowned Only</option>
+          </select>
+          <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
+            <i class="fas fa-chevron-down"></i>
+          </span>
+        </div>
+
         <!-- Stage Filter -->
         <div class="relative w-full md:w-48">
           <select 
@@ -124,7 +139,10 @@
       <template x-for="creature in filteredCreatures" :key="creature.id">
         <div 
           class="creature-card group rounded-xl overflow-hidden bg-white shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
-          :class="getHabitatClasses(creature.habitat_type)"
+          :class="[
+            getHabitatClasses(creature.habitat_type),
+            {'opacity-100': creature.owned, 'opacity-60 grayscale': !creature.owned}
+          ]"
         >
           <!-- Card Header with Habitat Type & Favorite Button -->
           <div class="flex justify-between items-center px-4 py-2 border-b border-gray-100">
@@ -166,15 +184,20 @@
           </div>
 
           <!-- Card Content -->
-          <div class="p-4">
+          <div class="p-4" :class="{'opacity-100': creature.owned, 'opacity-80': !creature.owned}">
             <!-- Creature Name & Stage -->
             <div class="flex justify-between items-start mb-2">
-              <h3 class="font-medium text-gray-900" x-text="creature.name"></h3>
-              <span 
-                class="text-xs px-2 py-1 rounded-full capitalize" 
-                :class="getStageBadgeClasses(creature.stage)"
-                x-text="creature.stage">
-              </span>
+              <h3 class="font-medium" :class="{'text-gray-900': creature.owned, 'text-gray-600': !creature.owned}" x-text="creature.name"></h3>
+              <div class="flex items-center space-x-1">
+                <template x-if="creature.owned">
+                  <span class="text-xs px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full">Owned</span>
+                </template>
+                <span 
+                  class="text-xs px-2 py-1 rounded-full capitalize" 
+                  :class="getStageBadgeClasses(creature.stage)"
+                  x-text="creature.stage">
+                </span>
+              </div>
             </div>
             
             <!-- Rarity -->
@@ -496,6 +519,7 @@
       searchQuery: '',
       activeFilter: 'all',
       stageFilter: 'all',
+      ownershipFilter: 'all',
       sortField: 'name',
       sortAsc: true,
       showOnlyFavorites: false,
@@ -528,6 +552,7 @@
         this.activeFilter = 'all';
         this.stageFilter = 'all';
         this.showOnlyFavorites = false;
+        this.ownershipFilter = 'all';
         
         // Dispatch custom events
         window.dispatchEvent(new CustomEvent('gallery-reset-filters'));
@@ -549,6 +574,7 @@
           growth_progress: 60,
           habitat_type: "ocean",
           rarity: "rare",
+          owned: true, // This creature is owned by the user
           description: "A majestic water dragon with scales that shimmer like the ocean surface. Known for its ability to breathe underwater and control water currents.",
           real_world_inspiration: "Inspired by the endangered Leatherback Sea Turtle, the largest sea turtle species that can dive to depths of over 1,000 meters.",
           conservation_fact: "Leatherback Sea Turtles are critically endangered due to plastic pollution, fishing net entanglement, and habitat loss. Their population has declined by over 80% in the last century.",
@@ -564,6 +590,7 @@
           growth_progress: 100,
           habitat_type: "cosmic",
           rarity: "mythical",
+          owned: true, // This creature is owned by the user
           description: "A celestial dragon whose scales contain the light of distant stars. It can traverse space and time, leaving trails of stardust in its wake.",
           real_world_inspiration: "Inspired by the Amur Leopard, one of the world's most endangered big cats with fewer than 100 individuals remaining in the wild.",
           conservation_fact: "The Amur Leopard faces threats from poaching, habitat loss, and fragmentation. Conservation efforts include anti-poaching measures and habitat protection in Russia and China.",
@@ -579,6 +606,7 @@
           growth_progress: 45,
           habitat_type: "forest",
           rarity: "common",
+          owned: true, // This creature is owned by the user
           description: "A small woodland creature with leaves growing from its body. It can blend perfectly with forest foliage and communicate with plants.",
           real_world_inspiration: "Inspired by the Giant Panda, a beloved symbol of wildlife conservation that relies on bamboo forests for survival.",
           conservation_fact: "While Giant Panda populations have increased slightly in recent years thanks to conservation efforts, they remain vulnerable due to habitat fragmentation and limited bamboo resources.",
@@ -594,6 +622,7 @@
           growth_progress: 85,
           habitat_type: "mountain",
           rarity: "uncommon",
+          owned: true, // This creature is owned by the user
           description: "A mysterious egg with a tough, stone-like shell that occasionally emits a warm glow. The creature inside seems to be growing stronger.",
           real_world_inspiration: "Inspired by the Snow Leopard, a highly elusive big cat adapted to the harsh mountain environments of Central Asia.",
           conservation_fact: "Snow Leopards face threats from poaching, retaliatory killings by herders, and habitat loss. There are estimated to be fewer than 10,000 mature individuals left in the wild.",
@@ -609,6 +638,7 @@
           growth_progress: 70,
           habitat_type: "sky",
           rarity: "rare",
+          owned: false, // This creature is NOT owned by the user
           description: "A graceful serpentine creature that glides through the air by manipulating wind currents. Its body is almost transparent with subtle blue hues.",
           real_world_inspiration: "Inspired by the Philippine Eagle, one of the largest and most powerful birds of prey, critically endangered with fewer than 400 pairs remaining.",
           conservation_fact: "The Philippine Eagle faces threats from deforestation, hunting, and climate change. Each breeding pair requires a large territory of old-growth forest to survive.",
@@ -624,6 +654,7 @@
           growth_progress: 50,
           habitat_type: "mountain",
           rarity: "uncommon",
+          owned: false, // This creature is NOT owned by the user
           description: "A majestic stag with antlers of molten lava and hooves that leave smoldering footprints. Despite its fiery appearance, it's gentle and protective.",
           real_world_inspiration: "Inspired by the Saola, often called the 'Asian unicorn' - one of the world's rarest mammals discovered only in 1992.",
           conservation_fact: "The Saola is critically endangered and notoriously difficult to study. Scientists estimate fewer than 100 individuals remain in the forests of Vietnam and Laos.",
@@ -639,6 +670,7 @@
           growth_progress: 65,
           habitat_type: "enchanted",
           rarity: "uncommon",
+          owned: false, // This creature is NOT owned by the user
           description: "A sentient plant-creature that communicates through soft rustling sounds. Its leaves glow with magical light when it's happy.",
           real_world_inspiration: "Inspired by the Venus Flytrap, one of the world's most famous carnivorous plants native to a small region in North and South Carolina.",
           conservation_fact: "Wild Venus Flytraps are vulnerable due to habitat loss and poaching for the plant trade. They only naturally grow in a small area of about 120 square kilometers.",
@@ -654,6 +686,7 @@
           growth_progress: 25,
           habitat_type: "ocean",
           rarity: "legendary",
+          owned: false, // This creature is NOT owned by the user
           description: "This rare egg pulses with blue and pink light, and seems to be growing a protective coral-like shell. Something powerful sleeps inside.",
           real_world_inspiration: "Inspired by coral reefs, which are living organisms that provide habitat for nearly 25% of all marine species despite covering less than 1% of the ocean floor.",
           conservation_fact: "Coral reefs worldwide are threatened by climate change, ocean acidification, pollution, and destructive fishing practices. Some regions have lost over 50% of their coral coverage in recent decades.",
@@ -669,6 +702,7 @@
           growth_progress: 30,
           habitat_type: "cosmic",
           rarity: "rare",
+          owned: false, // This creature is NOT owned by the user
           description: "A small owl with feathers that shimmer like moonlight. Its eyes appear to contain tiny galaxies, and it hoots in a musical, ethereal tone.",
           real_world_inspiration: "Inspired by the endangered Blakiston's Fish Owl, the largest owl species which needs old-growth forests near clean rivers to survive.",
           conservation_fact: "Blakiston's Fish Owls are endangered with only a few thousand remaining in Russia, China, and Japan. They require large territories with old trees for nesting and unpolluted rivers for fishing.",
@@ -684,6 +718,7 @@
           growth_progress: 100,
           habitat_type: "forest",
           rarity: "legendary",
+          owned: false, // This creature is NOT owned by the user
           description: "An ancient woodland spirit with bark-like skin and branches growing from its shoulders. It can command nearby plants and trees to protect the forest.",
           real_world_inspiration: "Inspired by the Sumatran Orangutan, a critically endangered great ape that spends most of its life in the trees of Indonesian rainforests.",
           conservation_fact: "Sumatran Orangutans have lost over 80% of their habitat in the last 50 years, primarily due to palm oil plantations, logging, and human encroachment.",
@@ -699,6 +734,7 @@
           growth_progress: 75,
           habitat_type: "enchanted",
           rarity: "rare",
+          owned: true, // This creature is owned by the user
           description: "A serpent with scales made of living crystal that change color with its mood. It can channel magical energies and create dazzling light displays.",
           real_world_inspiration: "Inspired by the Chinese Giant Salamander, the world's largest amphibian that can grow up to 6 feet long.",
           conservation_fact: "Chinese Giant Salamanders are critically endangered due to habitat destruction, pollution, and over-harvesting for traditional medicine and food. Wild populations have declined by over 80% since the 1950s.",
@@ -714,6 +750,7 @@
           growth_progress: 60,
           habitat_type: "sky",
           rarity: "uncommon",
+          owned: true, // This creature is owned by the user
           description: "A playful creature that resembles a dolphin but swims through the air instead of water. It can create small rainclouds when excited.",
           real_world_inspiration: "Inspired by the Vaquita, the world's most endangered marine mammal with fewer than 10 individuals remaining in the wild.",
           conservation_fact: "The Vaquita's population has collapsed due to illegal fishing practices in the Gulf of California. Despite protection efforts, their numbers continue to decline dramatically.",
@@ -725,6 +762,7 @@
       searchQuery: '',
       activeFilter: 'all',
       stageFilter: 'all',
+      ownershipFilter: 'all',
       sortField: 'name',
       sortAsc: true,
       showOnlyFavorites: false,
@@ -744,6 +782,7 @@
         this.$watch('searchQuery', () => this.applyFilters());
         this.$watch('activeFilter', () => this.applyFilters());
         this.$watch('stageFilter', () => this.applyFilters());
+        this.$watch('ownershipFilter', () => this.applyFilters());
         
         // Listen for custom events from other components
         window.addEventListener('gallery-sort', (e) => {
@@ -787,6 +826,12 @@
         // Apply stage filter
         if (this.stageFilter !== 'all') {
           result = result.filter(creature => creature.stage === this.stageFilter);
+        }
+        
+        // Apply ownership filter
+        if (this.ownershipFilter !== 'all') {
+          const isOwned = this.ownershipFilter === 'owned';
+          result = result.filter(creature => creature.owned === isOwned);
         }
         
         // Apply favorites filter
