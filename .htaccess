@@ -32,5 +32,4 @@
 # Set correct MIME types
 <IfModule mod_mime.c>
   AddType application/javascript .js
-  AddType text/css .css
 </IfModule>

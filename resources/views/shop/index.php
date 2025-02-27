@@ -67,6 +67,26 @@
     background-color: #FFD54F;
     color: #E65100;
   }
+  
+  /* Mini model viewer styles */
+  .mini-model-viewer {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+  }
+
+  .mini-model-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(240, 240, 240, 0.5);
+    z-index: 5;
+  }
 </style>
 
 <div class="min-h-screen bg-[var(--primary-bg)]">
@@ -282,34 +302,40 @@
           <img src="<?= $baseUrl ?>/images/shop/mythical-expansion.png" alt="Mythical Habitat Expansion" class="absolute -right-8 bottom-0 h-32 transform transition-transform duration-300 group-hover:scale-110 group-hover:translate-x-2">
         </div>
         
-        <!-- Regular Item 1 -->
+        <!-- Regular Item 1 with 3D Model -->
         <div class="bg-white rounded-lg shadow-sm border border-[var(--neutral-light)] overflow-hidden group hover:shadow-md transition-all duration-300 shop-item">
             <div class="relative">
                 <div class="bg-[var(--primary-bg)] h-48 flex items-center justify-center p-4 transition-all duration-300 group-hover:bg-[#F5F2E9]">
-                <img src="<?= $baseUrl ?>/public/images/arctic_hare.png" alt="Arctic Shimmer Hare" class="h-32 w-auto object-contain item-image transform transition-transform duration-300 group-hover:scale-105">
+                    <!-- 3D Model Viewer Container replaces static image -->
+                    <div id="mini-model-viewer-100" class="h-40 w-full mini-model-viewer">
+                        <!-- Model will be loaded here via JavaScript -->
+                        <div class="mini-model-loading">
+                            <span class="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></span>
+                        </div>
+                    </div>
                 </div>
                 <div class="absolute top-3 right-3 badge-rare text-xs font-medium px-2 py-1 rounded-full">
-                Rare
+                    Rare
                 </div>
             </div>
             <div class="p-5">
                 <h3 class="font-medium text-[var(--primary-text)] mb-1">Arctic Shimmer Hare</h3>
                 <p class="text-sm text-[var(--neutral-dark)] mb-3">A magical egg containing a rare mountain creature</p>
                 <div class="flex justify-between items-center">
-                <div class="flex items-center">
-                    <span class="font-bold text-[var(--primary-text)] mr-1">650</span>
-                    <i class="fas fa-coins text-yellow-500 text-sm"></i>
+                    <div class="flex items-center">
+                        <span class="font-bold text-[var(--primary-text)] mr-1">650</span>
+                        <i class="fas fa-coins text-yellow-500 text-sm"></i>
+                    </div>
+                    <div class="flex space-x-2">
+                        <a href="<?= $baseUrl ?>/shop/model-preview/100" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-3 py-2 rounded-lg transition-colors inline-flex items-center">
+                            <i class="fas fa-cube mr-1"></i> 3D View
+                        </a>
+                        <button class="bg-[var(--accent-primary)] hover:bg-[#5D4F91] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors flex items-center">
+                            <i class="fas fa-shopping-cart mr-2"></i> Add
+                        </button>
+                    </div>
                 </div>
-                <div class="flex space-x-2">
-                    <a href="<?= $baseUrl ?>/shop/model-preview/100" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-3 py-2 rounded-lg transition-colors inline-flex items-center">
-                    <i class="fas fa-cube mr-1"></i> 3D View
-                    </a>
-                    <button class="bg-[var(--accent-primary)] hover:bg-[#5D4F91] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors flex items-center">
-                    <i class="fas fa-shopping-cart mr-2"></i> Add
-                    </button>
-                </div>
-                </div>
-            </div>  
+            </div>
         </div>
         
         <!-- Regular Item 2 -->
@@ -641,6 +667,15 @@
 <!-- Add Alpine.js for tab functionality -->
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
+<!-- Load Three.js libraries if not already loaded -->
+<script>
+// Only load if not already loaded
+if (typeof THREE === 'undefined') {
+    document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"><\/script>');
+    document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"><\/script>');
+}
+</script>
+
 <!-- Shop page JavaScript -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -744,7 +779,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const rarityBadge = this.querySelector('[class*="badge-"]');
       const rarity = rarityBadge ? rarityBadge.textContent.trim() : 'Common';
       const type = 'Shop Item'; // This would be extracted from data attributes in a real implementation
-      const image = this.querySelector('img').src;
+      const image = this.querySelector('img')?.src;
       
       // Open the preview modal
       window.openItemPreview(1, name, description, price, rarity, type, image);
@@ -792,6 +827,564 @@ function getRarityClass(rarity) {
       return 'badge-common';
   }
 }
+</script>
+
+<!-- Arctic Shimmer Hare Inline Model Script -->
+<script>
+// Create a script element and insert the Arctic Shimmer Hare class definition directly
+function loadArcticShimmerHareInline() {
+  // Create a script element
+  const script = document.createElement('script');
+  script.type = 'text/javascript';
+  
+  // Define the ArcticShimmerHare class directly as text content
+  script.textContent = `
+    // Arctic Shimmer Hare 3D Model implementation
+    class ArcticShimmerHare {
+      constructor(stage = 'adult') {
+        this.stage = stage; // 'egg', 'baby', 'juvenile', 'adult', or 'mythical'
+        this.model = new THREE.Group();
+        this.animations = {};
+        this.createModel();
+      }
+      
+      // Create a simplified model for the shop display
+      createModel() {
+        this.model.clear();
+        
+        // Create a basic model based on stage
+        switch(this.stage) {
+          case 'egg':
+            this.createEgg();
+            break;
+          case 'baby':
+            this.createBaby();
+            break;
+          case 'juvenile': 
+            this.createJuvenile();
+            break;
+          case 'adult':
+            this.createAdult();
+            break;
+          case 'mythical':
+            this.createMythical();
+            break;
+          default:
+            this.createAdult();
+        }
+        
+        // Add a simple frost effect
+        this.addFrostEffect();
+        
+        return this.model;
+      }
+      
+      // Egg stage
+      createEgg() {
+        const eggGeometry = new THREE.SphereGeometry(5, 32, 32);
+        eggGeometry.scale(1, 1.5, 1);
+        
+        const eggMaterial = new THREE.MeshPhysicalMaterial({
+          color: 0xd8f0ff,
+          transparent: true,
+          opacity: 0.8,
+          roughness: 0.2,
+          metalness: 0.1
+        });
+        
+        const egg = new THREE.Mesh(eggGeometry, eggMaterial);
+        this.model.add(egg);
+      }
+      
+      // Baby stage
+      createBaby() {
+        // Body
+        const bodyGeometry = new THREE.SphereGeometry(3, 32, 16);
+        bodyGeometry.scale(1, 0.8, 1.2);
+        const bodyMaterial = new THREE.MeshStandardMaterial({
+          color: 0xf0f8ff,
+          roughness: 0.8,
+          metalness: 0.1,
+        });
+        const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+        
+        // Head
+        const headGeometry = new THREE.SphereGeometry(2, 32, 16);
+        const headMaterial = new THREE.MeshStandardMaterial({
+          color: 0xffffff,
+          roughness: 0.7,
+          metalness: 0.1,
+        });
+        const head = new THREE.Mesh(headGeometry, headMaterial);
+        head.position.set(0, 0.5, 2.5);
+        
+        // Ears
+        const earGeometry = new THREE.ConeGeometry(0.7, 2, 16);
+        const earMaterial = new THREE.MeshStandardMaterial({
+          color: 0xf0f8ff,
+          roughness: 0.7,
+          metalness: 0.1,
+        });
+        
+        const leftEar = new THREE.Mesh(earGeometry, earMaterial);
+        leftEar.position.set(-1, 1.8, 2.5);
+        leftEar.rotation.x = -Math.PI/6;
+        leftEar.rotation.z = -Math.PI/8;
+        
+        const rightEar = new THREE.Mesh(earGeometry, earMaterial);
+        rightEar.position.set(1, 1.8, 2.5);
+        rightEar.rotation.x = -Math.PI/6;
+        rightEar.rotation.z = Math.PI/8;
+        
+        // Add parts to model
+        this.model.add(body, head, leftEar, rightEar);
+        
+        // Scale for baby size
+        this.model.scale.set(0.6, 0.6, 0.6);
+      }
+      
+      // Juvenile stage
+      createJuvenile() {
+        // Body
+        const bodyGeometry = new THREE.SphereGeometry(4, 32, 16);
+        bodyGeometry.scale(1, 0.8, 1.4);
+        const bodyMaterial = new THREE.MeshStandardMaterial({
+          color: 0xffffff,
+          roughness: 0.8,
+          metalness: 0.1,
+        });
+        const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+        
+        // Head
+        const headGeometry = new THREE.SphereGeometry(2.5, 32, 16);
+        const headMaterial = new THREE.MeshStandardMaterial({
+          color: 0xf8f8ff,
+          roughness: 0.7,
+          metalness: 0.1,
+        });
+        const head = new THREE.Mesh(headGeometry, headMaterial);
+        head.position.set(0, 1, 3.5);
+        
+        // Ears
+        const earGeometry = new THREE.ConeGeometry(0.8, 3, 16);
+        const earMaterial = new THREE.MeshStandardMaterial({
+          color: 0xf0f8ff,
+          roughness: 0.7,
+          metalness: 0.1,
+        });
+        
+        const leftEar = new THREE.Mesh(earGeometry, earMaterial);
+        leftEar.position.set(-1.2, 2.5, 3.5);
+        leftEar.rotation.x = -Math.PI/6;
+        leftEar.rotation.z = -Math.PI/10;
+        
+        const rightEar = new THREE.Mesh(earGeometry, earMaterial);
+        rightEar.position.set(1.2, 2.5, 3.5);
+        rightEar.rotation.x = -Math.PI/6;
+        rightEar.rotation.z = Math.PI/10;
+        
+        // Ear tips
+        const tipGeometry = new THREE.ConeGeometry(0.4, 1, 16);
+        const tipMaterial = new THREE.MeshPhysicalMaterial({
+          color: 0xadd8e6,
+          roughness: 0.2,
+          metalness: 0.8,
+          transparent: true,
+          opacity: 0.8,
+          emissive: 0x3090c7,
+          emissiveIntensity: 0.3
+        });
+        
+        const leftTip = new THREE.Mesh(tipGeometry, tipMaterial);
+        leftTip.position.set(-1.2, 4, 3);
+        leftTip.rotation.x = -Math.PI/6;
+        leftTip.rotation.z = -Math.PI/10;
+        
+        const rightTip = new THREE.Mesh(tipGeometry, tipMaterial);
+        rightTip.position.set(1.2, 4, 3);
+        rightTip.rotation.x = -Math.PI/6;
+        rightTip.rotation.z = Math.PI/10;
+        
+        // Add all parts to model
+        this.model.add(body, head, leftEar, rightEar, leftTip, rightTip);
+        
+        // Scale for juvenile size
+        this.model.scale.set(0.8, 0.8, 0.8);
+      }
+      
+      // Adult stage
+      createAdult() {
+        // Body
+        const bodyGeometry = new THREE.SphereGeometry(5, 32, 16);
+        bodyGeometry.scale(1, 0.8, 1.5);
+        const bodyMaterial = new THREE.MeshStandardMaterial({
+          color: 0xffffff,
+          roughness: 0.8,
+          metalness: 0.1,
+        });
+        const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+        
+        // Head
+        const headGeometry = new THREE.SphereGeometry(3, 32, 16);
+        const headMaterial = new THREE.MeshStandardMaterial({
+          color: 0xf8f8ff,
+          roughness: 0.7,
+          metalness: 0.1,
+        });
+        const head = new THREE.Mesh(headGeometry, headMaterial);
+        head.position.set(0, 1.5, 4.5);
+        
+        // Ears with crystalline tips
+        const earGeometry = new THREE.ConeGeometry(1, 3.5, 16);
+        const earMaterial = new THREE.MeshStandardMaterial({
+          color: 0xf0f8ff,
+          roughness: 0.7,
+          metalness: 0.1,
+        });
+        
+        const leftEar = new THREE.Mesh(earGeometry, earMaterial);
+        leftEar.position.set(-1.5, 3, 4.5);
+        leftEar.rotation.x = -Math.PI/6;
+        leftEar.rotation.z = -Math.PI/12;
+        
+        const rightEar = new THREE.Mesh(earGeometry, earMaterial);
+        rightEar.position.set(1.5, 3, 4.5);
+        rightEar.rotation.x = -Math.PI/6;
+        rightEar.rotation.z = Math.PI/12;
+        
+        // Crystalline ear tips
+        const tipGeometry = new THREE.ConeGeometry(0.6, 1.5, 16);
+        const tipMaterial = new THREE.MeshPhysicalMaterial({
+          color: 0x89cff0,
+          roughness: 0.2,
+          metalness: 0.8,
+          transparent: true,
+          opacity: 0.8,
+          emissive: 0x3090c7,
+          emissiveIntensity: 0.4
+        });
+        
+        const leftTip = new THREE.Mesh(tipGeometry, tipMaterial);
+        leftTip.position.set(-1.5, 5, 4);
+        leftTip.rotation.x = -Math.PI/6;
+        leftTip.rotation.z = -Math.PI/12;
+        
+        const rightTip = new THREE.Mesh(tipGeometry, tipMaterial);
+        rightTip.position.set(1.5, 5, 4);
+        rightTip.rotation.x = -Math.PI/6;
+        rightTip.rotation.z = Math.PI/12;
+        
+        // Add blue-silver markings
+        const markingsGeometry = new THREE.SphereGeometry(1, 16, 16);
+        markingsGeometry.scale(2, 0.2, 1);
+        const markingsMaterial = new THREE.MeshStandardMaterial({
+          color: 0x89cff0,
+          roughness: 0.5,
+          metalness: 0.5,
+          emissive: 0x3090c7,
+          emissiveIntensity: 0.4
+        });
+        
+        const backMarking = new THREE.Mesh(markingsGeometry, markingsMaterial);
+        backMarking.position.set(0, 1.5, -2);
+        
+        // Add all parts to model
+        this.model.add(body, head, leftEar, rightEar, leftTip, rightTip, backMarking);
+      }
+      
+      // Mythical stage
+      createMythical() {
+        // Body
+        const bodyGeometry = new THREE.SphereGeometry(6, 32, 16);
+        bodyGeometry.scale(1, 0.8, 1.6);
+        const bodyMaterial = new THREE.MeshPhysicalMaterial({
+          color: 0xf0f8ff,
+          roughness: 0.6,
+          metalness: 0.2,
+          clearcoat: 0.4,
+          clearcoatRoughness: 0.2,
+        });
+        const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+        
+        // Head
+        const headGeometry = new THREE.SphereGeometry(3.5, 32, 16);
+        const headMaterial = new THREE.MeshPhysicalMaterial({
+          color: 0xf8f8ff,
+          roughness: 0.6,
+          metalness: 0.2,
+          clearcoat: 0.4,
+          clearcoatRoughness: 0.2,
+        });
+        const head = new THREE.Mesh(headGeometry, headMaterial);
+        head.position.set(0, 2, 5.5);
+        
+        // Magical ears
+        const earGeometry = new THREE.ConeGeometry(1.2, 4, 16);
+        const earMaterial = new THREE.MeshPhysicalMaterial({
+          color: 0xf0f8ff,
+          roughness: 0.6,
+          metalness: 0.3,
+          clearcoat: 0.4,
+          clearcoatRoughness: 0.2,
+        });
+        
+        const leftEar = new THREE.Mesh(earGeometry, earMaterial);
+        leftEar.position.set(-1.8, 4, 5.5);
+        leftEar.rotation.x = -Math.PI/6;
+        leftEar.rotation.z = -Math.PI/12;
+        
+        const rightEar = new THREE.Mesh(earGeometry, earMaterial);
+        rightEar.position.set(1.8, 4, 5.5);
+        rightEar.rotation.x = -Math.PI/6;
+        rightEar.rotation.z = Math.PI/12;
+        
+        // Crystal ear tips
+        const tipGeometry = new THREE.ConeGeometry(0.8, 2, 16);
+        const tipMaterial = new THREE.MeshPhysicalMaterial({
+          color: 0x00bfff,
+          roughness: 0.1,
+          metalness: 0.9,
+          transparent: true,
+          opacity: 0.9,
+          emissive: 0x007fff,
+          emissiveIntensity: 0.8
+        });
+        
+        const leftTip = new THREE.Mesh(tipGeometry, tipMaterial);
+        leftTip.position.set(-1.8, 6.5, 5);
+        leftTip.rotation.x = -Math.PI/6;
+        leftTip.rotation.z = -Math.PI/12;
+        
+        const rightTip = new THREE.Mesh(tipGeometry, tipMaterial);
+        rightTip.position.set(1.8, 6.5, 5);
+        rightTip.rotation.x = -Math.PI/6;
+        rightTip.rotation.z = Math.PI/12;
+        
+        // Add parts to model
+        this.model.add(body, head, leftEar, rightEar, leftTip, rightTip);
+      }
+      
+      // Add a simplified frost effect
+      addFrostEffect() {
+        // Add a few particles
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesMaterial = new THREE.PointsMaterial({
+          color: 0xadd8e6,
+          size: 0.2,
+          transparent: true,
+          opacity: 0.7,
+          blending: THREE.AdditiveBlending,
+        });
+        
+        const particleCount = 20;
+        const positions = new Float32Array(particleCount * 3);
+        
+        for (let i = 0; i < particleCount; i++) {
+          // Random position around the model
+          const radius = 8;
+          const theta = Math.random() * Math.PI * 2;
+          const phi = Math.random() * Math.PI;
+          
+          positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+          positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+          positions[i * 3 + 2] = radius * Math.cos(phi);
+        }
+        
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+        this.model.add(particles);
+      }
+      
+      // Get the model
+      getModel() {
+        return this.model;
+      }
+      
+      // Update method (can be expanded if needed)
+      update() {
+        // Animation placeholder
+      }
+      
+      // Clean up resources
+      dispose() {
+        // Dispose geometries and materials
+        this.model.traverse((object) => {
+          if (object.geometry) {
+            object.geometry.dispose();
+          }
+          
+          if (object.material) {
+            if (Array.isArray(object.material)) {
+              object.material.forEach(material => material.dispose());
+            } else {
+              object.material.dispose();
+            }
+          }
+        });
+      }
+    }
+  `;
+  
+  // Add the script to the document
+  document.head.appendChild(script);
+}
+
+// Mini Model Viewer class for shop items
+class MiniModelViewer {
+  constructor(containerId, options = {}) {
+    this.container = document.getElementById(containerId);
+    if (!this.container) {
+      console.error(`Container with ID "${containerId}" not found.`);
+      return;
+    }
+    
+    // Default options
+    this.options = Object.assign({
+      width: this.container.clientWidth,
+      height: this.container.clientHeight,
+      backgroundColor: 0xf5f5f8,
+      autoRotate: true,
+      stage: 'adult'
+    }, options);
+    
+    this.init();
+  }
+  
+  init() {
+    // Create scene
+    this.scene = new THREE.Scene();
+    this.scene.background = new THREE.Color(this.options.backgroundColor);
+    
+    // Create camera
+    this.camera = new THREE.PerspectiveCamera(
+      75, 
+      this.options.width / this.options.height, 
+      0.1, 
+      1000
+    );
+    this.camera.position.z = 20;
+    
+    // Create renderer
+    this.renderer = new THREE.WebGLRenderer({ antialias: true });
+    this.renderer.setSize(this.options.width, this.options.height);
+    this.renderer.setPixelRatio(window.devicePixelRatio);
+    
+    // Clear container and add renderer
+    while (this.container.firstChild) {
+      this.container.removeChild(this.container.firstChild);
+    }
+    this.container.appendChild(this.renderer.domElement);
+    
+    // Add lights
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    this.scene.add(ambientLight);
+    
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    directionalLight.position.set(1, 1, 1);
+    this.scene.add(directionalLight);
+    
+    // Add orbit controls
+    this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+    this.controls.enableDamping = true;
+    this.controls.dampingFactor = 0.05;
+    this.controls.autoRotate = this.options.autoRotate;
+    this.controls.autoRotateSpeed = 3.0;
+    this.controls.enableZoom = false;
+    this.controls.enablePan = false;
+    
+    // Create a simple model for testing (while actual model loads)
+    this.createSimpleModel();
+    
+    // Start animation loop
+    this.animate();
+  }
+  
+  createSimpleModel() {
+    // Create a simple sphere as placeholder
+    const geometry = new THREE.SphereGeometry(5, 32, 32);
+    const material = new THREE.MeshStandardMaterial({ 
+      color: 0xa0d8ef,
+      roughness: 0.5,
+      metalness: 0.3,
+    });
+    this.model = new THREE.Mesh(geometry, material);
+    this.scene.add(this.model);
+    
+    // If ArcticShimmerHare is available, load it
+    if (typeof ArcticShimmerHare !== 'undefined') {
+      this.scene.remove(this.model);
+      const hare = new ArcticShimmerHare(this.options.stage);
+      this.model = hare.getModel();
+      this.scene.add(this.model);
+      
+      // Adjust model position
+      this.model.position.y = -5;
+      
+      // Create a simple ambient animation
+      const animate = () => {
+        requestAnimationFrame(animate);
+        this.model.rotation.y += 0.01;
+      };
+      animate();
+    }
+  }
+  
+  animate() {
+    requestAnimationFrame(this.animate.bind(this));
+    
+    if (this.controls) {
+      this.controls.update();
+    }
+    
+    this.renderer.render(this.scene, this.camera);
+  }
+  
+  resize() {
+    if (!this.container) return;
+    
+    const width = this.container.clientWidth;
+    const height = this.container.clientHeight;
+    
+    this.camera.aspect = width / height;
+    this.camera.updateProjectionMatrix();
+    
+    this.renderer.setSize(width, height);
+  }
+}
+
+// Use this function to load the ArcticShimmerHare inline
+document.addEventListener('DOMContentLoaded', function() {
+  // Load the Arctic Shimmer Hare class definition
+  loadArcticShimmerHareInline();
+  
+  // Initialize mini model viewers after a short delay to ensure the class is defined
+  setTimeout(() => {
+    const miniViewerContainers = document.querySelectorAll('.mini-model-viewer');
+    miniViewerContainers.forEach(container => {
+      if (container.id) {
+        new MiniModelViewer(container.id, {
+          stage: 'adult'
+        });
+      }
+    });
+    
+    // Remove loading indicators
+    document.querySelectorAll('.mini-model-loading').forEach(loader => {
+      loader.style.display = 'none';
+    });
+  }, 500);
+  
+  // Handle window resize
+  window.addEventListener('resize', function() {
+    // Resize all three.js renderers
+    document.querySelectorAll('.mini-model-viewer canvas').forEach(canvas => {
+      const width = canvas.parentElement.clientWidth;
+      const height = canvas.parentElement.clientHeight;
+      canvas.width = width;
+      canvas.height = height;
+    });
+  });
+});
 </script>
 
 <?php require_once ROOT_PATH . '/resources/views/layouts/footer.php'; ?>
