@@ -1634,7 +1634,7 @@
 <!-- Loading Screen -->
 <div class="loading-screen" id="loadingScreen">
   <div class="loading-logo">
-    <img src="<?= $baseUrl ?>/assets/images/logo.svg" alt="Wildlife Haven" width="120">
+    <img src="<?= $baseUrl ?>/public/img/logo.png" alt="Wildlife Haven" width="120">
     <div class="loading-progress">
       <div class="loading-bar" id="loadingBar"></div>
     </div>
