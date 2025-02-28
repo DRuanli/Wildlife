@@ -30,6 +30,7 @@ function getRoutes() {
         // Dashboard routes
         '/dashboard' => 'DashboardController@index',
         '/dashboard/profile' => 'DashboardController@profile',
+        '/dashboard/visualization' => 'DashboardController@visualization',
         '/dashboard/settings' => 'DashboardController@settings',
         '/dashboard/profile/update' => 'DashboardController@updateProfile',
         '/dashboard/password/update' => 'DashboardController@updatePassword',
