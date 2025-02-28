@@ -36,6 +36,33 @@ const scrollContent = document.getElementById('scrollContent');
 const customCursor = document.getElementById('customCursor');
 const cursorFollower = document.getElementById('cursorFollower');
 
+// Detect low-performance devices
+const isLowPerformance = () => {
+    // Simple detection based on device memory API or user agent
+    if (navigator.deviceMemory && navigator.deviceMemory < 4) return true;
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        return true;
+    }
+    return false;
+};
+
+// If low performance, add class to body
+if (isLowPerformance()) {
+    document.documentElement.classList.add('low-performance');
+}
+
+// Function for throttling high-frequency events
+function throttle(fn, delay) {
+    let lastCall = 0;
+    return function (...args) {
+        const now = Date.now();
+        if (now - lastCall >= delay) {
+            lastCall = now;
+            fn.apply(this, args);
+        }
+    };
+}
+
 // Loading animation
 function simulateLoading() {
     let progress = 0;
@@ -61,6 +88,9 @@ function simulateLoading() {
 
 // Initialize page animations
 function initPage() {
+    // Apply hardware acceleration to key elements
+    applyHardwareAcceleration();
+    
     initSmoothScroll();
     initCursor();
     initHeroSection();
@@ -77,48 +107,206 @@ function initPage() {
     initMorphingBlobs();
 }
 
+// Apply hardware acceleration
+function applyHardwareAcceleration() {
+    const acceleratedElements = document.querySelectorAll(
+        '.hero-content, .feature-card, .creature-card, .testimonial-card, ' +
+        '.conservation-stat, .timer-container, .parallax-element, .floating-card'
+    );
+    
+    acceleratedElements.forEach(el => {
+        el.style.willChange = 'transform';
+        el.style.backfaceVisibility = 'hidden';
+        el.style.transform = 'translateZ(0)';
+    });
+}
+
+// Improved smooth scrolling implementation
+class SmoothScroller {
+    constructor() {
+        this.DOM = {
+            scroll: document.querySelector('#scrollContent') || document.documentElement
+        };
+        
+        this.current = 0;
+        this.target = 0;
+        this.ease = 0.12; // Adjust for smoothness (0.05-0.15 is good)
+        this.rafID = null;
+        
+        // Skip on mobile or Safari (causes issues)
+        if (this.isMobile() || this.isSafari()) {
+            document.documentElement.classList.add('native-scroll');
+            return;
+        }
+        
+        this.init();
+    }
+    
+    isMobile() {
+        return /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+               (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    }
+    
+    isSafari() {
+        return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    }
+    
+    init() {
+        this.createSmoothScrollStructure();
+        this.setHeight();
+        this.addListeners();
+        this.render();
+    }
+    
+    createSmoothScrollStructure() {
+        // Set up the DOM for smooth scrolling
+        document.documentElement.classList.add('smooth-scroll');
+        
+        const scrollContent = document.getElementById('scrollContent');
+        if (!scrollContent) return;
+        
+        // Create wrapper if not exists
+        let wrapper = document.getElementById('smooth-wrapper');
+        if (!wrapper) {
+            wrapper = document.createElement('div');
+            wrapper.id = 'smooth-wrapper';
+            wrapper.style.position = 'fixed';
+            wrapper.style.width = '100%';
+            wrapper.style.height = '100%';
+            wrapper.style.top = '0';
+            wrapper.style.left = '0';
+            wrapper.style.overflow = 'hidden';
+            wrapper.style.zIndex = '1';
+            
+            // Move the content to the wrapper
+            document.body.insertBefore(wrapper, scrollContent);
+            wrapper.appendChild(scrollContent);
+            
+            // Adjust content styles
+            scrollContent.style.willChange = 'transform';
+            scrollContent.style.transform = 'translateZ(0)';
+        }
+    }
+    
+    setHeight() {
+        const content = document.getElementById('scrollContent');
+        if (!content) return;
+        
+        // Measure content height
+        const contentHeight = content.scrollHeight;
+        
+        // Set document height to enable scrolling
+        document.body.style.height = `${contentHeight}px`;
+    }
+    
+    addListeners() {
+        // Refresh height on window resize
+        window.addEventListener('resize', throttle(() => {
+            this.setHeight();
+        }, 100));
+        
+        // Update scroll position
+        window.addEventListener('scroll', throttle(() => {
+            this.target = window.scrollY;
+            document.documentElement.classList.add('is-scrolling');
+            
+            // Remove scrolling class after delay
+            clearTimeout(this.scrollTimeout);
+            this.scrollTimeout = setTimeout(() => {
+                document.documentElement.classList.remove('is-scrolling');
+            }, 100);
+        }, 16), { passive: true });
+    }
+    
+    render() {
+        // Use lerp for smooth scrolling effect
+        this.current = this.lerp(this.current, this.target, this.ease);
+        
+        // Apply transform
+        const scrollContent = document.getElementById('scrollContent');
+        if (scrollContent) {
+            scrollContent.style.transform = `translate3d(0, ${-this.current}px, 0)`;
+        }
+        
+        // Continue the animation loop
+        this.rafID = requestAnimationFrame(() => this.render());
+    }
+    
+    lerp(start, end, factor) {
+        // Linear interpolation for smooth movement
+        return (1 - factor) * start + factor * end;
+    }
+}
+
 // Standard scrolling with enhanced animations
 function initSmoothScroll() {
-    // Convert smooth scroll containers to standard layout
-    const smoothScrollContainer = document.getElementById('smoothScroll');
-    const scrollContentElement = document.getElementById('scrollContent');
-
-    if (smoothScrollContainer && scrollContentElement) {
-        // Remove fixed positioning to enable normal scrolling
-        smoothScrollContainer.style.position = 'static';
-        scrollContentElement.style.position = 'static';
-        document.body.style.overflow = 'auto';
-    }
-
-    // Setup scroll triggers for animations without pinning
-    ScrollTrigger.defaults({
-        toggleActions: "play none none reverse",
-        markers: false
-    });
-
-    // Handle window resize
-    window.addEventListener('resize', () => {
-        setTimeout(() => {
+    // Initialize smooth scroller
+    const smoother = new SmoothScroller();
+    
+    // Configure ScrollTrigger for better performance
+    if (typeof ScrollTrigger !== 'undefined') {
+        ScrollTrigger.config({
+            limitCallbacks: true,
+            ignoreMobileResize: true
+        });
+        
+        // Optimize marker rendering
+        ScrollTrigger.defaults({
+            markers: false,
+            preventOverlaps: true,
+            toggleActions: "play none none reverse"
+        });
+        
+        // Batch ScrollTrigger refreshes
+        const debouncedRefresh = throttle(() => {
             ScrollTrigger.refresh();
-        }, 100);
-    });
-
-    // Add error handling
-    window.addEventListener('error', function (e) {
-        console.error('Animation error:', e);
-        // Force enable normal scrolling if an error occurs
-        document.body.style.overflow = 'auto';
-        if (smoothScrollContainer) smoothScrollContainer.style.position = 'static';
-        if (scrollContentElement) scrollContentElement.style.position = 'static';
+        }, 200);
+        
+        window.addEventListener('resize', debouncedRefresh);
+    }
+    
+    // Use Intersection Observer for simpler animations
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+    };
+    
+    const animateOnScroll = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('in-view');
+                
+                // Only observe once if it has data-once attribute
+                if (entry.target.dataset.once === 'true') {
+                    animateOnScroll.unobserve(entry.target);
+                }
+            } else if (entry.target.dataset.once !== 'true') {
+                entry.target.classList.remove('in-view');
+            }
+        });
+    }, observerOptions);
+    
+    // Apply to elements that don't need complex GSAP animations
+    document.querySelectorAll('.body-text, .conservation-description').forEach(el => {
+        el.dataset.once = 'true';
+        animateOnScroll.observe(el);
     });
 }
 
 // Custom cursor
 function initCursor() {
+    // Skip for touch devices
+    if (isTouchDevice()) {
+        return;
+    }
+    
     const cursor = document.getElementById('customCursor');
     const follower = document.getElementById('cursorFollower');
+    
+    if (!cursor || !follower) return;
 
-    // Variables for cursor position
+    // Variables for cursor position with better performance
     let mouseX = 0;
     let mouseY = 0;
     let cursorX = 0;
@@ -126,8 +314,8 @@ function initCursor() {
     let followerX = 0;
     let followerY = 0;
 
-    // Update cursor position on mouse move
-    document.addEventListener('mousemove', (e) => {
+    // Update cursor position on mouse move (throttled)
+    document.addEventListener('mousemove', throttle((e) => {
         mouseX = e.clientX;
         mouseY = e.clientY;
 
@@ -143,32 +331,36 @@ function initCursor() {
                 follower.style.backgroundColor = 'white';
             }
         }
-    });
+    }, 16));
 
-    // Add hover effect on interactive elements
-    const interactiveElements = document.querySelectorAll('a, button, .feature-card, .creature-card, .timer-btn, .testimonial-btn, .testimonial-dot');
-    interactiveElements.forEach(element => {
-        element.addEventListener('mouseenter', () => {
+    // Add hover effect on interactive elements (with delegated events)
+    document.addEventListener('mouseover', (e) => {
+        const target = e.target;
+        if (target.matches('a, button, .feature-card, .creature-card, .timer-btn, .testimonial-btn, .testimonial-dot')) {
             cursor.classList.add('cursor-hover');
-        });
-        element.addEventListener('mouseleave', () => {
+        }
+    });
+    
+    document.addEventListener('mouseout', (e) => {
+        const target = e.target;
+        if (target.matches('a, button, .feature-card, .creature-card, .timer-btn, .testimonial-btn, .testimonial-dot')) {
             cursor.classList.remove('cursor-hover');
-        });
+        }
     });
 
-    // Animate cursor with requestAnimationFrame
+    // Animate cursor with requestAnimationFrame for better performance
     function animateCursor() {
         // Smoothly move main cursor with easing
-        cursorX += (mouseX - cursorX) * 0.1;
-        cursorY += (mouseY - cursorY) * 0.1;
+        cursorX += (mouseX - cursorX) * 0.15;
+        cursorY += (mouseY - cursorY) * 0.15;
 
         // Smoothly move follower with different easing
-        followerX += (mouseX - followerX) * 0.2;
-        followerY += (mouseY - followerY) * 0.2;
+        followerX += (mouseX - followerX) * 0.08;
+        followerY += (mouseY - followerY) * 0.08;
 
-        // Update cursor positions
-        cursor.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
-        follower.style.transform = `translate(${followerX}px, ${followerY}px)`;
+        // Use transform instead of direct top/left for better performance
+        cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
+        follower.style.transform = `translate3d(${followerX}px, ${followerY}px, 0) translate(-50%, -50%)`;
 
         // Continue animation loop
         requestAnimationFrame(animateCursor);
@@ -205,85 +397,101 @@ function initHeroSection() {
         ease: "power2.inOut"
     });
 
-    // Parallax effect for hero content on mouse move
-    document.addEventListener('mousemove', (e) => {
-        const xPos = (e.clientX / window.innerWidth - 0.5) * 20;
-        const yPos = (e.clientY / window.innerHeight - 0.5) * 20;
+    // More efficient parallax implementation
+    if (!isLowPerformance()) {
+        // Use throttled event handler for better performance
+        document.addEventListener('mousemove', throttle((e) => {
+            const xPos = (e.clientX / window.innerWidth - 0.5) * 20;
+            const yPos = (e.clientY / window.innerHeight - 0.5) * 20;
+    
+            gsap.to('#heroContent', {
+                rotationY: xPos * 0.5,
+                rotationX: -yPos * 0.5,
+                transformPerspective: 1000,
+                duration: 0.6,
+                ease: "power1.out",
+                force3D: true
+            });
+    
+            // Subtle video movement - only if not scrolling
+            if (!document.documentElement.classList.contains('is-scrolling')) {
+                gsap.to('#heroVideo', {
+                    x: xPos * 0.5,
+                    y: yPos * 0.5,
+                    duration: 1,
+                    ease: "power1.out"
+                });
+            }
+        }, 40));
+    }
 
-        gsap.to('#heroContent', {
-            rotationY: xPos * 0.5,
-            rotationX: -yPos * 0.5,
-            transformPerspective: 1000,
-            duration: 0.6,
-            ease: "power1.out"
+    // Video blur effect on scroll - only on higher performance devices
+    if (!isLowPerformance()) {
+        ScrollTrigger.create({
+            trigger: "#hero",
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+            onUpdate: (self) => {
+                // Only apply blur during pauses in scrolling
+                if (!document.documentElement.classList.contains('is-scrolling')) {
+                    const blur = Math.min(self.progress * 5, 5); // Cap at 5px blur
+                    gsap.to('#heroVideo', {filter: `blur(${blur}px)`, ease: "none", duration: 0.5});
+                }
+            }
         });
-
-        // Subtle video movement
-        gsap.to('#heroVideo', {
-            x: xPos * 0.5,
-            y: yPos * 0.5,
-            duration: 1,
-            ease: "power1.out"
-        });
-    });
-
-    // Video blur effect on scroll
-    ScrollTrigger.create({
-        trigger: "#hero",
-        start: "top top",
-        end: "bottom top",
-        scrub: true,
-        onUpdate: (self) => {
-            const blur = self.progress * 10;
-            gsap.to('#heroVideo', {filter: `blur(${blur}px)`, ease: "none"});
-        }
-    });
+    }
 }
 
-// Text reveal animations
+// Text reveal animations with IntersectionObserver for better performance
 function initRevealAnimations() {
-    // Split text into words for animated reveal
-    const revealTexts = document.querySelectorAll('.headline .reveal-text');
-
-    revealTexts.forEach(text => {
-        // Create scroll trigger for each headline
-        ScrollTrigger.create({
-            trigger: text.parentElement,
-            start: "top 80%",
-            once: true,
-            onEnter: () => {
-                gsap.to(text, {
-                    y: 0,
-                    opacity: 1,
-                    duration: 1,
-                    ease: "power3.out"
-                });
+    // Use IntersectionObserver instead of scroll triggers for better performance
+    const textObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const element = entry.target;
+                
+                // Handle reveal text animations
+                if (element.classList.contains('reveal-text')) {
+                    gsap.to(element, {
+                        y: 0,
+                        opacity: 1,
+                        duration: 1,
+                        ease: "power3.out"
+                    });
+                }
+                // Handle body text animations
+                else if (element.classList.contains('body-text')) {
+                    gsap.to(element, {
+                        y: 0,
+                        opacity: 1,
+                        duration: 1,
+                        ease: "power2.out"
+                    });
+                }
+                
+                textObserver.unobserve(element);
             }
         });
+    }, {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
     });
 
-    // Animate body text
-    const bodyTexts = document.querySelectorAll('.body-text');
-
-    bodyTexts.forEach(text => {
-        ScrollTrigger.create({
-            trigger: text,
-            start: "top 85%",
-            once: true,
-            onEnter: () => {
-                gsap.to(text, {
-                    y: 0,
-                    opacity: 1,
-                    duration: 1,
-                    ease: "power2.out"
-                });
-            }
-        });
+    // Observe reveal text elements
+    document.querySelectorAll('.headline .reveal-text, .body-text').forEach(text => {
+        textObserver.observe(text);
     });
 }
 
-// Parallax background elements
+// Parallax background elements with improved performance
 function initParallaxElements() {
+    // Skip for low performance devices
+    if (isLowPerformance()) {
+        return;
+    }
+    
     const parallaxElements = document.querySelectorAll('.parallax-element');
 
     parallaxElements.forEach(element => {
@@ -296,145 +504,187 @@ function initParallaxElements() {
                 trigger: element.parentElement,
                 start: "top bottom",
                 end: "bottom top",
-                scrub: true
+                scrub: 0.5, // More responsive scrubbing
+                preventOverlaps: true
             }
         });
     });
 }
 
-// Feature cards animation
+// Feature cards animation with better performance
 function initFeatureCards() {
     const featureCards = document.querySelectorAll('.feature-card');
+    
+    // Use a single IntersectionObserver for all cards
+    const cardObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const card = entry.target;
+                const delay = parseFloat(card.getAttribute('data-delay')) || 0;
+                
+                gsap.to(card, {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.8,
+                    delay: delay,
+                    ease: "power2.out"
+                });
+                
+                cardObserver.unobserve(card);
+            }
+        });
+    }, {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+    });
 
     featureCards.forEach(card => {
-        const delay = parseFloat(card.getAttribute('data-delay')) || 0;
+        // Pre-set initial state for performance
+        gsap.set(card, {
+            y: 50,
+            opacity: 0
+        });
+        
+        cardObserver.observe(card);
 
-        ScrollTrigger.create({
-            trigger: card,
-            start: "top 85%",
-            once: true,
-            onEnter: () => {
+        // Use more efficient 3D tilt effect if not on a low performance device
+        if (!isLowPerformance()) {
+            // Use throttled function for performance
+            card.addEventListener('mousemove', throttle((e) => {
+                const cardRect = card.getBoundingClientRect();
+                const cardCenterX = cardRect.left + cardRect.width / 2;
+                const cardCenterY = cardRect.top + cardRect.height / 2;
+                const angleY = (e.clientX - cardCenterX) / 10;
+                const angleX = (cardCenterY - e.clientY) / 10;
+
                 gsap.to(card, {
-                    y: 0,
-                    opacity: 1,
-                    duration: 0.8,
-                    delay: delay,
-                    ease: "power2.out"
+                    rotationY: angleY,
+                    rotationX: angleX,
+                    transformPerspective: 1000,
+                    duration: 0.3,
+                    ease: "power1.out",
+                    force3D: true
                 });
+            }, 40));
+
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, {
+                    rotationY: 0,
+                    rotationX: 0,
+                    y: 0,
+                    duration: 0.5,
+                    ease: "power1.out",
+                    force3D: true
+                });
+            });
+        }
+    });
+}
+
+// Timer section animations with performance improvements
+function initTimerSection() {
+    // Use IntersectionObserver for animation triggers
+    const timerObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                if (entry.target.id === 'timerContainer') {
+                    gsap.to("#timerContainer", {
+                        scale: 1,
+                        opacity: 1,
+                        duration: 1,
+                        ease: "elastic.out(1, 0.5)",
+                        force3D: true
+                    });
+                }
+                else if (entry.target.id === 'timerControls') {
+                    gsap.to("#timerControls", {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.8,
+                        ease: "power2.out",
+                        force3D: true
+                    });
+
+                    gsap.to("#timerSettings", {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.8,
+                        delay: 0.2,
+                        ease: "power2.out",
+                        force3D: true
+                    });
+                }
+                
+                timerObserver.unobserve(entry.target);
             }
         });
-
-        // 3D tilt effect
-        card.addEventListener('mousemove', (e) => {
-            const cardRect = card.getBoundingClientRect();
-            const cardCenterX = cardRect.left + cardRect.width / 2;
-            const cardCenterY = cardRect.top + cardRect.height / 2;
-            const angleY = (e.clientX - cardCenterX) / 10;
-            const angleX = (cardCenterY - e.clientY) / 10;
-
-            gsap.to(card, {
-                rotationY: angleY,
-                rotationX: angleX,
-                transformPerspective: 1000,
-                duration: 0.3,
-                ease: "power1.out"
-            });
-        });
-
-        card.addEventListener('mouseleave', () => {
-            gsap.to(card, {
-                rotationY: 0,
-                rotationX: 0,
-                y: 0,
-                duration: 0.5,
-                ease: "power1.out"
-            });
-        });
+    }, {
+        threshold: 0.3
     });
+    
+    // Observe timer elements
+    const timerElements = document.querySelectorAll('#timerContainer, #timerControls');
+    timerElements.forEach(el => timerObserver.observe(el));
 }
 
-// Timer section animations
-function initTimerSection() {
-    // Animate timer container
-    ScrollTrigger.create({
-        trigger: "#timerContainer",
-        start: "top 75%",
-        once: true,
-        onEnter: () => {
-            gsap.to("#timerContainer", {
-                scale: 1,
-                opacity: 1,
-                duration: 1,
-                ease: "elastic.out(1, 0.5)"
-            });
-        }
-    });
-
-    // Animate timer controls and settings
-    ScrollTrigger.create({
-        trigger: "#timerControls",
-        start: "top 85%",
-        once: true,
-        onEnter: () => {
-            gsap.to("#timerControls", {
-                y: 0,
-                opacity: 1,
-                duration: 0.8,
-                ease: "power2.out"
-            });
-
-            gsap.to("#timerSettings", {
-                y: 0,
-                opacity: 1,
-                duration: 0.8,
-                delay: 0.2,
-                ease: "power2.out"
-            });
-        }
-    });
-}
-
-// Creatures section animations
+// Creatures section animations with improved performance
 function initCreatures() {
     const creatureCards = document.querySelectorAll('.creature-card');
-
-    creatureCards.forEach(card => {
-        const delay = parseFloat(card.getAttribute('data-delay')) || 0;
-
-        ScrollTrigger.create({
-            trigger: card,
-            start: "top 85%",
-            once: true,
-            onEnter: () => {
+    
+    // Use a single IntersectionObserver for all cards
+    const cardObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const card = entry.target;
+                const delay = parseFloat(card.getAttribute('data-delay')) || 0;
+                
                 gsap.to(card, {
                     y: 0,
                     opacity: 1,
                     duration: 0.8,
                     delay: delay,
-                    ease: "power2.out"
+                    ease: "power2.out",
+                    force3D: true
                 });
+                
+                cardObserver.unobserve(card);
             }
         });
+    }, {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
     });
 
-    // Interactive pattern background
-    const pattern = document.getElementById('creaturesPattern');
-    if (pattern) {
-        document.addEventListener('mousemove', (e) => {
-            const xPos = (e.clientX / window.innerWidth - 0.5) * 20;
-            const yPos = (e.clientY / window.innerHeight - 0.5) * 20;
+    creatureCards.forEach(card => {
+        cardObserver.observe(card);
+    });
 
-            gsap.to(pattern, {
-                x: xPos,
-                y: yPos,
-                duration: 1,
-                ease: "power1.out"
-            });
-        });
+    // Interactive pattern background - only for higher performance devices
+    if (!isLowPerformance()) {
+        const pattern = document.getElementById('creaturesPattern');
+        if (pattern) {
+            document.addEventListener('mousemove', throttle((e) => {
+                // Skip if scrolling
+                if (document.documentElement.classList.contains('is-scrolling')) return;
+                
+                const xPos = (e.clientX / window.innerWidth - 0.5) * 20;
+                const yPos = (e.clientY / window.innerHeight - 0.5) * 20;
+
+                gsap.to(pattern, {
+                    x: xPos,
+                    y: yPos,
+                    duration: 1,
+                    ease: "power1.out",
+                    force3D: true
+                });
+            }, 50));
+        }
     }
 }
 
-// Testimonials section
+// Testimonials section with optimized animations
 function initTestimonials() {
     const testimonialCards = document.querySelectorAll('.testimonial-card');
     const prevBtn = document.getElementById('prevBtn');
@@ -450,203 +700,253 @@ function initTestimonials() {
         });
     }, 500);
 
-    // Navigation buttons
+    // Batch DOM operations for navigation
+    function updateTestimonialCards() {
+        // Update all cards in a single batch
+        testimonialCards.forEach((card, i) => {
+            card.classList.remove('active', 'prev', 'next');
+            
+            if (i === currentTestimonial) {
+                card.classList.add('active');
+            } else if (i === (currentTestimonial - 1 + testimonialCards.length) % testimonialCards.length) {
+                card.classList.add('prev');
+            } else if (i === (currentTestimonial + 1) % testimonialCards.length) {
+                card.classList.add('next');
+            }
+        });
+
+        // Update indicator dots
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === currentTestimonial);
+        });
+    }
+
+    // Navigation buttons with debounce for performance
+    let isAnimating = false;
+    
     prevBtn.addEventListener('click', () => {
-        navigateTestimonial('prev');
+        if (isAnimating) return;
+        isAnimating = true;
+        
+        currentTestimonial = (currentTestimonial - 1 + testimonialCards.length) % testimonialCards.length;
+        updateTestimonialCards();
+        
+        setTimeout(() => {
+            isAnimating = false;
+        }, 600);
     });
 
     nextBtn.addEventListener('click', () => {
-        navigateTestimonial('next');
+        if (isAnimating) return;
+        isAnimating = true;
+        
+        currentTestimonial = (currentTestimonial + 1) % testimonialCards.length;
+        updateTestimonialCards();
+        
+        setTimeout(() => {
+            isAnimating = false;
+        }, 600);
     });
 
     // Indicator dots
     dots.forEach((dot, index) => {
         dot.addEventListener('click', () => {
-            goToTestimonial(index);
+            if (isAnimating || index === currentTestimonial) return;
+            isAnimating = true;
+            
+            currentTestimonial = index;
+            updateTestimonialCards();
+            
+            setTimeout(() => {
+                isAnimating = false;
+            }, 600);
         });
     });
 
-    // Auto rotate testimonials
-    const autoRotate = setInterval(() => {
-        navigateTestimonial('next');
-    }, 8000);
+    // Auto rotate testimonials - disable during scroll
+    let autoRotateInterval;
+    
+    function startAutoRotate() {
+        clearInterval(autoRotateInterval);
+        autoRotateInterval = setInterval(() => {
+            if (!document.documentElement.classList.contains('is-scrolling') && !isAnimating) {
+                currentTestimonial = (currentTestimonial + 1) % testimonialCards.length;
+                updateTestimonialCards();
+            }
+        }, 8000);
+    }
+    
+    // Start auto-rotation
+    startAutoRotate();
 
     // Stop auto-rotation on hover
     const testimonialsContainer = document.querySelector('.testimonials-container');
     testimonialsContainer.addEventListener('mouseenter', () => {
-        clearInterval(autoRotate);
+        clearInterval(autoRotateInterval);
+    });
+    
+    testimonialsContainer.addEventListener('mouseleave', () => {
+        startAutoRotate();
     });
 }
 
-// Navigate testimonials
-function navigateTestimonial(direction) {
-    const totalTestimonials = testimonials.length;
-    let newIndex;
-
-    if (direction === 'next') {
-        newIndex = (currentTestimonial + 1) % totalTestimonials;
-    } else {
-        newIndex = (currentTestimonial - 1 + totalTestimonials) % totalTestimonials;
-    }
-
-    goToTestimonial(newIndex);
-}
-
-// Go to specific testimonial
-function goToTestimonial(index) {
-    if (index === currentTestimonial) return;
-
-    const prevIndex = currentTestimonial;
-    currentTestimonial = index;
-
-    // Update testimonial cards
-    const cards = document.querySelectorAll('.testimonial-card');
-
-    // Set classes based on position
-    cards.forEach((card, i) => {
-        card.classList.remove('active', 'prev', 'next');
-
-        if (i === currentTestimonial) {
-            card.classList.add('active');
-        } else if (i === (currentTestimonial - 1 + cards.length) % cards.length) {
-            card.classList.add('prev');
-        } else if (i === (currentTestimonial + 1) % cards.length) {
-            card.classList.add('next');
-        }
-    });
-
-    // Update indicator dots
-    const dots = document.querySelectorAll('.testimonial-dot');
-    dots.forEach((dot, i) => {
-        dot.classList.toggle('active', i === currentTestimonial);
-    });
-}
-
-// Conservation section animations
+// Conservation section animations with performance improvements
 function initConservationSection() {
-    // Animate description
-    ScrollTrigger.create({
-        trigger: "#conservationDesc",
-        start: "top 85%",
-        once: true,
-        onEnter: () => {
-            gsap.to("#conservationDesc", {
-                y: 0,
-                opacity: 1,
-                duration: 0.8,
-                ease: "power2.out"
+    // Use IntersectionObserver for animations
+    const conservationObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const element = entry.target;
+                
+                if (element.id === 'conservationDesc') {
+                    gsap.to(element, {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.8,
+                        ease: "power2.out"
+                    });
+                }
+                else if (element.classList.contains('conservation-stat')) {
+                    const delay = parseFloat(element.getAttribute('data-delay')) || 0;
+                    
+                    gsap.to(element, {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.8,
+                        delay: delay,
+                        ease: "power2.out"
+                    });
+                    
+                    // Animate count after card appears
+                    setTimeout(() => {
+                        const countElement = element.querySelector('.count');
+                        if (countElement) {
+                            animateCount(countElement);
+                        }
+                    }, delay * 1000 + 500);
+                }
+                
+                conservationObserver.unobserve(element);
+            }
+        });
+    }, {
+        threshold: 0.2
+    });
+    
+    // Observe conservation elements
+    conservationObserver.observe(document.getElementById('conservationDesc'));
+    
+    document.querySelectorAll('.conservation-stat').forEach(stat => {
+        conservationObserver.observe(stat);
+    });
+
+    // Use more efficient parallax for background
+    if (!isLowPerformance()) {
+        const bg = document.getElementById('conservationBg');
+        if (bg) {
+            ScrollTrigger.create({
+                trigger: "#conservation",
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 0.3,
+                onUpdate: (self) => {
+                    // Only update during pauses in scrolling
+                    if (!document.documentElement.classList.contains('is-scrolling')) {
+                        const yPos = self.progress * 20;
+                        gsap.to(bg, {y: -yPos + '%', ease: "none", duration: 0.3});
+                    }
+                }
             });
         }
-    });
-
-    // Animate stat cards
-    const statCards = document.querySelectorAll('.conservation-stat');
-
-    statCards.forEach(card => {
-        const delay = parseFloat(card.getAttribute('data-delay')) || 0;
-
-        ScrollTrigger.create({
-            trigger: card,
-            start: "top 85%",
-            once: true,
-            onEnter: () => {
-                gsap.to(card, {
-                    y: 0,
-                    opacity: 1,
-                    duration: 0.8,
-                    delay: delay,
-                    ease: "power2.out"
-                });
-
-                // Animate the count after card appears
-                setTimeout(() => {
-                    const countElement = card.querySelector('.count');
-                    if (countElement) {
-                        animateCount(countElement);
-                    }
-                }, delay * 1000 + 500);
-            }
-        });
-    });
-
-    // Parallax background
-    const bg = document.getElementById('conservationBg');
-    if (bg) {
-        ScrollTrigger.create({
-            trigger: "#conservation",
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-            onUpdate: (self) => {
-                const yPos = self.progress * 20;
-                gsap.to(bg, {y: -yPos + '%', ease: "none"});
-            }
-        });
     }
 }
 
-// Animated counting for stats
+// Animated counting for stats with performance optimizations
 function animateCount(el) {
     const target = parseInt(el.getAttribute('data-target'));
-    const duration = 2500;
-    const frameDuration = 1000 / 60;
-    const totalFrames = Math.round(duration / frameDuration);
-    let frame = 0;
-
-    const counter = setInterval(() => {
-        frame++;
-        const progress = frame / totalFrames;
-        const easedProgress = 1 - Math.pow(1 - progress, 3); // Cubic ease out
-        const currentCount = Math.round(easedProgress * target);
-
+    const duration = 2000; // Shorter duration for better performance
+    
+    // Use requestAnimationFrame for smoother counting
+    const startTime = performance.now();
+    const startValue = 0;
+    
+    function updateCount(currentTime) {
+        const elapsedTime = currentTime - startTime;
+        const progress = Math.min(elapsedTime / duration, 1);
+        
+        // Cubic ease out for smoother animation
+        const easedProgress = 1 - Math.pow(1 - progress, 3);
+        const currentCount = Math.round(startValue + easedProgress * (target - startValue));
+        
         el.textContent = currentCount.toLocaleString();
-
-        if (frame === totalFrames) {
-            clearInterval(counter);
+        
+        if (progress < 1) {
+            requestAnimationFrame(updateCount);
         }
-    }, frameDuration);
+    }
+    
+    requestAnimationFrame(updateCount);
 }
 
-// CTA section animations
+// CTA section animations with performance improvements
 function initCtaSection() {
-    // Animate CTA elements
-    ScrollTrigger.create({
-        trigger: "#cta",
-        start: "top 75%",
-        once: true,
-        onEnter: () => {
-            gsap.to(".cta-title", {
-                y: 0,
-                opacity: 1,
-                duration: 0.8,
-                ease: "power2.out"
-            });
-
-            gsap.to("#ctaDesc", {
-                y: 0,
-                opacity: 1,
-                duration: 0.8,
-                delay: 0.2,
-                ease: "power2.out"
-            });
-
-            gsap.to("#ctaForm", {
-                y: 0,
-                opacity: 1,
-                duration: 0.8,
-                delay: 0.4,
-                ease: "power2.out"
-            });
-        }
+    // Use IntersectionObserver for animations
+    const ctaObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const element = entry.target;
+                
+                if (element.classList.contains('cta-title')) {
+                    gsap.to(element, {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.8,
+                        ease: "power2.out"
+                    });
+                }
+                else if (element.id === 'ctaDesc') {
+                    gsap.to(element, {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.8,
+                        delay: 0.2,
+                        ease: "power2.out"
+                    });
+                }
+                else if (element.id === 'ctaForm') {
+                    gsap.to(element, {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.8,
+                        delay: 0.4,
+                        ease: "power2.out"
+                    });
+                }
+                
+                ctaObserver.unobserve(element);
+            }
+        });
+    }, {
+        threshold: 0.2
     });
+    
+    // Observe CTA elements
+    ctaObserver.observe(document.querySelector('.cta-title'));
+    ctaObserver.observe(document.getElementById('ctaDesc'));
+    ctaObserver.observe(document.getElementById('ctaForm'));
 }
 
-// Magnetic buttons effect
+// Magnetic buttons effect with performance improvements
 function initMagneticButtons() {
+    // Skip for low performance devices
+    if (isLowPerformance()) {
+        return;
+    }
+    
     const magneticBtns = document.querySelectorAll('.magnetic-btn');
 
     magneticBtns.forEach(btn => {
-        btn.addEventListener('mousemove', (e) => {
+        btn.addEventListener('mousemove', throttle((e) => {
             const btnRect = btn.getBoundingClientRect();
             const btnCenterX = btnRect.left + btnRect.width / 2;
             const btnCenterY = btnRect.top + btnRect.height / 2;
@@ -656,7 +956,7 @@ function initMagneticButtons() {
             const distanceY = e.clientY - btnCenterY;
 
             // Max movement range
-            const maxMovement = 15;
+            const maxMovement = 10; // Reduced range for better performance
 
             // Calculate movement based on distance from center
             const moveX = (distanceX / btnRect.width) * maxMovement;
@@ -667,21 +967,23 @@ function initMagneticButtons() {
                 x: moveX,
                 y: moveY,
                 duration: 0.3,
-                ease: "power2.out"
+                ease: "power2.out",
+                force3D: true
             });
-        });
+        }, 40));
 
         btn.addEventListener('mouseleave', () => {
             gsap.to(btn, {
                 x: 0,
                 y: 0,
                 duration: 0.5,
-                ease: "elastic.out(1, 0.5)"
+                ease: "elastic.out(1, 0.5)",
+                force3D: true
             });
         });
 
-        // Ripple effect on click
-        btn.addEventListener('click', (e) => {
+        // Ripple effect on click with better performance
+        btn.addEventListener('click', throttle((e) => {
             const btnRect = btn.getBoundingClientRect();
             const liquid = btn.querySelector('.liquid');
 
@@ -701,28 +1003,38 @@ function initMagneticButtons() {
                     opacity: 0,
                     duration: 0.8,
                     ease: "power2.out",
+                    force3D: true,
                     onComplete: () => {
                         gsap.set(liquid, {opacity: 1, scale: 0});
                     }
                 });
             }
-        });
+        }, 100));
     });
 }
 
-// Create floating particles
+// Create floating particles with performance optimizations
 function createParticles() {
+    // Skip for low performance devices
+    if (isLowPerformance()) {
+        return;
+    }
+    
     const container = document.getElementById('particles');
     if (!container) return;
 
-    const particleCount = Math.min(50, Math.floor(window.innerWidth / 20));
+    // Reduce particle count for better performance
+    const particleCount = Math.min(30, Math.floor(window.innerWidth / 30));
+
+    // Create all particles in a single document fragment
+    const fragment = document.createDocumentFragment();
 
     for (let i = 0; i < particleCount; i++) {
         const particle = document.createElement('div');
         particle.classList.add('particle');
 
-        // Random size
-        const size = Math.random() * 8 + 2;
+        // Random size - smaller particles for better performance
+        const size = Math.random() * 6 + 2;
         particle.style.width = `${size}px`;
         particle.style.height = `${size}px`;
 
@@ -733,26 +1045,51 @@ function createParticles() {
         particle.style.top = `${posY}%`;
 
         // Random opacity
-        particle.style.opacity = Math.random() * 0.2 + 0.05;
+        particle.style.opacity = Math.random() * 0.15 + 0.05;
 
-        // Add to container
-        container.appendChild(particle);
+        // Enable hardware acceleration
+        particle.style.transform = 'translateZ(0)';
+        particle.style.willChange = 'transform';
 
-        // Animate particle
-        gsap.to(particle, {
-            x: `${(Math.random() - 0.5) * 50}%`,
-            y: `${(Math.random() - 0.5) * 50}%`,
-            duration: Math.random() * 10 + 10,
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut",
-            delay: Math.random() * 5
+        // Add to fragment
+        fragment.appendChild(particle);
+    }
+
+    // Add all particles at once
+    container.appendChild(fragment);
+
+    // Animate in batches for better performance
+    const particles = container.querySelectorAll('.particle');
+    
+    for (let i = 0; i < particles.length; i += 5) {
+        const batch = Array.from(particles).slice(i, i + 5);
+        
+        batch.forEach(particle => {
+            gsap.to(particle, {
+                x: `${(Math.random() - 0.5) * 40}%`,
+                y: `${(Math.random() - 0.5) * 40}%`,
+                duration: Math.random() * 10 + 15, // Longer duration for better performance
+                repeat: -1,
+                yoyo: true,
+                ease: "sine.inOut",
+                delay: Math.random() * 5,
+                force3D: true
+            });
         });
     }
 }
 
-// Initialize morphing blobs
+// Initialize morphing blobs with better performance
 function initMorphingBlobs() {
+    // Skip for low performance devices or reduce complexity
+    if (isLowPerformance()) {
+        const blobs = document.querySelectorAll('.morphing-blob');
+        blobs.forEach(blob => {
+            blob.style.opacity = '0.02';
+        });
+        return;
+    }
+    
     const blobs = [
         document.getElementById('blob1'),
         document.getElementById('blob2'),
@@ -762,46 +1099,51 @@ function initMorphingBlobs() {
 
     blobs.forEach(blob => {
         // Get initial size
-        const initialWidth = parseInt(blob.style.width);
-        const initialHeight = parseInt(blob.style.height);
+        const initialWidth = parseInt(blob.style.width) || 300;
+        const initialHeight = parseInt(blob.style.height) || 300;
 
-        // Animate blob morphing
+        // Simpler blob animation for better performance
         gsap.to(blob, {
-            width: initialWidth * (0.8 + Math.random() * 0.4),
-            height: initialHeight * (0.8 + Math.random() * 0.4),
-            x: `${(Math.random() - 0.5) * 20}%`,
-            y: `${(Math.random() - 0.5) * 20}%`,
-            borderRadius: `${30 + Math.random() * 40}% ${30 + Math.random() * 40}% ${30 + Math.random() * 40}% ${30 + Math.random() * 40}%`,
-            duration: 8 + Math.random() * 7,
+            width: initialWidth * (0.9 + Math.random() * 0.2),
+            height: initialHeight * (0.9 + Math.random() * 0.2),
+            x: `${(Math.random() - 0.5) * 10}%`,
+            y: `${(Math.random() - 0.5) * 10}%`,
+            borderRadius: `${40 + Math.random() * 20}% ${40 + Math.random() * 20}% ${40 + Math.random() * 20}% ${40 + Math.random() * 20}%`,
+            duration: 10 + Math.random() * 10,
             repeat: -1,
             yoyo: true,
-            ease: "sine.inOut"
+            ease: "sine.inOut",
+            force3D: true
         });
     });
 }
 
-// Scroll to section (simplified version)
+// Optimized scroll to section
 function scrollToSection(selector) {
     const section = document.querySelector(selector);
     if (!section) return;
 
-    // Use a simpler scroll method that's more reliable
-    section.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-    });
+    // Mark scrolling for animation performance
+    document.documentElement.classList.add('is-scrolling');
 
-    // Fallback for browsers that don't support smooth scrolling
-    if (typeof window.scrollTo === 'function' && !('scrollBehavior' in document.documentElement.style)) {
-        const sectionPosition = section.getBoundingClientRect().top + window.scrollY;
-        window.scrollTo({
-            top: sectionPosition,
-            behavior: 'smooth'
-        });
-    }
+    // Use ScrollToPlugin for smoother scrolling
+    gsap.to(window, {
+        duration: 1,
+        scrollTo: {
+            y: section,
+            offsetY: 0
+        },
+        ease: "power2.inOut",
+        onComplete: () => {
+            // Remove scrolling class after completion
+            setTimeout(() => {
+                document.documentElement.classList.remove('is-scrolling');
+            }, 100);
+        }
+    });
 }
 
-// Focus Timer Functionality
+// Focus Timer Functionality - Optimized
 let timerInterval;
 let remainingSeconds = 0;
 let totalSeconds = 0;
@@ -828,10 +1170,15 @@ function startTimer() {
     // Play start sound
     playSound('start');
 
-    // Start interval
+    // Start interval - use more efficient timing
+    const startTime = Date.now();
+    
     timerInterval = setInterval(() => {
         if (!isPaused) {
-            remainingSeconds--;
+            // Calculate elapsed time more accurately
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            remainingSeconds = Math.max(0, totalSeconds - elapsed);
+            
             updateTimerDisplay();
 
             if (remainingSeconds <= 0) {
@@ -840,7 +1187,7 @@ function startTimer() {
                 timerComplete();
             }
         }
-    }, 1000);
+    }, 500); // Reduced update frequency for better performance
 }
 
 function updateTimerDisplay() {
@@ -917,7 +1264,8 @@ function timerComplete() {
         duration: 0.3,
         yoyo: true,
         repeat: 3,
-        ease: "elastic.out(1, 0.3)"
+        ease: "elastic.out(1, 0.3)",
+        force3D: true
     });
 }
 
@@ -946,6 +1294,13 @@ function isTouchDevice() {
         (navigator.msMaxTouchPoints > 0);
 }
 
+// Improved Animation System with performance optimizations
+gsap.config({
+    force3D: true,
+    autoSleep: 60,
+    nullTargetWarn: false
+});
+
 // Initialize everything on document load
 document.addEventListener('DOMContentLoaded', function () {
     // First simulate loading
@@ -962,45 +1317,22 @@ document.addEventListener('DOMContentLoaded', function () {
         if (follower) follower.style.display = 'none';
     }
 
-    // Add fallback for scrolling issues
-    document.body.style.overflow = 'auto';
+    // Add floating cards section after a delay to ensure page is fully loaded
     window.addEventListener('load', function () {
         setTimeout(function () {
-            // Force enable scrolling after slight delay to ensure page is fully loaded
-            document.body.style.overflow = 'auto';
-            const scrollContent = document.getElementById('scrollContent');
-            if (scrollContent) {
-                scrollContent.style.position = 'relative';
-                scrollContent.style.height = 'auto';
-            }
-            // Refresh scroll triggers
+            // Ensure smooth scrolling is working
             if (typeof ScrollTrigger !== 'undefined') {
                 ScrollTrigger.refresh();
             }
 
             // Add Chungi Yoo inspired floating cards section
-            addFloatingCardsSection();
+            try {
+                if (typeof addFloatingCardsSection === 'function') {
+                    addFloatingCardsSection();
+                }
+            } catch (e) {
+                console.warn('Could not initialize floating cards section:', e);
+            }
         }, 500);
     });
 });
-
-// Improved Animation System
-// Enable hardware acceleration for smoother animations
-gsap.config({
-    force3D: true,
-    autoSleep: 60,
-    nullTargetWarn: false
-});
-
-// Smoother animation timing and easing
-const smoother = {
-    easeOut: "power2.out",
-    easeInOut: "power3.inOut",
-    elastic: "elastic.out(0.8, 0.3)",
-    bounce: "bounce.out",
-    duration: {
-        short: 0.5,
-        medium: 0.8,
-        long: 1.2
-    }
-};

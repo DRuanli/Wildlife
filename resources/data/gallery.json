@@ -68,11 +68,11 @@
       "conservation_fact": "Giant Pandas are classified as Vulnerable due to habitat loss and fragmentation despite significant conservation efforts.",
       "last_interaction_at": "2023-11-22 11:45:00",
       "image_urls": {
-        "egg": "/Wildlife/images/creatures/3_egg.png",
-        "baby": "/Wildlife/images/creatures/3_baby.png",
-        "juvenile": "/Wildlife/images/creatures/3_juvenile.png",
-        "adult": "/Wildlife/images/creatures/3_adult.png",
-        "mythical": "/Wildlife/images/creatures/3_mythical.png"
+        "egg": "/Wildlife/images/creatures/3.jpg",
+        "baby": "/Wildlife/images/creatures/3.jpg",
+        "juvenile": "/Wildlife/images/creatures/3.jpg",
+        "adult": "/Wildlife/images/creatures/3.jpg",
+        "mythical": "/Wildlife/images/creatures/3.jpg"
       },
       "audio_url": "/Wildlife/audio/creatures/bamboo_sentinel.mp3",
       "exhibition_note": "A gentle reminder of the delicate balance between nature and human development."

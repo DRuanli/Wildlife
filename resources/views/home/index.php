@@ -9,6 +9,7 @@
     <link rel="preload" href="<?= $baseUrl ?>/assets/fonts/inter-v12-latin-regular.woff2" as="font" type="font/woff2"
           crossorigin>
     <link rel="stylesheet" href="<?= $baseUrl ?>/public/css/home/home.css">
+    <link rel="stylesheet" href="<?= $baseUrl ?>/public/css/smooth-scroll.css">
 
     <!-- GSAP Animation Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>

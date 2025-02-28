@@ -1,0 +1,321 @@
+/**
+ * smooth-scroll.css
+ * Optimizations for smooth scrolling and animations
+ */
+
+/* Base scroll behavior */
+html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Custom smooth scroll implementation */
+  html.smooth-scroll,
+  html.smooth-scroll body {
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    overscroll-behavior-y: none;
+  }
+  
+  /* Handle scrolling content */
+  #scrollContent {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+  
+  #smooth-wrapper {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  
+  #smooth-wrapper > * {
+    pointer-events: auto;
+  }
+  
+  /* Hardware acceleration for key elements */
+  .hero-content,
+  .feature-card,
+  .creature-card,
+  .testimonial-card,
+  .conservation-stat,
+  .timer-container,
+  .parallax-element,
+  .floating-card,
+  .hero-video-container,
+  .conservation-bg,
+  .morphing-blob,
+  .timer-circle,
+  .btn {
+    transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+  
+  /* More efficient transform properties */
+  .feature-card:hover,
+  .creature-card:hover,
+  .conservation-stat:hover,
+  .btn:hover {
+    transform: translateY(-5px) translateZ(0) !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+  }
+  
+  /* Optimize shadows for better performance */
+  .feature-card,
+  .creature-card,
+  .testimonial-card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08) !important;
+  }
+  
+  .feature-card:hover,
+  .creature-card:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  /* Efficient scrolling indicator */
+  .is-scrolling .hero-video {
+    filter: none !important;
+    transition: none !important;
+  }
+  
+  .is-scrolling .custom-cursor,
+  .is-scrolling .custom-cursor-follower {
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
+  }
+  
+  .is-scrolling .parallax-element,
+  .is-scrolling .conservation-bg {
+    transition: none !important;
+  }
+  
+  /* Support for IntersectionObserver animations */
+  .in-view {
+    opacity: 1 !important;
+    transform: translateY(0) translateZ(0) !important;
+  }
+  
+  /* Initial state for observed elements */
+  .body-text:not(.in-view),
+  .conservation-description:not(.in-view) {
+    opacity: 0;
+    transform: translateY(20px) translateZ(0);
+  }
+  
+  /* Optimize animations for mobile and low-end devices */
+  @media (prefers-reduced-motion: reduce), (max-width: 768px) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    
+    .parallax-element {
+      display: none !important;
+    }
+    
+    .morphing-blob {
+      opacity: 0.02 !important;
+      animation: none !important;
+    }
+    
+    .custom-cursor,
+    .custom-cursor-follower {
+      display: none !important;
+    }
+    
+    .feature-card:hover,
+    .creature-card:hover {
+      transform: translateY(-5px) !important;
+    }
+    
+    html.smooth-scroll,
+    html.smooth-scroll body {
+      overflow: auto !important;
+      height: auto !important;
+      position: static !important;
+    }
+    
+    #scrollContent {
+      transform: none !important;
+      position: static !important;
+    }
+  }
+  
+  /* Low performance mode styles */
+  html.low-performance .parallax-element {
+    display: none !important;
+  }
+  
+  html.low-performance .morphing-blob {
+    opacity: 0.02 !important;
+    animation: none !important;
+  }
+  
+  html.low-performance .custom-cursor,
+  html.low-performance .custom-cursor-follower {
+    display: none !important;
+  }
+  
+  html.low-performance .hero-video {
+    filter: none !important;
+  }
+  
+  html.low-performance .creature-card-inner {
+    transition: transform 0.5s ease !important;
+  }
+  
+  html.low-performance .feature-card:hover {
+    transform: translateY(-5px) !important;
+    transform-style: flat !important;
+    backface-visibility: visible !important;
+  }
+  
+  /* Native scroll mode */
+  html.native-scroll body {
+    overflow: auto !important;
+  }
+  
+  html.native-scroll #scrollContent {
+    position: static !important;
+    transform: none !important;
+  }
+  
+  /* Optimize testimonial carousel for performance */
+  .testimonial-card {
+    transform: none !important;
+    opacity: 0;
+    transition: opacity 0.6s ease, transform 0.6s ease !important;
+  }
+  
+  .testimonial-card.active {
+    opacity: 1 !important;
+    z-index: 2 !important;
+    transform: translateZ(0) translateX(0) rotateY(0) !important;
+  }
+  
+  .testimonial-card.prev {
+    opacity: 0.7 !important;
+    transform: translateZ(0) translateX(-100%) rotateY(10deg) scale(0.9) !important;
+  }
+  
+  .testimonial-card.next {
+    opacity: 0.7 !important;
+    transform: translateZ(0) translateX(100%) rotateY(-10deg) scale(0.9) !important;
+  }
+  
+  /* Timer optimization */
+  .timer-container {
+    transform: scale(0.8) translateZ(0) !important;
+  }
+  
+  /* Creature card optimizations */
+  .creature-card-inner {
+    will-change: transform;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1) !important;
+  }
+  
+  /* Optimize particles */
+  .particle {
+    will-change: transform;
+    background-color: var(--primary-color);
+    opacity: 0.1;
+    pointer-events: none;
+    transform: translateZ(0);
+    position: absolute;
+    border-radius: 50%;
+  }
+  
+  /* Magnetic button optimization */
+  .magnetic-btn {
+    transform-style: preserve-3d;
+    transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1) !important;
+    will-change: transform;
+  }
+  
+  .magnetic-btn .liquid {
+    will-change: transform, opacity;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    transform: scale(0) translateZ(0);
+    z-index: -1;
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+  }
+  
+  /* Smooth scrollbar style */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: rgba(77, 114, 77, 0.5);
+    border-radius: 5px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+  }
+  
+  /* Touch device optimizations */
+  .touch-device .custom-cursor,
+  .touch-device .custom-cursor-follower {
+    display: none !important;
+  }
+  
+  .touch-device .feature-card:hover,
+  .touch-device .creature-card:hover,
+  .touch-device .magnetic-btn:hover {
+    transform: translateY(-5px) !important;
+  }
+  
+  /* Safari-specific optimizations */
+  @supports (-webkit-overflow-scrolling: touch) {
+    .parallax-element {
+      transform: none !important;
+    }
+    
+    .custom-cursor,
+    .custom-cursor-follower {
+      display: none !important;
+    }
+    
+    html.smooth-scroll,
+    html.smooth-scroll body {
+      overflow: auto !important;
+      position: static !important;
+    }
+    
+    #scrollContent {
+      transform: none !important;
+      position: static !important;
+    }
+  }
+  
+  /* Firefox-specific optimizations */
+  @-moz-document url-prefix() {
+    .hero-content,
+    .feature-card,
+    .creature-card,
+    .parallax-element {
+      will-change: auto;
+    }
+  }
