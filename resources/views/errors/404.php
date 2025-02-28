@@ -333,7 +333,7 @@
           <div class="bg-white rounded-xl shadow-lg overflow-hidden h-full interactive-card-content card-bg">
             <div class="relative overflow-hidden">
               <div class="absolute inset-0 bg-gradient-to-b from-transparent to-blue-900 opacity-70"></div>
-              <img src="/api/placeholder/400/200" alt="Ocean" class="w-full h-48 object-cover transition group-hover:scale-110">
+              <img src="/Wildlife/public/img/404/seabed.jpg" alt="Ocean" class="w-full h-48 object-cover transition group-hover:scale-110">
               <div class="absolute bottom-0 left-0 p-4 text-white">
                 <h3 class="text-xl font-bold">Ocean Depths</h3>
               </div>
@@ -355,7 +355,7 @@
           <div class="bg-white rounded-xl shadow-lg overflow-hidden h-full interactive-card-content card-bg">
             <div class="relative overflow-hidden">
               <div class="absolute inset-0 bg-gradient-to-b from-transparent to-green-900 opacity-70"></div>
-              <img src="/api/placeholder/400/200" alt="Rainforest" class="w-full h-48 object-cover transition group-hover:scale-110">
+              <img src="/Wildlife/public/img/404/rainforest.jpg" alt="Rainforest" class="w-full h-48 object-cover transition group-hover:scale-110">
               <div class="absolute bottom-0 left-0 p-4 text-white">
                 <h3 class="text-xl font-bold">Rainforest</h3>
               </div>
@@ -377,7 +377,7 @@
           <div class="bg-white rounded-xl shadow-lg overflow-hidden h-full interactive-card-content card-bg">
             <div class="relative overflow-hidden">
               <div class="absolute inset-0 bg-gradient-to-b from-transparent to-amber-900 opacity-70"></div>
-              <img src="/api/placeholder/400/200" alt="Savanna" class="w-full h-48 object-cover transition group-hover:scale-110">
+              <img src="/Wildlife/public/img/404/sanava.jpg" alt="Savanna" class="w-full h-48 object-cover transition group-hover:scale-110">
               <div class="absolute bottom-0 left-0 p-4 text-white">
                 <h3 class="text-xl font-bold">Savanna</h3>
               </div>
@@ -443,7 +443,7 @@
                 </div>
                 <h3 class="text-lg font-semibold text-gray-800 mb-2" id="fact-title-1">Amazing Elephant Memory</h3>
                 <p class="text-gray-600 mb-4" id="fact-content-1">Elephants have remarkable memories and can remember routes to watering holes over incredibly long distances and time periods.</p>
-                <img src="/api/placeholder/400/150" alt="Elephant" class="w-full h-32 object-cover rounded-lg">
+                <img src="/Wildlife/public/img/ele.png" alt="Elephant" class="w-full h-32 object-cover rounded-lg">
               </div>
             </div>
             <div class="absolute inset-0 transition-transform duration-300 transform translate-x-full" id="fact-slide-2">
