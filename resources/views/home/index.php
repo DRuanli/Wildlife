@@ -1038,7 +1038,7 @@
   <section class="hero">
     <div class="hero-video-container">
       <video class="hero-video" autoplay muted loop playsinline>
-        <source src="<?= $baseUrl ?>/videos/wildlife-haven-hero.mp4" type="video/mp4">
+        <source src="<?= $baseUrl ?>/public/videos/vid.mp4" type="video/mp4">
       </video>
     </div>
     <div class="hero-overlay"></div>
@@ -1249,6 +1249,48 @@
             </div>
           </div>
         </div>
+
+        <!-- Creature 5 -->
+        <div class="creature-card" data-status="endangered">
+          <div class="creature-card-inner">
+            <div class="creature-front">
+              <img src="<?= $baseUrl ?>/public/img/ele.png" alt="Stone Sentinel" class="creature-image">
+              <div class="creature-overlay">
+                <h3 class="creature-name">Stone Sentinel</h3>
+                <p class="creature-species">Inspired by: Asian Elephant</p>
+              </div>
+            </div>
+            <div class="creature-back">
+              <h3 class="creature-back-title">Stone Sentinel</h3>
+              <p class="creature-description">
+                With armor-like skin and powerful presence, the Stone Sentinel embodies the critically endangered Sumatran Rhinoceros. Fewer than 80 individuals remain in isolated pockets of Indonesian rainforests.
+              </p>
+              <span class="creature-conservation-status">Endangered</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Creature 4 -->
+        <div class="creature-card" data-status="endangered">
+          <div class="creature-card-inner">
+            <div class="creature-front">
+              <img src="<?= $baseUrl ?>/public/img/IndochineseTiger.jpg" alt="Stone Sentinel" class="creature-image">
+              <div class="creature-overlay">
+                <h3 class="creature-name">Stone Sentinel</h3>
+                <p class="creature-species">Inspired by: Indochinese Tiger</p>
+              </div>
+            </div>
+            <div class="creature-back">
+              <h3 class="creature-back-title">Stone Sentinel</h3>
+              <p class="creature-description">
+                With armor-like skin and powerful presence, the Stone Sentinel embodies the critically endangered Sumatran Rhinoceros. Fewer than 80 individuals remain in isolated pockets of Indonesian rainforests.
+              </p>
+              <span class="creature-conservation-status">Endangered</span>
+            </div>
+          </div>
+        </div>
+
+        
       </div>
     </div>
   </section>
