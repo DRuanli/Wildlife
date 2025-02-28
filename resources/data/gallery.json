@@ -16,11 +16,11 @@
       "conservation_fact": "Leatherback Sea Turtles are Critically Endangered, with populations declining rapidly due to human impact.",
       "last_interaction_at": "2023-11-20 15:30:00",
       "image_urls": {
-        "egg": "/Wildlife/resources/data/1.png", 
-        "baby": "/Wildlife/resources/data/1.png",
-        "juvenile": "/Wildlife/resources/data/1.png",
-        "adult": "/Wildlife/resources/data/1.png",
-        "mythical": "/Wildlife/resources/data/1.png"
+        "egg": "/Wildlife/images/creatures/1.png", 
+        "baby": "/Wildlife/images/creatures/1.png",
+        "juvenile": "/Wildlife/images/creatures/1.png",
+        "adult": "/Wildlife/images/creatures/1.png",
+        "mythical": "/Wildlife/images/creatures/1.png"
       },
       "audio_url": "/Wildlife/audio/creatures/sea_guardian.mp3",
       "exhibition_note": "This creature embodies the majesty and vulnerability of ocean giants, urging urgent conservation efforts."
