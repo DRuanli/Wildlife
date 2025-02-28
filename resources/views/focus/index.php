@@ -73,8 +73,8 @@
     box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
   }
 
-  /* 3D canvas container */
-  .habitat-container {
+  /* 3D model container */
+  .model-container {
     position: relative;
     width: 100%;
     height: 300px;
@@ -82,6 +82,18 @@
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .model-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
   }
 
   .habitat-type-indicator {
@@ -219,7 +231,7 @@
       height: 220px;
     }
 
-    .habitat-container {
+    .model-container {
       height: 250px;
     }
   }
@@ -338,14 +350,24 @@
 
       <!-- Middle and Right Columns: Habitat Visualization and Stats -->
       <div class="lg:col-span-2">
-        <!-- 3D Habitat Visualization Card -->
-        <div id="habitat-card" class="bg-white rounded-xl shadow-md p-6 mb-6">
+        <!-- 3D Model Placeholder Card -->
+        <div id="model-card" class="bg-white rounded-xl shadow-md p-6 mb-6">
           <h3 class="font-bold text-gray-800 mb-4">Your Wildlife Habitat</h3>
           
-          <!-- 3D Habitat Container -->
-          <div class="habitat-container">
-            <!-- 3D Rendering will be inserted here -->
-            <div id="habitat-canvas"></div>
+          <!-- 3D Model Container -->
+          <div class="model-container">
+            <!-- Placeholder for 3D model - will be replaced with actual 3D model in the future -->
+            <div id="model-display" class="w-full h-full">
+              <div id="model-placeholder" class="model-placeholder">
+                <div class="text-6xl mb-4 text-gray-300">
+                  <i class="fas fa-cube"></i>
+                </div>
+                <div class="text-gray-500">
+                  <p class="font-medium mb-2">Select a creature to view it in 3D</p>
+                  <p class="text-sm">Your creature will appear here when selected</p>
+                </div>
+              </div>
+            </div>
             
             <!-- Habitat Type Indicator -->
             <div id="habitat-type" class="habitat-type-indicator">
@@ -382,7 +404,7 @@
             </div>
           </div>
           
-          <!-- Habitat Controls -->
+          <!-- Model Controls -->
           <div class="flex justify-center mt-4 space-x-3">
             <button id="rotate-left-btn" class="px-3 py-1.5 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 focus:outline-none disabled:opacity-50" disabled>
               <i class="fas fa-undo"></i>
@@ -562,9 +584,9 @@
   </div>
 </div>
 
-<!-- Load Three.js library -->
-<script src="https://cdn.jsdelivr.net/npm/three@0.154.0/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.154.0/examples/js/controls/OrbitControls.js"></script>
+<!-- Future 3D Model Loading Library -->
+<!-- This script tag will be where we include the 3D model loader in the future -->
+<!-- <script src="path/to/3d-model-loader.js"></script> -->
 
 <!-- Focus Page JavaScript -->
 <script>
@@ -596,11 +618,9 @@ document.addEventListener('DOMContentLoaded', function() {
   const focusModeOverlay = document.getElementById('focus-mode-overlay');
   const focusApp = document.getElementById('focus-app');
   
-  // 3D scene variables
-  let scene, camera, renderer, controls;
-  let habitat, creature;
-  let rotateEnabled = false;
-  const habitatCanvas = document.getElementById('habitat-canvas');
+  // 3D model display elements
+  const modelPlaceholder = document.getElementById('model-placeholder');
+  const modelDisplay = document.getElementById('model-display');
   const habitatTypeIndicator = document.getElementById('habitat-type');
   const creatureInfoPanel = document.getElementById('creature-info-panel');
   const creatureNameDisplay = document.getElementById('creature-name');
@@ -609,6 +629,13 @@ document.addEventListener('DOMContentLoaded', function() {
   const creatureHappinessDisplay = document.getElementById('creature-happiness');
   const growthPercentageDisplay = document.getElementById('growth-percentage');
   const growthBar = document.getElementById('growth-bar');
+  
+  // Control buttons
+  const rotateLeftBtn = document.getElementById('rotate-left-btn');
+  const rotateRightBtn = document.getElementById('rotate-right-btn');
+  const zoomInBtn = document.getElementById('zoom-in-btn');
+  const zoomOutBtn = document.getElementById('zoom-out-btn');
+  const resetViewBtn = document.getElementById('reset-view-btn');
   
   // Modal elements
   const completeModal = document.getElementById('complete-modal');
@@ -620,1070 +647,123 @@ document.addEventListener('DOMContentLoaded', function() {
   const resultCoins = document.getElementById('result-coins');
   const resultCreatureGrowth = document.getElementById('result-creature-growth');
   
-  // Habitat control buttons
-  const rotateLeftBtn = document.getElementById('rotate-left-btn');
-  const rotateRightBtn = document.getElementById('rotate-right-btn');
-  const zoomInBtn = document.getElementById('zoom-in-btn');
-  const zoomOutBtn = document.getElementById('zoom-out-btn');
-  const resetViewBtn = document.getElementById('reset-view-btn');
-  
-  // Initialize 3D scene
-  function initScene() {
-    // Create scene
-    scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xf0f9ff);
+  /**
+   * Load 3D model for creature
+   * This function will be implemented in the future to load .jbx models
+   * @param {string} speciesId - The species ID
+   * @param {string} stage - The creature's stage (egg, baby, juvenile, adult, mythical)
+   */
+  function loadCreatureModel(speciesId, stage) {
+    // This is a placeholder function for future implementation
+    console.log(`Loading model for species ${speciesId} at stage ${stage}`);
     
-    // Create camera
-    camera = new THREE.PerspectiveCamera(75, habitatCanvas.clientWidth / habitatCanvas.clientHeight, 0.1, 1000);
-    camera.position.z = 5;
-    camera.position.y = 2;
+    // In the future, this will load a .jbx model file
+    // const modelPath = `/models/creatures/${speciesId}_${stage}.jbx`;
     
-    // Create renderer
-    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(habitatCanvas.clientWidth, habitatCanvas.clientHeight);
-    renderer.shadowMap.enabled = true;
+    // Clear placeholder when model is selected
+    modelPlaceholder.style.display = 'none';
     
-    // Clear previous canvas if it exists
-    while (habitatCanvas.firstChild) {
-      habitatCanvas.removeChild(habitatCanvas.firstChild);
-    }
+    // Show a temporary placeholder for now
+    const placeholderIcon = getCreatureIcon(stage);
+    modelDisplay.innerHTML = `
+      <div class="flex items-center justify-center h-full">
+        <div class="text-8xl ${getCreatureColor(speciesId, stage)}">
+          ${placeholderIcon}
+        </div>
+      </div>
+    `;
     
-    // Add new canvas
-    habitatCanvas.appendChild(renderer.domElement);
-    
-    // Add orbit controls
-    controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
-    controls.rotateSpeed = 0.5;
-    controls.enableZoom = true;
-    controls.enablePan = false;
-    controls.enabled = false; // Disable controls initially
-    
-    // Add ambient light
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-    scene.add(ambientLight);
-    
-    // Add directional light (sun)
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    directionalLight.position.set(5, 10, 5);
-    directionalLight.castShadow = true;
-    scene.add(directionalLight);
-    
-    // Set up the ground
-    const groundGeometry = new THREE.PlaneGeometry(20, 20);
-    const groundMaterial = new THREE.MeshStandardMaterial({ 
-      color: 0x90ee90, 
-      roughness: 0.8,
-      metalness: 0.2
-    });
-    const ground = new THREE.Mesh(groundGeometry, groundMaterial);
-    ground.rotation.x = -Math.PI / 2;
-    ground.receiveShadow = true;
-    scene.add(ground);
-    
-    // Start animation loop
-    animate();
+    // Enable model control buttons
+    enableModelControls(true);
   }
   
-  // Animation loop
-  function animate() {
-    requestAnimationFrame(animate);
+  /**
+   * Load habitat environment
+   * This function will be implemented in the future to load habitat 3D environments
+   * @param {string} habitatType - The type of habitat
+   */
+  function loadHabitatEnvironment(habitatType) {
+    // Update habitat type indicator
+    habitatTypeIndicator.innerHTML = getHabitatIcon(habitatType);
+    habitatTypeIndicator.className = `habitat-type-indicator text-${habitatType}`;
     
-    if (controls) {
-      controls.update();
-    }
-    
-    if (creature) {
-      // Add subtle movement to creature
-      creature.rotation.y += 0.005;
-    }
-    
-    renderer.render(scene, camera);
+    // In the future, this will load a habitat environment
+    // const environmentPath = `/models/environments/${habitatType}.jbx`;
   }
   
-  // Handle window resize
-  function onWindowResize() {
-    if (camera && renderer && habitatCanvas) {
-      camera.aspect = habitatCanvas.clientWidth / habitatCanvas.clientHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(habitatCanvas.clientWidth, habitatCanvas.clientHeight);
+  /**
+   * Get creature icon based on stage
+   * @param {string} stage - The creature's stage
+   * @return {string} HTML for the icon
+   */
+  function getCreatureIcon(stage) {
+    switch(stage) {
+      case 'egg': return '<i class="fas fa-egg"></i>';
+      case 'baby': return '<i class="fas fa-baby"></i>';
+      case 'juvenile': return '<i class="fas fa-paw"></i>';
+      case 'adult': return '<i class="fas fa-dragon"></i>';
+      case 'mythical': return '<i class="fas fa-dragon"></i>';
+      default: return '<i class="fas fa-question"></i>';
     }
   }
   
-  // Create habitat based on type
-  function createHabitat(type) {
-    // Remove existing habitat if any
-    if (habitat) {
-      scene.remove(habitat);
+  /**
+   * Get creature color class based on species and stage
+   * @param {number} speciesId - The species ID
+   * @param {string} stage - The creature's stage
+   * @return {string} CSS class for the color
+   */
+  function getCreatureColor(speciesId, stage) {
+    const habitatMap = ['forest', 'ocean', 'mountain', 'sky', 'cosmic', 'enchanted'];
+    const habitatType = habitatMap[speciesId % habitatMap.length];
+    
+    if (stage === 'mythical') {
+      return `text-yellow-500`;
     }
     
-    // Create new habitat group
-    habitat = new THREE.Group();
-    
-    // Add different elements based on habitat type
-    switch (type) {
-      case 'forest':
-        // Update habitat type indicator
-        habitatTypeIndicator.innerHTML = '<i class="fas fa-tree mr-1"></i> Forest Habitat';
-        habitatTypeIndicator.className = 'habitat-type-indicator text-forest';
-        
-        // Create trees and forest elements
-        for (let i = 0; i < 10; i++) {
-          const treeGeometry = new THREE.ConeGeometry(0.5, 2, 8);
-          const treeMaterial = new THREE.MeshStandardMaterial({ color: 0x2d6a4f });
-          const tree = new THREE.Mesh(treeGeometry, treeMaterial);
-          tree.position.x = Math.random() * 10 - 5;
-          tree.position.z = Math.random() * 10 - 5;
-          tree.position.y = 1;
-          tree.castShadow = true;
-          
-          const trunkGeometry = new THREE.CylinderGeometry(0.1, 0.1, 1, 8);
-          const trunkMaterial = new THREE.MeshStandardMaterial({ color: 0x8B4513 });
-          const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
-          trunk.position.y = -0.5;
-          tree.add(trunk);
-          
-          habitat.add(tree);
-        }
-        
-        // Set forest ground color
-        scene.background = new THREE.Color(0xE8F5E9);
-        break;
-        
-      case 'ocean':
-        // Update habitat type indicator
-        habitatTypeIndicator.innerHTML = '<i class="fas fa-water mr-1"></i> Ocean Habitat';
-        habitatTypeIndicator.className = 'habitat-type-indicator text-ocean';
-        
-        // Create water surface
-        const waterGeometry = new THREE.PlaneGeometry(20, 20, 20, 20);
-        const waterMaterial = new THREE.MeshStandardMaterial({ 
-          color: 0x1e40af, 
-          transparent: true, 
-          opacity: 0.8,
-          roughness: 0.2,
-          metalness: 0.1
-        });
-        const water = new THREE.Mesh(waterGeometry, waterMaterial);
-        water.rotation.x = -Math.PI / 2;
-        water.position.y = 0.1;
-        habitat.add(water);
-        
-        // Add coral elements
-        for (let i = 0; i < 8; i++) {
-          const coralGeometry = new THREE.DodecahedronGeometry(0.3, 0);
-          const coralMaterial = new THREE.MeshStandardMaterial({ 
-            color: Math.random() > 0.5 ? 0xFF6F61 : 0x9D65C9,
-            roughness: 0.7
-          });
-          const coral = new THREE.Mesh(coralGeometry, coralMaterial);
-          coral.position.x = Math.random() * 10 - 5;
-          coral.position.z = Math.random() * 10 - 5;
-          coral.position.y = 0.3;
-          coral.scale.y = 1 + Math.random();
-          coral.castShadow = true;
-          habitat.add(coral);
-        }
-        
-        // Set ocean background color
-        scene.background = new THREE.Color(0xBBDEFB);
-        break;
-        
-      case 'mountain':
-        // Update habitat type indicator
-        habitatTypeIndicator.innerHTML = '<i class="fas fa-mountain mr-1"></i> Mountain Habitat';
-        habitatTypeIndicator.className = 'habitat-type-indicator text-mountain';
-        
-        // Create mountains
-        for (let i = 0; i < 5; i++) {
-          const mountainGeometry = new THREE.ConeGeometry(2, 4, 6);
-          const mountainMaterial = new THREE.MeshStandardMaterial({ 
-            color: 0x7f1d1d,
-            roughness: 0.9
-          });
-          const mountain = new THREE.Mesh(mountainGeometry, mountainMaterial);
-          mountain.position.x = Math.random() * 16 - 8;
-          mountain.position.z = Math.random() * 16 - 8;
-          mountain.position.y = 0;
-          mountain.castShadow = true;
-          
-          // Add snow cap
-          const snowGeometry = new THREE.ConeGeometry(0.8, 1, 6);
-          const snowMaterial = new THREE.MeshStandardMaterial({ color: 0xFFFFFF });
-          const snow = new THREE.Mesh(snowGeometry, snowMaterial);
-          snow.position.y = 1.7;
-          mountain.add(snow);
-          
-          habitat.add(mountain);
-        }
-        
-        // Set mountain background color
-        scene.background = new THREE.Color(0xF3E5F5);
-        break;
-        
-      case 'sky':
-        // Update habitat type indicator
-        habitatTypeIndicator.innerHTML = '<i class="fas fa-cloud mr-1"></i> Sky Habitat';
-        habitatTypeIndicator.className = 'habitat-type-indicator text-sky';
-        
-        // Create clouds
-        for (let i = 0; i < 10; i++) {
-          // Cloud group
-          const cloud = new THREE.Group();
-          
-          // Create cloud puffs
-          const puffCount = 3 + Math.floor(Math.random() * 4);
-          for (let j = 0; j < puffCount; j++) {
-            const puffGeometry = new THREE.SphereGeometry(0.5 + Math.random() * 0.5, 7, 7);
-            const puffMaterial = new THREE.MeshStandardMaterial({ 
-              color: 0xFFFFFF,
-              roughness: 0.3
-            });
-            const puff = new THREE.Mesh(puffGeometry, puffMaterial);
-            puff.position.x = j * 0.7;
-            puff.position.y = Math.random() * 0.2;
-            puff.position.z = Math.random() * 0.2;
-            cloud.add(puff);
-          }
-          
-          cloud.position.x = Math.random() * 16 - 8;
-          cloud.position.y = 1 + Math.random() * 3;
-          cloud.position.z = Math.random() * 16 - 8;
-          
-          habitat.add(cloud);
-        }
-        
-        // Set sky background color
-        scene.background = new THREE.Color(0xAEE2FF);
-        break;
-        
-      case 'cosmic':
-        // Update habitat type indicator
-        habitatTypeIndicator.innerHTML = '<i class="fas fa-star mr-1"></i> Cosmic Habitat';
-        habitatTypeIndicator.className = 'habitat-type-indicator text-cosmic';
-        
-        // Create stars
-        for (let i = 0; i < 200; i++) {
-          const starGeometry = new THREE.SphereGeometry(0.05, 4, 4);
-          const starMaterial = new THREE.MeshBasicMaterial({ 
-            color: 0xFFFFFF
-          });
-          const star = new THREE.Mesh(starGeometry, starMaterial);
-          
-          // Position stars in a large sphere around the center
-          const radius = 10;
-          const theta = Math.random() * Math.PI * 2;
-          const phi = Math.random() * Math.PI;
-          
-          star.position.x = radius * Math.sin(phi) * Math.cos(theta);
-          star.position.y = radius * Math.sin(phi) * Math.sin(theta);
-          star.position.z = radius * Math.cos(phi);
-          
-          habitat.add(star);
-        }
-        
-        // Add a few planets
-        for (let i = 0; i < 3; i++) {
-          const planetGeometry = new THREE.SphereGeometry(0.5, 32, 32);
-          const planetMaterial = new THREE.MeshStandardMaterial({ 
-            color: [0x8B4513, 0x76ABDF, 0x8A2BE2][i],
-            roughness: 0.7
-          });
-          const planet = new THREE.Mesh(planetGeometry, planetMaterial);
-          
-          planet.position.x = Math.random() * 8 - 4;
-          planet.position.y = Math.random() * 4;
-          planet.position.z = Math.random() * 8 - 4;
-          
-          habitat.add(planet);
-        }
-        
-        // Set cosmic background color (dark space)
-        scene.background = new THREE.Color(0x090418);
-        break;
-      
-      case 'enchanted':
-        // Update habitat type indicator
-        habitatTypeIndicator.innerHTML = '<i class="fas fa-magic mr-1"></i> Enchanted Habitat';
-        habitatTypeIndicator.className = 'habitat-type-indicator text-enchanted';
-        
-        // Create magical mushrooms and flowers
-        for (let i = 0; i < 15; i++) {
-          // Mushroom
-          if (i < 8) {
-            const stemGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.5, 8);
-            const stemMaterial = new THREE.MeshStandardMaterial({ color: 0xFFFFFF });
-            const stem = new THREE.Mesh(stemGeometry, stemMaterial);
-            
-            const capGeometry = new THREE.SphereGeometry(0.3, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2);
-            const capMaterial = new THREE.MeshStandardMaterial({ 
-              color: 0x9D174D,
-              roughness: 0.6
-            });
-            const cap = new THREE.Mesh(capGeometry, capMaterial);
-            cap.position.y = 0.3;
-            cap.rotation.x = Math.PI;
-            
-            const mushroom = new THREE.Group();
-            mushroom.add(stem);
-            mushroom.add(cap);
-            mushroom.position.x = Math.random() * 10 - 5;
-            mushroom.position.z = Math.random() * 10 - 5;
-            mushroom.position.y = 0.25;
-            
-            habitat.add(mushroom);
-          } 
-          // Magical flowers
-          else {
-            const stemGeometry = new THREE.CylinderGeometry(0.03, 0.03, 0.6, 8);
-            const stemMaterial = new THREE.MeshStandardMaterial({ color: 0x4CAF50 });
-            const stem = new THREE.Mesh(stemGeometry, stemMaterial);
-            
-            const flowerGeometry = new THREE.DodecahedronGeometry(0.2, 0);
-            const flowerMaterial = new THREE.MeshStandardMaterial({ 
-              color: Math.random() > 0.5 ? 0xFF69B4 : 0x9370DB,
-              roughness: 0.5,
-              metalness: 0.3
-            });
-            const flower = new THREE.Mesh(flowerGeometry, flowerMaterial);
-            flower.position.y = 0.4;
-            
-            const plantGroup = new THREE.Group();
-            plantGroup.add(stem);
-            plantGroup.add(flower);
-            plantGroup.position.x = Math.random() * 10 - 5;
-            plantGroup.position.z = Math.random() * 10 - 5;
-            plantGroup.position.y = 0.3;
-            
-            habitat.add(plantGroup);
-          }
-        }
-        
-        // Add magical fog/particles
-        const particleGeometry = new THREE.BufferGeometry();
-        const particleCount = 100;
-        const positions = new Float32Array(particleCount * 3);
-        
-        for (let i = 0; i < particleCount * 3; i += 3) {
-          positions[i] = Math.random() * 10 - 5; // x
-          positions[i + 1] = Math.random() * 3; // y
-          positions[i + 2] = Math.random() * 10 - 5; // z
-        }
-        
-        particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        
-        const particleMaterial = new THREE.PointsMaterial({
-          color: 0xE195BD,
-          size: 0.1,
-          transparent: true,
-          opacity: 0.7
-        });
-        
-        const particles = new THREE.Points(particleGeometry, particleMaterial);
-        habitat.add(particles);
-        
-        // Set enchanted background color
-        scene.background = new THREE.Color(0xFCE4EC);
-        break;
-        
-      default:
-        // Default habitat (grass field)
-        habitatTypeIndicator.innerHTML = '<i class="fas fa-leaf mr-1"></i> Default Habitat';
-        habitatTypeIndicator.className = 'habitat-type-indicator';
+    switch(habitatType) {
+      case 'forest': return 'text-green-600';
+      case 'ocean': return 'text-blue-600';
+      case 'mountain': return 'text-red-700';
+      case 'sky': return 'text-blue-400';
+      case 'cosmic': return 'text-purple-600';
+      case 'enchanted': return 'text-pink-600';
+      default: return 'text-gray-500';
     }
-    
-    // Add habitat to scene
-    scene.add(habitat);
   }
   
-  // Create creature based on stage
-  function createCreature(stage, speciesId) {
-    // Remove existing creature if any
-    if (creature) {
-      scene.remove(creature);
+  /**
+   * Get habitat icon and label based on type
+   * @param {string} habitatType - The habitat type
+   * @return {string} HTML for the habitat indicator
+   */
+  function getHabitatIcon(habitatType) {
+    switch(habitatType) {
+      case 'forest': return '<i class="fas fa-tree mr-1"></i> Forest Habitat';
+      case 'ocean': return '<i class="fas fa-water mr-1"></i> Ocean Habitat';
+      case 'mountain': return '<i class="fas fa-mountain mr-1"></i> Mountain Habitat';
+      case 'sky': return '<i class="fas fa-cloud mr-1"></i> Sky Habitat';
+      case 'cosmic': return '<i class="fas fa-star mr-1"></i> Cosmic Habitat';
+      case 'enchanted': return '<i class="fas fa-magic mr-1"></i> Enchanted Habitat';
+      default: return '<i class="fas fa-tree mr-1"></i> Select a creature';
     }
-    
-    // Create creature based on stage
-    creature = new THREE.Group();
-    
-    switch (stage) {
-      case 'egg':
-        // Create egg shape
-        const eggGeometry = new THREE.SphereGeometry(0.5, 32, 32);
-        eggGeometry.scale(1, 1.3, 1);
-        
-        // Determine egg color based on species
-        let eggColor;
-        switch (speciesId % 6) {
-          case 0: eggColor = 0x2d6a4f; break; // Forest
-          case 1: eggColor = 0x1e40af; break; // Ocean
-          case 2: eggColor = 0x7f1d1d; break; // Mountain
-          case 3: eggColor = 0x0369a1; break; // Sky
-          case 4: eggColor = 0x4c1d95; break; // Cosmic
-          case 5: eggColor = 0x9d174d; break; // Enchanted
-          default: eggColor = 0x999999;
-        }
-        
-        const eggMaterial = new THREE.MeshStandardMaterial({
-          color: eggColor,
-          roughness: 0.7,
-          metalness: 0.1
-        });
-        
-        const egg = new THREE.Mesh(eggGeometry, eggMaterial);
-        egg.rotation.x = Math.PI * 0.1;
-        egg.castShadow = true;
-        
-        // Add some egg patterns/spots
-        for (let i = 0; i < 5; i++) {
-          const spotGeometry = new THREE.CircleGeometry(0.07, 12);
-          const spotMaterial = new THREE.MeshBasicMaterial({
-            color: 0xFFFFFF,
-            opacity: 0.7,
-            transparent: true
-          });
-          const spot = new THREE.Mesh(spotGeometry, spotMaterial);
-          
-          // Position spots randomly on the egg surface
-          const phi = Math.random() * Math.PI;
-          const theta = Math.random() * Math.PI * 2;
-          
-          spot.position.x = 0.5 * Math.sin(phi) * Math.cos(theta);
-          spot.position.y = 0.65 * Math.sin(phi) * Math.sin(theta);
-          spot.position.z = 0.5 * Math.cos(phi);
-          
-          // Orient spot to face outward from egg center
-          spot.lookAt(spot.position.clone().multiplyScalar(2));
-          
-          egg.add(spot);
-        }
-        
-        creature.add(egg);
-        break;
-        
-      case 'baby':
-        // Create baby creature (small and cute)
-        // Body
-        const babyBodyGeometry = new THREE.SphereGeometry(0.35, 24, 24);
-        const babyBodyMaterial = new THREE.MeshStandardMaterial({
-          color: getCreatureColor(speciesId),
-          roughness: 0.8,
-          metalness: 0.1
-        });
-        const babyBody = new THREE.Mesh(babyBodyGeometry, babyBodyMaterial);
-        babyBody.castShadow = true;
-        creature.add(babyBody);
-        
-        // Head (larger in proportion to body for cuteness)
-        const babyHeadGeometry = new THREE.SphereGeometry(0.25, 24, 24);
-        const babyHeadMaterial = new THREE.MeshStandardMaterial({
-          color: getCreatureColor(speciesId, true),
-          roughness: 0.8,
-          metalness: 0.1
-        });
-        const babyHead = new THREE.Mesh(babyHeadGeometry, babyHeadMaterial);
-        babyHead.position.y = 0.4;
-        babyHead.position.z = 0.1;
-        babyHead.castShadow = true;
-        creature.add(babyHead);
-        
-        // Eyes
-        const eyeGeometry = new THREE.SphereGeometry(0.05, 16, 16);
-        const eyeMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
-        
-        const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
-        leftEye.position.x = -0.1;
-        leftEye.position.y = 0.05;
-        leftEye.position.z = 0.2;
-        babyHead.add(leftEye);
-        
-        const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
-        rightEye.position.x = 0.1;
-        rightEye.position.y = 0.05;
-        rightEye.position.z = 0.2;
-        babyHead.add(rightEye);
-        
-        // White dots in eyes for cuteness
-        const eyeHighlightGeometry = new THREE.SphereGeometry(0.015, 8, 8);
-        const eyeHighlightMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
-        
-        const leftHighlight = new THREE.Mesh(eyeHighlightGeometry, eyeHighlightMaterial);
-        leftHighlight.position.x = 0.02;
-        leftHighlight.position.y = 0.02;
-        leftHighlight.position.z = 0.05;
-        leftEye.add(leftHighlight);
-        
-        const rightHighlight = new THREE.Mesh(eyeHighlightGeometry, eyeHighlightMaterial);
-        rightHighlight.position.x = 0.02;
-        rightHighlight.position.y = 0.02;
-        rightHighlight.position.z = 0.05;
-        rightEye.add(rightHighlight);
-        
-        // Small tail
-        const babyTailGeometry = new THREE.ConeGeometry(0.1, 0.3, 8);
-        babyTailGeometry.rotateX(Math.PI / 2);
-        const babyTailMaterial = new THREE.MeshStandardMaterial({
-          color: getCreatureColor(speciesId, true),
-          roughness: 0.7,
-          metalness: 0.1
-        });
-        const babyTail = new THREE.Mesh(babyTailGeometry, babyTailMaterial);
-        babyTail.position.z = -0.35;
-        babyTail.castShadow = true;
-        creature.add(babyTail);
-        
-        // Tiny stubby limbs
-        const limbGeometry = new THREE.SphereGeometry(0.08, 16, 16);
-        limbGeometry.scale(1, 1, 1.2);
-        const limbMaterial = babyBodyMaterial;
-        
-        const frontLeftLimb = new THREE.Mesh(limbGeometry, limbMaterial);
-        frontLeftLimb.position.set(-0.25, -0.1, 0.2);
-        frontLeftLimb.castShadow = true;
-        creature.add(frontLeftLimb);
-        
-        const frontRightLimb = new THREE.Mesh(limbGeometry, limbMaterial);
-        frontRightLimb.position.set(0.25, -0.1, 0.2);
-        frontRightLimb.castShadow = true;
-        creature.add(frontRightLimb);
-        
-        const backLeftLimb = new THREE.Mesh(limbGeometry, limbMaterial);
-        backLeftLimb.position.set(-0.25, -0.1, -0.2);
-        backLeftLimb.castShadow = true;
-        creature.add(backLeftLimb);
-        
-        const backRightLimb = new THREE.Mesh(limbGeometry, limbMaterial);
-        backRightLimb.position.set(0.25, -0.1, -0.2);
-        backRightLimb.castShadow = true;
-        creature.add(backRightLimb);
-        break;
-        
-      case 'juvenile':
-        // Create juvenile creature (medium sized, developing features)
-        // Body
-        const juvBodyGeometry = new THREE.SphereGeometry(0.4, 24, 24);
-        juvBodyGeometry.scale(1.2, 1, 1.5);
-        const juvBodyMaterial = new THREE.MeshStandardMaterial({
-          color: getCreatureColor(speciesId),
-          roughness: 0.7,
-          metalness: 0.2
-        });
-        const juvBody = new THREE.Mesh(juvBodyGeometry, juvBodyMaterial);
-        juvBody.castShadow = true;
-        creature.add(juvBody);
-        
-        // Head
-        const juvHeadGeometry = new THREE.SphereGeometry(0.3, 24, 24);
-        const juvHeadMaterial = new THREE.MeshStandardMaterial({
-          color: getCreatureColor(speciesId, true),
-          roughness: 0.7,
-          metalness: 0.2
-        });
-        const juvHead = new THREE.Mesh(juvHeadGeometry, juvHeadMaterial);
-        juvHead.position.y = 0.5;
-        juvHead.position.z = 0.4;
-        juvHead.castShadow = true;
-        creature.add(juvHead);
-        
-        // Neck
-        const neckGeometry = new THREE.CylinderGeometry(0.15, 0.2, 0.4, 16);
-        const neckMaterial = juvBodyMaterial;
-        const neck = new THREE.Mesh(neckGeometry, neckMaterial);
-        neck.position.y = 0.3;
-        neck.position.z = 0.2;
-        neck.rotation.x = Math.PI / 4;
-        neck.castShadow = true;
-        creature.add(neck);
-        
-        // Eyes
-        const juvEyeGeometry = new THREE.SphereGeometry(0.06, 16, 16);
-        const juvEyeMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
-        
-        const juvLeftEye = new THREE.Mesh(juvEyeGeometry, juvEyeMaterial);
-        juvLeftEye.position.x = -0.12;
-        juvLeftEye.position.y = 0.05;
-        juvLeftEye.position.z = 0.25;
-        juvHead.add(juvLeftEye);
-        
-        const juvRightEye = new THREE.Mesh(juvEyeGeometry, juvEyeMaterial);
-        juvRightEye.position.x = 0.12;
-        juvRightEye.position.y = 0.05;
-        juvRightEye.position.z = 0.25;
-        juvHead.add(juvRightEye);
-        
-        // Eye highlights
-        const juvHighlightGeometry = new THREE.SphereGeometry(0.02, 8, 8);
-        const juvHighlightMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
-        
-        const juvLeftHighlight = new THREE.Mesh(juvHighlightGeometry, juvHighlightMaterial);
-        juvLeftHighlight.position.x = 0.02;
-        juvLeftHighlight.position.y = 0.02;
-        juvLeftHighlight.position.z = 0.06;
-        juvLeftEye.add(juvLeftHighlight);
-        
-        const juvRightHighlight = new THREE.Mesh(juvHighlightGeometry, juvHighlightMaterial);
-        juvRightHighlight.position.x = 0.02;
-        juvRightHighlight.position.y = 0.02;
-        juvRightHighlight.position.z = 0.06;
-        juvRightEye.add(juvRightHighlight);
-        
-        // Developing horn/crest (depending on species)
-        if (speciesId % 2 === 0) {
-          // Horn
-          const hornGeometry = new THREE.ConeGeometry(0.08, 0.25, 16);
-          const hornMaterial = new THREE.MeshStandardMaterial({
-            color: 0xD3D3D3,
-            roughness: 0.5,
-            metalness: 0.5
-          });
-          const horn = new THREE.Mesh(hornGeometry, hornMaterial);
-          horn.position.y = 0.2;
-          horn.rotation.x = -Math.PI / 4;
-          horn.castShadow = true;
-          juvHead.add(horn);
-        } else {
-          // Crest
-          const crestGeometry = new THREE.BoxGeometry(0.4, 0.1, 0.2);
-          crestGeometry.translate(0, 0.15, 0);
-          const crestMaterial = new THREE.MeshStandardMaterial({
-            color: getCreatureColor(speciesId, true, 1.2), // Brighter color
-            roughness: 0.7,
-            metalness: 0.2
-          });
-          const crest = new THREE.Mesh(crestGeometry, crestMaterial);
-          crest.castShadow = true;
-          juvHead.add(crest);
-        }
-        
-        // Tail
-        const juvTailGeometry = new THREE.ConeGeometry(0.15, 0.6, 16);
-        juvTailGeometry.rotateX(Math.PI / 2);
-        const juvTailMaterial = juvBodyMaterial;
-        const juvTail = new THREE.Mesh(juvTailGeometry, juvTailMaterial);
-        juvTail.position.z = -0.7;
-        juvTail.castShadow = true;
-        creature.add(juvTail);
-        
-        // Legs
-        const legGeometry = new THREE.CylinderGeometry(0.08, 0.1, 0.35, 12);
-        const legMaterial = juvBodyMaterial;
-        
-        const frontLeftLeg = new THREE.Mesh(legGeometry, legMaterial);
-        frontLeftLeg.position.set(-0.35, -0.4, 0.3);
-        frontLeftLeg.castShadow = true;
-        creature.add(frontLeftLeg);
-        
-        const frontRightLeg = new THREE.Mesh(legGeometry, legMaterial);
-        frontRightLeg.position.set(0.35, -0.4, 0.3);
-        frontRightLeg.castShadow = true;
-        creature.add(frontRightLeg);
-        
-        const backLeftLeg = new THREE.Mesh(legGeometry, legMaterial);
-        backLeftLeg.position.set(-0.35, -0.4, -0.3);
-        backLeftLeg.castShadow = true;
-        creature.add(backLeftLeg);
-        
-        const backRightLeg = new THREE.Mesh(legGeometry, legMaterial);
-        backRightLeg.position.set(0.35, -0.4, -0.3);
-        backRightLeg.castShadow = true;
-        creature.add(backRightLeg);
-        
-        // Developing wings for some species types
-        if (speciesId % 3 === 0) {
-          const wingGeometry = new THREE.BoxGeometry(0.05, 0.4, 0.5);
-          wingGeometry.translate(0, 0, -0.25);
-          const wingMaterial = new THREE.MeshStandardMaterial({
-            color: getCreatureColor(speciesId, true, 0.8), // Lighter color
-            roughness: 0.7,
-            metalness: 0.2,
-            transparent: true,
-            opacity: 0.9
-          });
-          
-          const leftWing = new THREE.Mesh(wingGeometry, wingMaterial);
-          leftWing.position.set(-0.5, 0.1, 0);
-          leftWing.rotation.y = Math.PI / 4;
-          leftWing.castShadow = true;
-          creature.add(leftWing);
-          
-          const rightWing = new THREE.Mesh(wingGeometry, wingMaterial);
-          rightWing.position.set(0.5, 0.1, 0);
-          rightWing.rotation.y = -Math.PI / 4;
-          rightWing.castShadow = true;
-          creature.add(rightWing);
-        }
-        break;
-        
-      case 'adult':
-      case 'mythical':
-        // Create adult/mythical creature (full size, all features)
-        // Determine if it's mythical for special effects
-        const isMythical = stage === 'mythical';
-        
-        // Body
-        const adultBodyGeometry = new THREE.SphereGeometry(0.5, 32, 32);
-        adultBodyGeometry.scale(1.3, 1, 1.8);
-        const adultBodyMaterial = new THREE.MeshStandardMaterial({
-          color: getCreatureColor(speciesId, false, isMythical ? 1.2 : 1),
-          roughness: isMythical ? 0.4 : 0.6,
-          metalness: isMythical ? 0.5 : 0.2
-        });
-        const adultBody = new THREE.Mesh(adultBodyGeometry, adultBodyMaterial);
-        adultBody.castShadow = true;
-        creature.add(adultBody);
-        
-        // Head
-        const adultHeadGeometry = new THREE.SphereGeometry(0.35, 32, 32);
-        const adultHeadMaterial = new THREE.MeshStandardMaterial({
-          color: getCreatureColor(speciesId, true, isMythical ? 1.2 : 1),
-          roughness: isMythical ? 0.4 : 0.6,
-          metalness: isMythical ? 0.5 : 0.2
-        });
-        const adultHead = new THREE.Mesh(adultHeadGeometry, adultHeadMaterial);
-        adultHead.position.y = 0.6;
-        adultHead.position.z = 0.6;
-        adultHead.castShadow = true;
-        creature.add(adultHead);
-        
-        // Strong neck
-        const adultNeckGeometry = new THREE.CylinderGeometry(0.2, 0.25, 0.5, 16);
-        const adultNeckMaterial = adultBodyMaterial;
-        const adultNeck = new THREE.Mesh(adultNeckGeometry, adultNeckMaterial);
-        adultNeck.position.y = 0.35;
-        adultNeck.position.z = 0.3;
-        adultNeck.rotation.x = Math.PI / 3.5;
-        adultNeck.castShadow = true;
-        creature.add(adultNeck);
-        
-        // Eyes
-        const adultEyeGeometry = new THREE.SphereGeometry(0.07, 16, 16);
-        const adultEyeMaterial = new THREE.MeshBasicMaterial({ 
-          color: isMythical ? 0x00FFFF : 0x000000 
-        });
-        
-        const adultLeftEye = new THREE.Mesh(adultEyeGeometry, adultEyeMaterial);
-        adultLeftEye.position.x = -0.15;
-        adultLeftEye.position.y = 0.05;
-        adultLeftEye.position.z = 0.3;
-        adultHead.add(adultLeftEye);
-        
-        const adultRightEye = new THREE.Mesh(adultEyeGeometry, adultEyeMaterial);
-        adultRightEye.position.x = 0.15;
-        adultRightEye.position.y = 0.05;
-        adultRightEye.position.z = 0.3;
-        adultHead.add(adultRightEye);
-        
-        // Eye highlights (not for mythical glowing eyes)
-        if (!isMythical) {
-          const adultHighlightGeometry = new THREE.SphereGeometry(0.025, 8, 8);
-          const adultHighlightMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
-          
-          const adultLeftHighlight = new THREE.Mesh(adultHighlightGeometry, adultHighlightMaterial);
-          adultLeftHighlight.position.x = 0.03;
-          adultLeftHighlight.position.y = 0.03;
-          adultLeftHighlight.position.z = 0.07;
-          adultLeftEye.add(adultLeftHighlight);
-          
-          const adultRightHighlight = new THREE.Mesh(adultHighlightGeometry, adultHighlightMaterial);
-          adultRightHighlight.position.x = 0.03;
-          adultRightHighlight.position.y = 0.03;
-          adultRightHighlight.position.z = 0.07;
-          adultRightEye.add(adultRightHighlight);
-        }
-        
-        // Full-grown horns/crest based on species
-        if (speciesId % 3 === 0) {
-          // Dual horns
-          const hornGeometry = new THREE.ConeGeometry(0.08, 0.4, 16);
-          const hornMaterial = new THREE.MeshStandardMaterial({
-            color: isMythical ? 0xFFD700 : 0xD3D3D3,
-            roughness: 0.3,
-            metalness: 0.7
-          });
-          
-          const leftHorn = new THREE.Mesh(hornGeometry, hornMaterial);
-          leftHorn.position.set(-0.15, 0.25, 0.1);
-          leftHorn.rotation.x = -Math.PI / 6;
-          leftHorn.rotation.z = -Math.PI / 12;
-          leftHorn.castShadow = true;
-          adultHead.add(leftHorn);
-          
-          const rightHorn = new THREE.Mesh(hornGeometry, hornMaterial);
-          rightHorn.position.set(0.15, 0.25, 0.1);
-          rightHorn.rotation.x = -Math.PI / 6;
-          rightHorn.rotation.z = Math.PI / 12;
-          rightHorn.castShadow = true;
-          adultHead.add(rightHorn);
-        } 
-        else if (speciesId % 3 === 1) {
-          // Crown/crest
-          const crestGeometry = new THREE.BoxGeometry(0.5, 0.2, 0.3);
-          crestGeometry.translate(0, 0.2, 0);
-          const crestMaterial = new THREE.MeshStandardMaterial({
-            color: getCreatureColor(speciesId, true, 1.5), // Much brighter
-            roughness: 0.5,
-            metalness: 0.3,
-            emissive: isMythical ? getCreatureColor(speciesId, true, 0.5) : 0x000000,
-            emissiveIntensity: isMythical ? 0.5 : 0
-          });
-          const crest = new THREE.Mesh(crestGeometry, crestMaterial);
-          crest.castShadow = true;
-          adultHead.add(crest);
-          
-          // Add crest spikes for more detail
-          for (let i = 0; i < 5; i++) {
-            const spikeGeometry = new THREE.ConeGeometry(0.03, 0.2, 8);
-            const spike = new THREE.Mesh(spikeGeometry, crestMaterial);
-            spike.position.set(-0.2 + i * 0.1, 0.3, 0);
-            spike.castShadow = true;
-            adultHead.add(spike);
-          }
-        }
-        else {
-          // Single large horn
-          const longHornGeometry = new THREE.ConeGeometry(0.1, 0.6, 16);
-          const longHornMaterial = new THREE.MeshStandardMaterial({
-            color: isMythical ? 0xE0E0FF : 0xE0E0E0,
-            roughness: 0.3,
-            metalness: 0.7,
-            emissive: isMythical ? 0x8080FF : 0x000000,
-            emissiveIntensity: isMythical ? 0.3 : 0
-          });
-          const longHorn = new THREE.Mesh(longHornGeometry, longHornMaterial);
-          longHorn.position.set(0, 0.2, 0.05);
-          longHorn.rotation.x = -Math.PI / 5;
-          longHorn.castShadow = true;
-          adultHead.add(longHorn);
-        }
-        
-        // Tail
-        const adultTailGeometry = new THREE.CylinderGeometry(0.15, 0.03, 1.2, 16);
-        adultTailGeometry.translate(0, -0.6, 0);
-        adultTailGeometry.rotateX(Math.PI / 2);
-        const adultTailMaterial = adultBodyMaterial;
-        const adultTail = new THREE.Mesh(adultTailGeometry, adultTailMaterial);
-        adultTail.position.z = -0.8;
-        adultTail.castShadow = true;
-        creature.add(adultTail);
-        
-        // Add tail end (different shapes based on species)
-        if (speciesId % 3 === 0) {
-          // Spade-shaped tail end
-          const spadeGeometry = new THREE.SphereGeometry(0.15, 16, 16);
-          spadeGeometry.scale(1, 0.7, 0.3);
-          const spadeMaterial = new THREE.MeshStandardMaterial({
-            color: getCreatureColor(speciesId, true),
-            roughness: 0.6,
-            metalness: 0.2
-          });
-          const spade = new THREE.Mesh(spadeGeometry, spadeMaterial);
-          spade.position.y = 0;
-          spade.position.z = -1.2;
-          spade.rotation.x = Math.PI / 3;
-          spade.castShadow = true;
-          adultTail.add(spade);
-        } else {
-          // Fluffy or pointed tail end
-          const tailEndGeometry = speciesId % 2 === 0 
-            ? new THREE.SphereGeometry(0.12, 16, 16) // Fluffy
-            : new THREE.ConeGeometry(0.1, 0.3, 8);   // Pointed
-            
-          const tailEndMaterial = new THREE.MeshStandardMaterial({
-            color: getCreatureColor(speciesId, true),
-            roughness: 0.7,
-            metalness: 0.1,
-            emissive: isMythical ? getCreatureColor(speciesId, true, 0.3) : 0x000000,
-            emissiveIntensity: isMythical ? 0.3 : 0
-          });
-          
-          const tailEnd = new THREE.Mesh(tailEndGeometry, tailEndMaterial);
-          tailEnd.position.z = -1.2;
-          if (speciesId % 2 !== 0) {
-            tailEnd.rotation.x = -Math.PI / 2; // Rotate cone for pointed tail
-          }
-          tailEnd.castShadow = true;
-          adultTail.add(tailEnd);
-        }
-        
-        // Strong legs
-        const adultLegGeometry = new THREE.CylinderGeometry(0.12, 0.15, 0.6, 12);
-        const adultLegMaterial = adultBodyMaterial;
-        
-        const adultFrontLeftLeg = new THREE.Mesh(adultLegGeometry, adultLegMaterial);
-        adultFrontLeftLeg.position.set(-0.5, -0.45, 0.5);
-        adultFrontLeftLeg.castShadow = true;
-        creature.add(adultFrontLeftLeg);
-        
-        const adultFrontRightLeg = new THREE.Mesh(adultLegGeometry, adultLegMaterial);
-        adultFrontRightLeg.position.set(0.5, -0.45, 0.5);
-        adultFrontRightLeg.castShadow = true;
-        creature.add(adultFrontRightLeg);
-        
-        const adultBackLeftLeg = new THREE.Mesh(adultLegGeometry, adultLegMaterial);
-        adultBackLeftLeg.position.set(-0.5, -0.45, -0.5);
-        adultBackLeftLeg.castShadow = true;
-        creature.add(adultBackLeftLeg);
-        
-        const adultBackRightLeg = new THREE.Mesh(adultLegGeometry, adultLegMaterial);
-        adultBackRightLeg.position.set(0.5, -0.45, -0.5);
-        adultBackRightLeg.castShadow = true;
-        creature.add(adultBackRightLeg);
-        
-        // Add feet
-        const footGeometry = new THREE.SphereGeometry(0.15, 16, 16);
-        footGeometry.scale(1, 0.5, 1.3);
-        
-        const adultFrontLeftFoot = new THREE.Mesh(footGeometry, adultLegMaterial);
-        adultFrontLeftFoot.position.y = -0.3;
-        adultFrontLeftLeg.add(adultFrontLeftFoot);
-        
-        const adultFrontRightFoot = new THREE.Mesh(footGeometry, adultLegMaterial);
-        adultFrontRightFoot.position.y = -0.3;
-        adultFrontRightLeg.add(adultFrontRightFoot);
-        
-        const adultBackLeftFoot = new THREE.Mesh(footGeometry, adultLegMaterial);
-        adultBackLeftFoot.position.y = -0.3;
-        adultBackLeftLeg.add(adultBackLeftFoot);
-        
-        const adultBackRightFoot = new THREE.Mesh(footGeometry, adultLegMaterial);
-        adultBackRightFoot.position.y = -0.3;
-        adultBackRightLeg.add(adultBackRightFoot);
-        
-        // Wings for flying species
-        if ([0, 3, 4].includes(speciesId % 6)) {
-          const wingGeometry = new THREE.BoxGeometry(0.05, 0.6, 1.2);
-          wingGeometry.translate(0, 0.15, -0.4);
-          
-          const wingMaterial = new THREE.MeshStandardMaterial({
-            color: getCreatureColor(speciesId, true, 0.9),
-            roughness: 0.6,
-            metalness: 0.2,
-            transparent: true,
-            opacity: 0.9,
-            emissive: isMythical ? getCreatureColor(speciesId, true, 0.3) : 0x000000,
-            emissiveIntensity: isMythical ? 0.3 : 0
-          });
-          
-          const leftWing = new THREE.Mesh(wingGeometry, wingMaterial);
-          leftWing.position.set(-0.7, 0.15, 0);
-          leftWing.rotation.y = Math.PI / 6;
-          leftWing.castShadow = true;
-          creature.add(leftWing);
-          
-          const rightWing = new THREE.Mesh(wingGeometry, wingMaterial);
-          rightWing.position.set(0.7, 0.15, 0);
-          rightWing.rotation.y = -Math.PI / 6;
-          rightWing.castShadow = true;
-          creature.add(rightWing);
-        }
-        
-        // Special effects for mythical creatures
-        if (isMythical) {
-          // Add particle effects or glowing aura
-          const auraGeometry = new THREE.SphereGeometry(1.5, 32, 32);
-          const auraColor = getCreatureColor(speciesId, true, 0.5);
-          const auraMaterial = new THREE.MeshBasicMaterial({
-            color: auraColor,
-            transparent: true,
-            opacity: 0.15,
-            side: THREE.DoubleSide
-          });
-          const aura = new THREE.Mesh(auraGeometry, auraMaterial);
-          creature.add(aura);
-          
-          // Add special markings/patterns on body
-          const markingsGeometry = new THREE.PlaneGeometry(0.8, 1.2);
-          const markingsMaterial = new THREE.MeshBasicMaterial({
-            color: 0xFFFFFF,
-            transparent: true,
-            opacity: 0.5,
-            side: THREE.DoubleSide
-          });
-          
-          const frontMarkings = new THREE.Mesh(markingsGeometry, markingsMaterial);
-          frontMarkings.position.z = 0.7;
-          frontMarkings.position.y = 0.1;
-          frontMarkings.rotation.x = Math.PI / 2;
-          creature.add(frontMarkings);
-        }
-        break;
-        
-      default:
-        // Default placeholder (simple sphere)
-        const defaultGeometry = new THREE.SphereGeometry(0.5, 32, 32);
-        const defaultMaterial = new THREE.MeshStandardMaterial({
-          color: 0x999999,
-          roughness: 0.7,
-          metalness: 0.1
-        });
-        const defaultMesh = new THREE.Mesh(defaultGeometry, defaultMaterial);
-        defaultMesh.castShadow = true;
-        creature.add(defaultMesh);
-    }
-    
-    // Position the creature
-    creature.position.y = stage === 'egg' ? 0.5 : 0.7;
-    
-    // Add creature to scene
-    scene.add(creature);
-    
-    // Enable habitat controls once a creature is added
-    controls.enabled = true;
-    rotateEnabled = true;
-    
-    // Enable habitat control buttons
-    rotateLeftBtn.disabled = false;
-    rotateRightBtn.disabled = false;
-    zoomInBtn.disabled = false;
-    zoomOutBtn.disabled = false;
-    resetViewBtn.disabled = false;
   }
   
-  // Helper to get consistent creature colors based on species ID
-  function getCreatureColor(speciesId, isSecondary = false, brightnessFactor = 1) {
-    // Base colors by habitat type
-    const baseColors = [
-      0x2d6a4f, // Forest (green)
-      0x1e40af, // Ocean (blue)
-      0x7f1d1d, // Mountain (brown/red)
-      0x0369a1, // Sky (light blue)
-      0x4c1d95, // Cosmic (purple)
-      0x9d174d  // Enchanted (pink/magenta)
-    ];
-    
-    // Secondary colors (slightly different hue)
-    const secondaryColors = [
-      0x3a8c5f, // Lighter forest green
-      0x3b82f6, // Lighter ocean blue
-      0x9a3412, // Reddish brown
-      0x38bdf8, // Bright sky blue
-      0x7c3aed, // Bright purple
-      0xec4899  // Bright pink
-    ];
-    
-    // Get the base color based on species ID
-    const colorIndex = speciesId % baseColors.length;
-    let color = isSecondary ? secondaryColors[colorIndex] : baseColors[colorIndex];
-    
-    // Apply brightness adjustment if needed
-    if (brightnessFactor !== 1) {
-      const hex = color.toString(16).padStart(6, '0');
-      let r = parseInt(hex.substring(0, 2), 16);
-      let g = parseInt(hex.substring(2, 4), 16);
-      let b = parseInt(hex.substring(4, 6), 16);
-      
-      r = Math.min(255, Math.floor(r * brightnessFactor));
-      g = Math.min(255, Math.floor(g * brightnessFactor));
-      b = Math.min(255, Math.floor(b * brightnessFactor));
-      
-      color = (r << 16) + (g << 8) + b;
-    }
-    
-    return color;
+  /**
+   * Enable or disable the model control buttons
+   * @param {boolean} enable - Whether to enable the controls
+   */
+  function enableModelControls(enable) {
+    rotateLeftBtn.disabled = !enable;
+    rotateRightBtn.disabled = !enable;
+    zoomInBtn.disabled = !enable;
+    zoomOutBtn.disabled = !enable;
+    resetViewBtn.disabled = !enable;
   }
   
-  // Update creature display in the 3D scene
+  /**
+   * Update creature info display
+   */
   function updateCreatureDisplay() {
     if (!selectedCreatureId || !selectedCreatureData) {
       return;
@@ -1698,11 +778,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const happiness = selectedCreatureData.happiness;
     const growthProgress = selectedCreatureData.growth;
     
-    // Update habitat visualization
-    createHabitat(habitatType);
-    
-    // Update creature model
-    createCreature(creatureStage, creatureSpecies);
+    // Load 3D model and environment (will be implemented in the future)
+    loadHabitatEnvironment(habitatType);
+    loadCreatureModel(creatureSpecies, creatureStage);
     
     // Update creature info panel
     creatureNameDisplay.textContent = creatureName;
@@ -1765,7 +843,7 @@ document.addEventListener('DOMContentLoaded', function() {
         growth: selectedOption.dataset.growth
       };
       
-      // Update 3D visualization
+      // Update creature display
       updateCreatureDisplay();
     }
     
@@ -2069,66 +1147,49 @@ document.addEventListener('DOMContentLoaded', function() {
         growth: selectedOption.dataset.growth
       };
       
-      // Update 3D visualization
+      // Update creature display
       updateCreatureDisplay();
     } else {
-      // Reset creature display
-      if (creature) {
-        scene.remove(creature);
-        creature = null;
-      }
+      // Reset model display
+      modelPlaceholder.style.display = 'flex';
+      modelDisplay.innerHTML = '';
       
-      // Reset habitat to default
-      createHabitat('default');
+      // Reset habitat type indicator
+      habitatTypeIndicator.innerHTML = '<i class="fas fa-tree mr-1"></i> Select a creature';
+      habitatTypeIndicator.className = 'habitat-type-indicator';
       
-      // Reset creature info panel
+      // Hide creature info panel
       creatureInfoPanel.classList.add('opacity-0');
       
-      // Disable habitat controls
-      controls.enabled = false;
-      rotateEnabled = false;
-      
-      // Disable habitat control buttons
-      rotateLeftBtn.disabled = true;
-      rotateRightBtn.disabled = true;
-      zoomInBtn.disabled = true;
-      zoomOutBtn.disabled = true;
-      resetViewBtn.disabled = true;
+      // Disable model controls
+      enableModelControls(false);
     }
   });
   
-  // Habitat control buttons
+  // Model control button listeners - placeholder for future functionality
   rotateLeftBtn.addEventListener('click', function() {
-    if (controls && rotateEnabled) {
-      controls.rotateLeft(Math.PI / 8); // Rotate 22.5 degrees left
-    }
+    console.log('Rotate left');
+    // In the future, this will rotate the 3D model left
   });
   
   rotateRightBtn.addEventListener('click', function() {
-    if (controls && rotateEnabled) {
-      controls.rotateRight(Math.PI / 8); // Rotate 22.5 degrees right
-    }
+    console.log('Rotate right');
+    // In the future, this will rotate the 3D model right
   });
   
   zoomInBtn.addEventListener('click', function() {
-    if (controls && rotateEnabled) {
-      controls.dollyIn(1.2); // Zoom in
-    }
+    console.log('Zoom in');
+    // In the future, this will zoom in the 3D model
   });
   
   zoomOutBtn.addEventListener('click', function() {
-    if (controls && rotateEnabled) {
-      controls.dollyOut(1.2); // Zoom out
-    }
+    console.log('Zoom out');
+    // In the future, this will zoom out the 3D model
   });
   
   resetViewBtn.addEventListener('click', function() {
-    if (controls && rotateEnabled) {
-      // Reset camera position
-      camera.position.set(0, 2, 5);
-      camera.lookAt(0, 0, 0);
-      controls.update();
-    }
+    console.log('Reset view');
+    // In the future, this will reset the 3D model view
   });
   
   // Complete modal listeners
@@ -2146,15 +1207,6 @@ document.addEventListener('DOMContentLoaded', function() {
       completeModal.classList.add('hidden');
     }
   });
-  
-  // Window resize handler
-  window.addEventListener('resize', onWindowResize);
-  
-  // Initialize the scene
-  initScene();
-  
-  // Create default habitat
-  createHabitat('default');
   
   // Check for active session
   <?php if (isset($activeSession)): ?>
@@ -2190,7 +1242,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
   
-  // Update 3D visualization
+  // Update creature display
   updateCreatureDisplay();
   <?php endif; ?>
   
@@ -2218,3 +1270,62 @@ document.addEventListener('DOMContentLoaded', function() {
   }, 1000);
   <?php endif; ?>
 });
+
+/**
+ * Placeholder for future 3D model loading functionality
+ * This would be in a separate file that implements model loading
+ */
+class ModelLoader {
+  constructor(containerId) {
+    this.container = document.getElementById(containerId);
+    // Initialize 3D engine, camera, etc.
+  }
+  
+  /**
+   * Load a 3D model file
+   * @param {string} modelPath - Path to the model file (.jbx)
+   * @return {Promise} Promise that resolves when the model is loaded
+   */
+  loadModel(modelPath) {
+    return new Promise((resolve, reject) => {
+      console.log(`Loading model from ${modelPath}`);
+      // Implementation for loading .jbx models will go here
+      resolve();
+    });
+  }
+  
+  /**
+   * Load environment (background/setting)
+   * @param {string} environmentPath - Path to the environment model
+   * @return {Promise} Promise that resolves when the environment is loaded
+   */
+  loadEnvironment(environmentPath) {
+    return new Promise((resolve, reject) => {
+      console.log(`Loading environment from ${environmentPath}`);
+      // Implementation for loading environment models will go here
+      resolve();
+    });
+  }
+  
+  /**
+   * Create a model file path based on species and stage
+   * @param {number} speciesId - The species ID
+   * @param {string} stage - The creature's stage
+   * @return {string} Path to the model file
+   */
+  static getModelPath(speciesId, stage) {
+    return `/models/creatures/${speciesId}_${stage}.jbx`;
+  }
+  
+  /**
+   * Create an environment file path based on habitat type
+   * @param {string} habitatType - The habitat type
+   * @return {string} Path to the environment file
+   */
+  static getEnvironmentPath(habitatType) {
+    return `/models/environments/${habitatType}.jbx`;
+  }
+}
+</script>
+
+<?php require_once ROOT_PATH . '/resources/views/layouts/footer.php'; ?>
