@@ -1281,6 +1281,207 @@
     transition: width 0.3s ease-out;
   }
 
+  /* Chungi Yoo Inspired Floating Cards Section */
+  .floating-cards-section {
+    padding: 8rem 0;
+    position: relative;
+    height: 100vh;
+    min-height: 700px;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Circular background - similar to Chungi Yoo site */
+  .circle-background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: radial-gradient(circle at center, rgba(var(--primary-rgb), 0.1) 0%, rgba(255,255,255,0) 70%);
+    z-index: -1;
+}
+
+  /* Container for content */
+  .floating-cards-section .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    padding: 0 2rem;
+  }
+
+  /* Floating stage where the cards are positioned */
+  .floating-stage {
+    position: relative;
+    height: 400px;
+    perspective: 1000px;
+    margin: 0 auto;
+    max-width: 800px;
+    transition: opacity 0.5s ease;
+  }
+
+  /* Floating cards */
+  .floating-card {
+    position: absolute;
+    width: 280px;
+    height: 380px;
+    border-radius: 20px;
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+    overflow: hidden;
+    left: calc(50% - 140px);
+    top: 0;
+}
+
+  .floating-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0,0,0,0) 70%, rgba(0,0,0,0.7) 100%);
+    z-index: 1;
+  }
+
+  .floating-card:hover {
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    transform: translateY(-10px);
+}
+
+  .card-title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0));
+    color: white;
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  .floating-card:hover .card-title {
+    opacity: 1;
+  }
+
+  /* Pagination - similar to Chungi Yoo site */
+  .cards-pagination {
+    margin: 1rem 0 2rem;
+    font-size: 1.2rem;
+    color: var(--text-dark);
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Heading styles */
+  .floating-cards-section .headline {
+    margin-bottom: 1rem;
+    color: var(--text-dark);
+    font-size: clamp(3rem, 8vw, 6rem);
+    line-height: 1;
+  }
+
+  /* Description text */
+  .cards-description {
+    max-width: 600px;
+    margin: 0 auto;
+    color: var(--text-medium);
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+
+  /* Expanded Card Container */
+.expanded-card-container {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  gap: 30px;
+}
+
+/* Expanded Content Section */
+.expanded-content {
+    flex: 1;
+    padding: 20px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .expanded-content h2 {
+    font-size: 28px;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+    }
+
+    .expanded-content p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    }
+
+    .learn-more-btn {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.learn-more-btn:hover {
+  background-color: var(--primary-dark);
+}
+
+/* Expanded Image Section */
+.expanded-image {
+  flex: 1;
+  height: 350px;
+  border-radius: 15px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  transform-style: preserve-3d;
+  transition: transform 0.5s ease;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .expanded-card-container {
+    flex-direction: column-reverse;
+  }
+
+  .expanded-image {
+    width: 100%;
+    height: 250px;
+    margin-bottom: 20px;
+  }
+  
+  .floating-card {
+    width: 240px;
+    height: 320px;
+    left: calc(50% - 120px);
+  }
+}
+
   /* Media Queries for Responsive Design */
   @media (max-width: 1024px) {
     .headline-lg { font-size: var(--text-5xl); }
@@ -1301,6 +1502,26 @@
     .testimonial-btn { display: none; }
     .cta-form { flex-direction: column; }
     .cta-input, .btn { width: 100%; }
+    
+    .floating-card {
+      width: 250px;
+      height: 350px;
+    }
+    
+    .floating-cards-section {
+        position: relative;
+        padding: 80px 0;
+        overflow: hidden;
+    }
+    
+    .floating-stage {
+      height: 40vh;
+      min-height: 350px;
+    }
+    
+    .floating-cards-section .headline {
+      font-size: clamp(2.5rem, 7vw, 4rem);
+    }
   }
   
   @media (max-width: 480px) {
@@ -1310,6 +1531,19 @@
     .hero-subtitle { font-size: var(--text-base); }
     .testimonial-quote { font-size: var(--text-lg); }
     .timer-settings { flex-direction: column; }
+    
+    .floating-card {
+      width: 200px;
+      height: 280px;
+    }
+    
+    .floating-stage {
+      min-height: 300px;
+    }
+    
+    .card-title {
+      font-size: 1.25rem;
+    }
   }
 </style>
 
@@ -2757,7 +2991,374 @@
         if (typeof ScrollTrigger !== 'undefined') {
           ScrollTrigger.refresh();
         }
+        
+        // Add Chungi Yoo inspired floating cards section
+        addFloatingCardsSection();
       }, 500);
     });
   });
+  
+  // Improved Animation System
+  // Enable hardware acceleration for smoother animations
+  gsap.config({
+    force3D: true,
+    autoSleep: 60,
+    nullTargetWarn: false
+  });
+  
+  // Smoother animation timing and easing
+  const smoother = {
+    easeOut: "power2.out",
+    easeInOut: "power3.inOut",
+    elastic: "elastic.out(0.8, 0.3)",
+    bounce: "bounce.out",
+    duration: {
+      short: 0.5,
+      medium: 0.8,
+      long: 1.2
+    }
+  };
+  
+  // Create and add the Chungi Yoo inspired floating cards section
+  function addFloatingCardsSection() {
+    // Create the section
+    const section = document.createElement('section');
+    section.className = 'floating-cards-section';
+    section.id = 'floatingCards';
+    
+    // Create circular background
+    const circleBackground = document.createElement('div');
+    circleBackground.className = 'circle-background';
+    
+    // Create container
+    const container = document.createElement('div');
+    container.className = 'container';
+    
+    // Create floating cards stage
+    const floatingStage = document.createElement('div');
+    floatingStage.className = 'floating-stage';
+    
+    // Create four floating cards
+    const cardsData = [
+      { 
+        title: 'Focus Timer', 
+        image: '<?= $baseUrl ?>/public/img/panda.jpg', 
+        color: 'var(--primary-color)',
+        content: 'The Focus Timer helps you stay on task with timed work sessions inspired by the peaceful nature of pandas. Take regular breaks to recharge your mind.' 
+      },
+      { 
+        title: 'Mythical Creatures', 
+        image: '<?= $baseUrl ?>/public/img/snow_leopard.png', 
+        color: 'var(--accent-1)',
+        content: 'Explore the world of mythical creatures and their connection to wildlife conservation through engaging stories and interactive experiences.' 
+      },
+      { 
+        title: 'Wildlife Impact', 
+        image: '<?= $baseUrl ?>/public/img/whale.png', 
+        color: 'var(--accent-2)',
+        content: 'Learn about the impact of human activities on wildlife habitats and discover ways to contribute to conservation efforts worldwide.' 
+      },
+      { 
+        title: 'Conservation', 
+        image: '<?= $baseUrl ?>/public/img/rhino.png', 
+        color: 'var(--primary-dark)',
+        content: 'Join our conservation initiatives to protect endangered species and preserve biodiversity for future generations.' 
+      }
+    ];
+    
+    // Create expanded card container
+    const expandedCardContainer = document.createElement('div');
+    expandedCardContainer.className = 'expanded-card-container';
+    expandedCardContainer.style.display = 'none';
+    
+    // Create expanded card content section
+    const expandedContent = document.createElement('div');
+    expandedContent.className = 'expanded-content';
+    
+    // Create expanded card image section
+    const expandedImage = document.createElement('div');
+    expandedImage.className = 'expanded-image';
+    
+    // Add to expanded card container
+    expandedCardContainer.appendChild(expandedContent);
+    expandedCardContainer.appendChild(expandedImage);
+    
+    // Add expanded card container to main container
+    container.appendChild(expandedCardContainer);
+    
+    // Add each card
+    cardsData.forEach((card, index) => {
+      const cardElement = document.createElement('div');
+      cardElement.className = 'floating-card';
+      cardElement.style.backgroundImage = `url(${card.image})`;
+      cardElement.style.backgroundColor = card.color;
+      cardElement.setAttribute('data-index', index);
+      cardElement.innerHTML = `<span class="card-title">${card.title}</span>`;
+      
+      // Add click event for card expansion
+      cardElement.addEventListener('click', function(e) {
+        e.stopPropagation();
+        expandCard(card, cardElement);
+      });
+      
+      floatingStage.appendChild(cardElement);
+    });
+    
+    // Create pagination indicator
+    const pagination = document.createElement('div');
+    pagination.className = 'cards-pagination';
+    
+    // Create heading
+    const heading = document.createElement('h2');
+    heading.className = 'headline headline-lg text-center';
+
+    // Assemble the section
+    container.appendChild(floatingStage);
+    
+    section.appendChild(circleBackground);
+    section.appendChild(container);
+    
+    // Add to page before the testimonials section
+    const testimonialsSection = document.getElementById('testimonials');
+    if (testimonialsSection) {
+      testimonialsSection.parentNode.insertBefore(section, testimonialsSection);
+    } else {
+      document.getElementById('scrollContent').appendChild(section);
+    }
+    
+    // Initialize floating cards animation
+    initFloatingCards();
+    
+    // Function to expand card
+    function expandCard(cardData, cardElement) {
+      // Store original card position for animation
+      const cardRect = cardElement.getBoundingClientRect();
+      const containerRect = section.getBoundingClientRect();
+      
+      // Clone the card for expanding animation
+      const cardClone = cardElement.cloneNode(true);
+      cardClone.style.position = 'fixed';
+      cardClone.style.top = `${cardRect.top}px`;
+      cardClone.style.left = `${cardRect.left}px`;
+      cardClone.style.width = `${cardRect.width}px`;
+      cardClone.style.height = `${cardRect.height}px`;
+      cardClone.style.zIndex = '100';
+      document.body.appendChild(cardClone);
+      
+      // Prepare expanded content
+      expandedContent.innerHTML = `
+        <h2>${cardData.title}</h2>
+        <p>${cardData.content}</p>
+        <button class="learn-more-btn">Learn More</button>
+      `;
+      
+      // Prepare expanded image
+      expandedImage.style.backgroundImage = `url(${cardData.image})`;
+      expandedImage.style.backgroundColor = cardData.color;
+      
+      // Show expanded container
+      expandedCardContainer.style.display = 'flex';
+      expandedCardContainer.style.opacity = '0';
+      
+      // Hide the floating stage
+      gsap.to(floatingStage, {
+        opacity: 0,
+        duration: 0.5,
+        ease: "power2.out"
+      });
+      
+      // Animate card to expanded position
+      gsap.to(cardClone, {
+        top: `${containerRect.top + 50}px`,
+        left: `${containerRect.width / 2 + containerRect.left}px`,
+        duration: 0.8,
+        ease: "power3.inOut",
+        onComplete: function() {
+          // Show expanded content with animation
+          gsap.to(expandedCardContainer, {
+            opacity: 1,
+            duration: 0.5,
+            ease: "power2.out"
+          });
+          
+          // Animate expanded content parts
+          gsap.fromTo(expandedContent, 
+            { x: -50, opacity: 0 },
+            { x: 0, opacity: 1, duration: 0.6, ease: "power2.out", delay: 0.2 }
+          );
+          
+          gsap.fromTo(expandedImage, 
+            { x: 50, opacity: 0, rotation: -5 },
+            { x: 0, opacity: 1, rotation: 0, duration: 0.6, ease: "power2.out", delay: 0.3 }
+          );
+          
+          // Remove the clone after animation completes
+          document.body.removeChild(cardClone);
+        }
+      });
+      
+      // Add event listener to close expanded card when mouse leaves the section
+      section.addEventListener('mouseleave', closeExpandedCard);
+      
+      // Add event listener to close on click outside
+      document.addEventListener('click', closeExpandedCard);
+    }
+    
+    // Function to close expanded card
+    function closeExpandedCard() {
+      // Don't close if already animating out
+      if (expandedCardContainer.classList.contains('closing')) return;
+      expandedCardContainer.classList.add('closing');
+      
+      // Animate out expanded content
+      gsap.to(expandedContent, {
+        x: -50,
+        opacity: 0,
+        duration: 0.5,
+        ease: "power2.in"
+      });
+      
+      gsap.to(expandedImage, {
+        x: 50,
+        opacity: 0,
+        rotation: -5,
+        duration: 0.5,
+        ease: "power2.in",
+        onComplete: function() {
+          // Hide expanded container
+          expandedCardContainer.style.display = 'none';
+          expandedCardContainer.classList.remove('closing');
+          
+          // Show floating stage again
+          gsap.to(floatingStage, {
+            opacity: 1,
+            duration: 0.5,
+            ease: "power2.out"
+          });
+        }
+      });
+      
+      // Remove event listeners
+      section.removeEventListener('mouseleave', closeExpandedCard);
+      document.removeEventListener('click', closeExpandedCard);
+    }
+  }
+  
+  function initFloatingCards() {
+    const cards = document.querySelectorAll('.floating-card');
+    const pagination = document.querySelector('.current-page');
+    let currentCard = 0;
+    
+    // Position cards in 3D space
+    function positionCards() {
+      cards.forEach((card, index) => {
+        const offset = (index - currentCard) % cards.length;
+        const zIndex = offset === 0 ? 10 : 5 - Math.abs(offset);
+        
+        gsap.to(card, {
+          x: offset * 50,
+          y: offset * 10,
+          z: offset * -100, 
+          rotationY: offset * -10,
+          rotationX: offset * 5,
+          scale: 1 - Math.abs(offset) * 0.15,
+          opacity: 1 - Math.abs(offset) * 0.2,
+          zIndex: zIndex,
+          duration: 1,
+          ease: "power3.out",
+          force3D: true
+        });
+      });
+      
+      // Update pagination
+      if (pagination) pagination.textContent = currentCard + 1;
+    }
+    
+    // Initial positioning
+    positionCards();
+    
+    // Navigate to next/previous card
+    function nextCard() {
+      currentCard = (currentCard + 1) % cards.length;
+      positionCards();
+    }
+    
+    function prevCard() {
+      currentCard = (currentCard - 1 + cards.length) % cards.length;
+      positionCards();
+    }
+    
+    // Click on card to navigate
+    cards.forEach(card => {
+      card.addEventListener('click', function(e) {
+        e.stopPropagation(); // Prevent bubbling
+        const index = parseInt(this.getAttribute('data-index'));
+        if (index !== currentCard) {
+          currentCard = index;
+          positionCards();
+        }
+      });
+    });
+    
+    // Add mouse movement effect
+    const floatingStage = document.querySelector('.floating-stage');
+    if (floatingStage) {
+      floatingStage.addEventListener('mousemove', (e) => {
+        const rect = floatingStage.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        
+        // Calculate mouse position relative to center
+        const xPos = (e.clientX - centerX) / (rect.width / 2);
+        const yPos = (e.clientY - centerY) / (rect.height / 2);
+        
+        // Apply subtle movement to all cards
+        cards.forEach(card => {
+          gsap.to(card, {
+            x: parseFloat(getComputedStyle(card).transform.split(',')[4] || 0) + xPos * 20,
+            y: parseFloat(getComputedStyle(card).transform.split(',')[5] || 0) + yPos * -20,
+            duration: 0.5,
+            ease: "power1.out"
+          });
+        });
+      });
+      
+      // Auto rotate cards
+      let autoRotate = setInterval(nextCard, 3000);
+      
+      // Stop auto-rotation on hover
+      floatingStage.addEventListener('mouseenter', () => {
+        clearInterval(autoRotate);
+      });
+      
+      // Resume auto-rotation on mouse leave
+      floatingStage.addEventListener('mouseleave', () => {
+        autoRotate = setInterval(nextCard, 3000);
+        setTimeout(() => {
+          positionCards();
+        }, 300);
+      });
+      
+      // Add touch swipe functionality
+      let startX, startY;
+      floatingStage.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+      }, false);
+      
+      floatingStage.addEventListener('touchend', (e) => {
+        let diffX = startX - e.changedTouches[0].clientX;
+        let diffY = startY - e.changedTouches[0].clientY;
+        
+        // Horizontal swipe detection
+        if (Math.abs(diffX) > Math.abs(diffY)) {
+          if (diffX > 50) {
+            nextCard();
+          } else if (diffX < -50) {
+            prevCard();
+          }
+        }
+      }, false);
+    }
+  }
   </script>
