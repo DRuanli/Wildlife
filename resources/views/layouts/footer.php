@@ -172,5 +172,52 @@ $baseUrl = '/Wildlife';
     });
   }
 </script>
+
+<!-- Custom Cursor -->
+<style>
+    /* Ẩn con trỏ mặc định */
+    body {
+        cursor: none;
+    }
+    /* Kiểu cho con trỏ tùy chỉnh */
+    .custom-cursor {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 15px;
+        height: 15px;
+        background-color: rgba(255, 255, 255, 0.7);
+        border: 2px solid #000;
+        border-radius: 50%;
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        transition: transform 0.1s ease, background-color 0.2s ease;
+        z-index: 9999;
+    }
+</style>
+
+<!-- Thêm element cho con trỏ tùy chỉnh -->
+<div id="custom-cursor" class="custom-cursor"></div>
+
+<script>
+    // Cập nhật vị trí con trỏ theo chuyển động chuột
+    document.addEventListener('mousemove', function(e) {
+        const cursor = document.getElementById('custom-cursor');
+        cursor.style.top = e.clientY + 'px';
+        cursor.style.left = e.clientX + 'px';
+    });
+
+    // Hiệu ứng click: mở rộng tạm thời con trỏ
+    document.addEventListener('click', function() {
+        const cursor = document.getElementById('custom-cursor');
+        cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+        cursor.style.backgroundColor = 'rgba(255, 255, 255, 1)';
+        setTimeout(() => {
+            cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+            cursor.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+        }, 150);
+    });
+</script>
+
 </body>
 </html>
