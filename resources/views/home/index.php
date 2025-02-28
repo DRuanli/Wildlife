@@ -1,4 +1,5 @@
 <?php require_once ROOT_PATH . '/resources/views/layouts/header.php'; ?>
+<?php //include ROOT_PATH . '/resources/views/components/loading.php'; ?>
 
 <!-- Enhanced Home Page with Advanced UX Features -->
 
@@ -1682,6 +1683,8 @@
       animateOnViewObserver.observe(el);
     });
   });
+
+  //window.hideLoadingScreen();
 </script>
 
 <?php require_once ROOT_PATH . '/resources/views/layouts/footer.php'; ?>

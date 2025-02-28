@@ -73,5 +73,7 @@ function getRoutes() {
         // Learn routes
         '/learn/support' => 'LearnController@support',
         '/learn/faq/:category' => 'LearnController@faq'
+
+        
     ];
 }

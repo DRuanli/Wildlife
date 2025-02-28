@@ -1,4 +1,5 @@
 <?php require_once ROOT_PATH . '/resources/views/layouts/header.php'; ?>
+<?php // include ROOT_PATH . '/resources/views/components/loading.php'; ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -1325,7 +1326,17 @@
         }
       });
     });
+
+    // Hide loading screen when page is fully loaded
+    window.addEventListener('load', function() {
+    // Allow some minimum time for users to see the loading animations
+    setTimeout(function() {
+        window.hideLoadingScreen();
+    }, 2000);
+    });
   </script>
+
+  
 </body>
 </html>
 <?php require_once ROOT_PATH . '/resources/views/layouts/footer.php'; ?>
