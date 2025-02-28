@@ -1283,19 +1283,12 @@
 
   /* Chungi Yoo Inspired Floating Cards Section */
   .floating-cards-section {
-    padding: 8rem 0;
-    position: relative;
-    height: 100vh;
-    min-height: 700px;
-    width: 100%;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  position: relative;
+  padding: 80px 0;
+  overflow: hidden;
+    }
 
-  /* Circular background - similar to Chungi Yoo site */
-  .circle-background {
+    .circle-background {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -1303,7 +1296,7 @@
     left: 0;
     background: radial-gradient(circle at center, rgba(var(--primary-rgb), 0.1) 0%, rgba(255,255,255,0) 70%);
     z-index: -1;
-}
+    }
 
   /* Container for content */
   .floating-cards-section .container {
@@ -1326,24 +1319,24 @@
     margin: 0 auto;
     max-width: 800px;
     transition: opacity 0.5s ease;
-  }
+    }
 
-  /* Floating cards */
-  .floating-card {
-    position: absolute;
-    width: 280px;
-    height: 380px;
-    border-radius: 20px;
-    background-size: cover;
-    background-position: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    cursor: pointer;
-    transform-style: preserve-3d;
-    transition: transform 0.5s ease, box-shadow 0.5s ease;
-    overflow: hidden;
-    left: calc(50% - 140px);
-    top: 0;
-}
+    .floating-card {
+        position: absolute;
+        width: 280px;
+        height: 380px;
+        border-radius: 20px;
+        background-size: cover;
+        background-position: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        cursor: pointer;
+        transform-style: preserve-3d;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        overflow: hidden;
+        left: calc(50% - 140px);
+        top: 0;
+        will-change: transform, opacity;
+    }
 
   .floating-card::before {
     content: '';
@@ -1358,20 +1351,39 @@
 
   .floating-card:hover {
     box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-    transform: translateY(-10px);
+    transform: translateY(-10px) scale(1.02);
+    }
+
+    .card-title {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 20px;
+        background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0));
+        color: white;
+        font-size: 24px;
+        font-weight: 600;
+    }
+
+    /* Full page overlay */
+.full-page-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.85);
+  z-index: 9999;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  will-change: opacity;
+  overflow-y: auto;
 }
 
-  .card-title {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 20px;
-    background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0));
-    color: white;
-    font-size: 24px;
-    font-weight: 600;
-  }
+
+
 
   .floating-card:hover .card-title {
     opacity: 1;
@@ -1402,33 +1414,42 @@
     line-height: 1.6;
   }
 
-  /* Expanded Card Container */
+
+/* Expanded Card Container */
 .expanded-card-container {
   position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 20px;
-  gap: 30px;
+  height: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  will-change: opacity;
 }
 
 /* Expanded Content Section */
+/* Expanded Content Section */
 .expanded-content {
-    flex: 1;
-    padding: 20px;
-    background-color: white;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    }
+  flex: 1;
+  height: 100vh;
+  padding: 5vw;
+  background-color: var(--primary-color);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  will-change: transform, opacity;
+  overflow-y: auto;
+}
 
-    .expanded-content h2 {
-    font-size: 28px;
-    margin-bottom: 15px;
-    color: var(--primary-color);
-    }
+.expanded-content h2 {
+  font-size: 3vw;
+  margin-bottom: 2vh;
+  color: white;
+  font-weight: 700;
+}
 
     .expanded-content p {
     font-size: 16px;
@@ -1437,48 +1458,111 @@
     }
 
     .learn-more-btn {
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 30px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
+        background-color: white;
+        color: var(--primary-color);
+        border: none;
+        padding: 12px 24px;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 1vw;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        align-self: flex-start;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
 
 .learn-more-btn:hover {
-  background-color: var(--primary-dark);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
 }
+
+.content-text {
+  font-size: 1.2vw;
+  line-height: 1.8;
+  margin-bottom: 4vh;
+  max-width: 80%;
+}
+
 
 /* Expanded Image Section */
 .expanded-image {
   flex: 1;
-  height: 350px;
-  border-radius: 15px;
+  height: 100vh;
   background-size: cover;
   background-position: center;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  transform-style: preserve-3d;
-  transition: transform 0.5s ease;
+  will-change: transform, opacity;
+}
+
+
+/* Close button */
+.close-expanded-card {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: white;
+  color: black;
+  border: none;
+  font-size: 24px;
+  line-height: 40px;
+  text-align: center;
+  cursor: pointer;
+  z-index: 10001;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+
+.close-expanded-card:hover {
+  transform: rotate(90deg);
+  background-color: var(--primary-color);
+  color: white;
 }
 
 /* Mobile Responsiveness */
-@media (max-width: 768px) {
+@media (max-width: 992px) {
   .expanded-card-container {
-    flex-direction: column-reverse;
-  }
-
-  .expanded-image {
-    width: 100%;
-    height: 250px;
-    margin-bottom: 20px;
+    flex-direction: column;
   }
   
+  .expanded-content, 
+  .expanded-image {
+    width: 100%;
+    height: auto;
+  }
+  
+  .expanded-image {
+    height: 40vh;
+  }
+  
+  .expanded-content {
+    padding: 40px 20px;
+  }
+  
+  .expanded-content h2 {
+    font-size: 28px;
+  }
+  
+  .content-text {
+    font-size: 16px;
+    max-width: 100%;
+  }
+  
+  .learn-more-btn {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 768px) {
   .floating-card {
     width: 240px;
     height: 320px;
     left: calc(50% - 120px);
+  }
+  
+  .expanded-image {
+    height: 30vh;
   }
 }
 
@@ -3038,38 +3122,16 @@
     const floatingStage = document.createElement('div');
     floatingStage.className = 'floating-stage';
     
-    // Create four floating cards
-    const cardsData = [
-      { 
-        title: 'Focus Timer', 
-        image: '<?= $baseUrl ?>/public/img/panda.jpg', 
-        color: 'var(--primary-color)',
-        content: 'The Focus Timer helps you stay on task with timed work sessions inspired by the peaceful nature of pandas. Take regular breaks to recharge your mind.' 
-      },
-      { 
-        title: 'Mythical Creatures', 
-        image: '<?= $baseUrl ?>/public/img/snow_leopard.png', 
-        color: 'var(--accent-1)',
-        content: 'Explore the world of mythical creatures and their connection to wildlife conservation through engaging stories and interactive experiences.' 
-      },
-      { 
-        title: 'Wildlife Impact', 
-        image: '<?= $baseUrl ?>/public/img/whale.png', 
-        color: 'var(--accent-2)',
-        content: 'Learn about the impact of human activities on wildlife habitats and discover ways to contribute to conservation efforts worldwide.' 
-      },
-      { 
-        title: 'Conservation', 
-        image: '<?= $baseUrl ?>/public/img/rhino.png', 
-        color: 'var(--primary-dark)',
-        content: 'Join our conservation initiatives to protect endangered species and preserve biodiversity for future generations.' 
-      }
-    ];
+    // Create overlay for expanded view
+    const fullPageOverlay = document.createElement('div');
+    fullPageOverlay.className = 'full-page-overlay';
+    fullPageOverlay.style.display = 'none';
+    document.body.appendChild(fullPageOverlay);
     
-    // Create expanded card container
+    // Create expanded card container inside overlay
     const expandedCardContainer = document.createElement('div');
     expandedCardContainer.className = 'expanded-card-container';
-    expandedCardContainer.style.display = 'none';
+    fullPageOverlay.appendChild(expandedCardContainer);
     
     // Create expanded card content section
     const expandedContent = document.createElement('div');
@@ -3079,12 +3141,44 @@
     const expandedImage = document.createElement('div');
     expandedImage.className = 'expanded-image';
     
+    // Add close button
+    const closeButton = document.createElement('button');
+    closeButton.className = 'close-expanded-card';
+    closeButton.innerHTML = '×';
+    closeButton.addEventListener('click', closeExpandedCard);
+    
     // Add to expanded card container
     expandedCardContainer.appendChild(expandedContent);
     expandedCardContainer.appendChild(expandedImage);
+    expandedCardContainer.appendChild(closeButton);
     
-    // Add expanded card container to main container
-    container.appendChild(expandedCardContainer);
+    // Create four floating cards
+    const cardsData = [
+      { 
+        title: 'Focus Timer', 
+        image: '<?= $baseUrl ?>/public/img/panda.jpg', 
+        color: 'var(--primary-color)',
+        content: 'The Focus Timer helps you stay on task with timed work sessions inspired by the peaceful nature of pandas. Take regular breaks to recharge your mind. Our approach combines productivity techniques with mindfulness practices to help you achieve deep focus while maintaining balance and preventing burnout.<br><br>Features include customizable session lengths, ambient nature sounds, gentle notifications, and progress tracking to help you build consistent work habits.' 
+      },
+      { 
+        title: 'Mythical Creatures', 
+        image: '<?= $baseUrl ?>/public/img/snow_leopard.png', 
+        color: 'var(--accent-1)',
+        content: 'Explore the world of mythical creatures and their connection to wildlife conservation through engaging stories and interactive experiences. Discover how legends and folklore from around the world often reflect our relationship with the natural environment.<br><br>Our collection features detailed illustrations, origin stories, and conservation connections for each creature, highlighting how mythology can inspire modern conservation efforts.' 
+      },
+      { 
+        title: 'Wildlife Impact', 
+        image: '<?= $baseUrl ?>/public/img/whale.png', 
+        color: 'var(--accent-2)',
+        content: 'Learn about the impact of human activities on wildlife habitats and discover ways to contribute to conservation efforts worldwide. Our interactive maps and data visualizations help you understand critical ecosystems and the challenges they face.<br><br>From climate change to habitat loss, pollution to poaching, we provide clear explanations of complex issues and actionable steps that anyone can take to make a positive difference.' 
+      },
+      { 
+        title: 'Conservation', 
+        image: '<?= $baseUrl ?>/public/img/rhino.png', 
+        color: 'var(--primary-dark)',
+        content: 'Join our conservation initiatives to protect endangered species and preserve biodiversity for future generations. Our community-driven approach connects passionate individuals with organizations doing vital work on the ground.<br><br>Through education, fundraising, and direct action programs, we create pathways for meaningful participation in conservation efforts around the world, with transparent tracking of impact and outcomes.' 
+      }
+    ];
     
     // Add each card
     cardsData.forEach((card, index) => {
@@ -3133,7 +3227,6 @@
     function expandCard(cardData, cardElement) {
       // Store original card position for animation
       const cardRect = cardElement.getBoundingClientRect();
-      const containerRect = section.getBoundingClientRect();
       
       // Clone the card for expanding animation
       const cardClone = cardElement.cloneNode(true);
@@ -3142,13 +3235,13 @@
       cardClone.style.left = `${cardRect.left}px`;
       cardClone.style.width = `${cardRect.width}px`;
       cardClone.style.height = `${cardRect.height}px`;
-      cardClone.style.zIndex = '100';
+      cardClone.style.zIndex = '10000';
       document.body.appendChild(cardClone);
       
       // Prepare expanded content
       expandedContent.innerHTML = `
         <h2>${cardData.title}</h2>
-        <p>${cardData.content}</p>
+        <div class="content-text">${cardData.content}</div>
         <button class="learn-more-btn">Learn More</button>
       `;
       
@@ -3156,91 +3249,112 @@
       expandedImage.style.backgroundImage = `url(${cardData.image})`;
       expandedImage.style.backgroundColor = cardData.color;
       
-      // Show expanded container
-      expandedCardContainer.style.display = 'flex';
-      expandedCardContainer.style.opacity = '0';
+      // Show overlay with fade in
+      fullPageOverlay.style.display = 'block';
+      fullPageOverlay.style.opacity = '0';
       
-      // Hide the floating stage
-      gsap.to(floatingStage, {
-        opacity: 0,
+      gsap.to(fullPageOverlay, {
+        opacity: 1,
         duration: 0.5,
         ease: "power2.out"
       });
       
-      // Animate card to expanded position
+      // Disable scroll
+      document.body.style.overflow = 'hidden';
+      
+      // First animate card to fullscreen
       gsap.to(cardClone, {
-        top: `${containerRect.top + 50}px`,
-        left: `${containerRect.width / 2 + containerRect.left}px`,
+        top: '0',
+        left: '0',
+        width: '100vw',
+        height: '100vh',
+        borderRadius: '0',
         duration: 0.8,
         ease: "power3.inOut",
         onComplete: function() {
-          // Show expanded content with animation
+          // When full screen, animate the split into content and image
+          gsap.to(cardClone, {
+            opacity: 0,
+            duration: 0.3,
+            onComplete: function() {
+              document.body.removeChild(cardClone);
+            }
+          });
+          
+          // Show expanded card container
+          expandedCardContainer.style.opacity = '0';
+          expandedCardContainer.style.display = 'flex';
+          
+          // Animate expanded content parts
           gsap.to(expandedCardContainer, {
             opacity: 1,
             duration: 0.5,
             ease: "power2.out"
           });
           
-          // Animate expanded content parts
           gsap.fromTo(expandedContent, 
-            { x: -50, opacity: 0 },
-            { x: 0, opacity: 1, duration: 0.6, ease: "power2.out", delay: 0.2 }
+            { x: -100, opacity: 0 },
+            { x: 0, opacity: 1, duration: 0.8, ease: "power2.out", delay: 0.1 }
           );
           
           gsap.fromTo(expandedImage, 
-            { x: 50, opacity: 0, rotation: -5 },
-            { x: 0, opacity: 1, rotation: 0, duration: 0.6, ease: "power2.out", delay: 0.3 }
+            { x: 100, opacity: 0, rotation: -5 },
+            { x: 0, opacity: 1, rotation: 0, duration: 0.8, ease: "power2.out", delay: 0.2 }
           );
-          
-          // Remove the clone after animation completes
-          document.body.removeChild(cardClone);
         }
       });
       
-      // Add event listener to close expanded card when mouse leaves the section
-      section.addEventListener('mouseleave', closeExpandedCard);
-      
-      // Add event listener to close on click outside
-      document.addEventListener('click', closeExpandedCard);
+      // Add event listener to close on escape key
+      document.addEventListener('keydown', handleEscKey);
+    }
+    
+    // Function to handle escape key
+    function handleEscKey(e) {
+      if (e.key === 'Escape') {
+        closeExpandedCard();
+      }
     }
     
     // Function to close expanded card
     function closeExpandedCard() {
       // Don't close if already animating out
-      if (expandedCardContainer.classList.contains('closing')) return;
-      expandedCardContainer.classList.add('closing');
+      if (fullPageOverlay.classList.contains('closing')) return;
+      fullPageOverlay.classList.add('closing');
       
       // Animate out expanded content
       gsap.to(expandedContent, {
-        x: -50,
+        x: -100,
         opacity: 0,
         duration: 0.5,
         ease: "power2.in"
       });
       
       gsap.to(expandedImage, {
-        x: 50,
+        x: 100,
         opacity: 0,
         rotation: -5,
         duration: 0.5,
-        ease: "power2.in",
-        onComplete: function() {
-          // Hide expanded container
-          expandedCardContainer.style.display = 'none';
-          expandedCardContainer.classList.remove('closing');
-          
-          // Show floating stage again
-          gsap.to(floatingStage, {
-            opacity: 1,
-            duration: 0.5,
-            ease: "power2.out"
-          });
-        }
+        ease: "power2.in"
       });
       
-      // Remove event listeners
-      section.removeEventListener('mouseleave', closeExpandedCard);
-      document.removeEventListener('click', closeExpandedCard);
+      // Fade out overlay
+      gsap.to(fullPageOverlay, {
+        opacity: 0,
+        duration: 0.5,
+        delay: 0.2,
+        ease: "power2.in",
+        onComplete: function() {
+          // Hide overlay
+          fullPageOverlay.style.display = 'none';
+          fullPageOverlay.classList.remove('closing');
+          
+          // Re-enable scroll
+          document.body.style.overflow = '';
+          
+          // Remove event listener
+          document.removeEventListener('keydown', handleEscKey);
+        }
+      });
     }
   }
   
@@ -3248,6 +3362,7 @@
     const cards = document.querySelectorAll('.floating-card');
     const pagination = document.querySelector('.current-page');
     let currentCard = 0;
+    let autoRotateInterval;
     
     // Position cards in 3D space
     function positionCards() {
@@ -3323,21 +3438,33 @@
         });
       });
       
-      // Auto rotate cards
-      let autoRotate = setInterval(nextCard, 3000);
+      // Start auto rotation
+      startAutoRotate();
       
       // Stop auto-rotation on hover
       floatingStage.addEventListener('mouseenter', () => {
-        clearInterval(autoRotate);
+        stopAutoRotate();
       });
       
       // Resume auto-rotation on mouse leave
       floatingStage.addEventListener('mouseleave', () => {
-        autoRotate = setInterval(nextCard, 3000);
+        startAutoRotate();
         setTimeout(() => {
           positionCards();
         }, 300);
       });
+      
+      function startAutoRotate() {
+        stopAutoRotate(); // Clear any existing interval first
+        autoRotateInterval = setInterval(nextCard, 3000);
+      }
+      
+      function stopAutoRotate() {
+        if (autoRotateInterval) {
+          clearInterval(autoRotateInterval);
+          autoRotateInterval = null;
+        }
+      }
       
       // Add touch swipe functionality
       let startX, startY;
