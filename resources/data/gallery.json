@@ -42,11 +42,11 @@
       "conservation_fact": "The Amur Leopard is Critically Endangered due to habitat loss, poaching, and human encroachment.",
       "last_interaction_at": "2023-11-21 09:15:00",
       "image_urls": {
-        "egg": "/Wildlife/images/creatures/2_egg.png",
-        "baby": "/Wildlife/images/creatures/2_baby.png",
-        "juvenile": "/Wildlife/images/creatures/2_juvenile.png",
-        "adult": "/Wildlife/images/creatures/2_adult.png",
-        "mythical": "/Wildlife/images/creatures/2_mythical.png"
+        "egg": "/Wildlife/images/creatures/2.jpg",
+        "baby": "/Wildlife/images/creatures/2.jpg",
+        "juvenile": "/Wildlife/images/creatures/2.jpg",
+        "adult": "/Wildlife/images/creatures/2.jpg",
+        "mythical": "/Wildlife/images/creatures/2.jpg"
       },
       "audio_url": "/Wildlife/audio/creatures/frost_prowler.mp3",
       "exhibition_note": "A symbol of survival in harsh climates, it calls attention to the fragility of endangered ecosystems."

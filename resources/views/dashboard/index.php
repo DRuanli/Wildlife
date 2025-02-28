@@ -10,7 +10,7 @@
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Google Fonts -->
+  <!-- Google Fonts - Preload for performance -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
@@ -21,7 +21,7 @@
   <!-- Alpine.js -->
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   
-  <!-- GSAP for animations -->
+  <!-- GSAP for animations - Load only what we need -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
@@ -63,6 +63,9 @@
       color: var(--color-text);
       line-height: 1.5;
       overflow-x: hidden;
+      /* Hardware acceleration hint */
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
     
     .headline {
@@ -70,13 +73,14 @@
       font-weight: 500;
     }
     
-    /* Parallax layers */
+    /* Optimized parallax with hardware acceleration */
     .parallax-container {
-      perspective: 1px;
       height: 100vh;
-      overflow-x: hidden;
       overflow-y: auto;
-      perspective-origin: 0 0;
+      overflow-x: hidden;
+      perspective: 10px;
+      transform-style: preserve-3d;
+      -webkit-overflow-scrolling: touch; /* For smooth scrolling on iOS */
     }
     
     .parallax-layer {
@@ -85,91 +89,65 @@
       left: 0;
       right: 0;
       bottom: 0;
-      transform-origin-x: 100%;
+      will-change: transform; /* Performance hint for browsers */
     }
     
     .parallax-layer-back {
-      transform: translateZ(-6px) scale(7);
+      transform: translateZ(-10px) scale(2);
     }
     
     .parallax-layer-mid {
-      transform: translateZ(-3px) scale(4);
+      transform: translateZ(-5px) scale(1.5);
     }
     
     .parallax-layer-front {
-      transform: translateZ(-1px) scale(2);
+      transform: translateZ(-2px) scale(1.2);
     }
     
     .parallax-content {
-      transform: translateZ(0);
       position: relative;
       z-index: 1;
+      transform: translateZ(0); /* Force hardware acceleration */
     }
     
-    /* Interactive elements */
+    /* Interactive elements with optimized transitions */
     .interactive-card {
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                  box-shadow 0.4s ease;
       border-radius: 16px;
       overflow: hidden;
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+      will-change: transform, box-shadow; /* Performance hint */
     }
     
     .interactive-card:hover {
-      transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+      transform: translateY(-10px);
       box-shadow: 0 20px 30px rgba(0, 0, 0, 0.1);
     }
     
-    /* Hero button effect */
+    /* Hero button effect - simplified for performance */
     .hero-button {
       position: relative;
       overflow: hidden;
       z-index: 1;
-      transition: all 0.5s ease;
+      transition: all 0.3s ease;
+      will-change: transform; /* Performance hint */
     }
     
-    .hero-button:before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.1);
-      z-index: -1;
-      transform: scale(0);
-      transition: transform 0.5s ease;
-      border-radius: inherit;
+    .hero-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1);
     }
     
-    .hero-button:hover:before {
-      transform: scale(1);
-    }
-    
-    .hero-button:after {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 50%);
-      transform: scale(0);
-      transition: transform 0.5s ease;
-    }
-    
-    .hero-button:hover:after {
-      transform: scale(1);
-    }
-    
-    /* Glass morphism */
+    /* Glass morphism - optimized for performance */
     .glass {
       background: rgba(255, 255, 255, 0.25);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       border: 1px solid rgba(255, 255, 255, 0.18);
     }
     
-    /* Animated background gradient */
+    /* Animated background gradient - reduced complexity */
     .animated-gradient {
       background: linear-gradient(-45deg, #2f4f2f, #4D724D, #4A6FA5, #CE8550);
       background-size: 400% 400%;
@@ -182,7 +160,7 @@
       100% { background-position: 0% 50%; }
     }
     
-    /* Particles container */
+    /* Particles container - optimized */
     #particles-js {
       position: absolute;
       width: 100%;
@@ -192,7 +170,7 @@
       z-index: 0;
     }
     
-    /* 3D scene container */
+    /* 3D scene container - optimized */
     #scene-container {
       position: absolute;
       top: 0;
@@ -200,14 +178,16 @@
       width: 100%;
       height: 100vh;
       z-index: 0;
-      opacity: 0.5;
+      opacity: 0.3; /* Reduced for better performance */
+      will-change: transform; /* Performance hint */
     }
     
-    /* Scroll-triggered animations */
+    /* Optimized scroll-triggered animations */
     .fade-in {
       opacity: 0;
       transform: translateY(20px);
-      transition: opacity 1s ease, transform 1s ease;
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      will-change: opacity, transform; /* Performance hint */
     }
     
     .fade-in.active {
@@ -215,27 +195,29 @@
       transform: translateY(0);
     }
     
-    /* Bubble floating animation */
+    /* Optimized floating animation */
     @keyframes float {
       0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-20px); }
+      50% { transform: translateY(-10px); }
     }
     
     .float {
       animation: float 6s ease-in-out infinite;
+      will-change: transform; /* Performance hint */
     }
     
-    /* Creature container */
+    /* Creature container - optimized */
     .creature-container {
       position: relative;
-      transition: transform 0.6s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+      transition: transform 0.4s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+      will-change: transform; /* Performance hint */
     }
     
     .creature-container:hover {
-      transform: scale(1.1) rotate(5deg);
+      transform: scale(1.05);
     }
     
-    /* Progress bar animation */
+    /* Progress bar animation - optimized */
     @keyframes progress-fill {
       0% { width: 0; }
       100% { width: var(--progress-width); }
@@ -257,17 +239,18 @@
       background: var(--color-primary);
       border-radius: 4px;
       width: 0;
-      animation: progress-fill 1.5s ease forwards;
+      animation: progress-fill 1s ease forwards;
+      will-change: width; /* Performance hint */
     }
     
-    /* Stats number animation */
+    /* Stats number animation - optimized */
     .animate-number {
       display: inline-block;
       opacity: 0;
       transform: translateY(10px);
     }
     
-    /* Cursor follower */
+    /* Optimized cursor follower */
     .cursor-follower {
       position: fixed;
       width: 30px;
@@ -278,381 +261,393 @@
       mix-blend-mode: difference;
       z-index: 9999;
       transform: translate(-50%, -50%);
-      transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease;
+      transition: width 0.2s ease, height 0.2s ease;
+      will-change: transform, width, height; /* Performance hint */
     }
   </style>
 </head>
 
-<body class="parallax-container" data-barba="wrapper">
-  <!-- Custom cursor follower -->
+<body>
+  <!-- Custom cursor follower - visible only on desktop -->
   <div class="cursor-follower hidden md:block"></div>
   
-  <!-- 3D Scene Container -->
-  <div id="scene-container"></div>
-  
-  <!-- Parallax Background Layers -->
-  <div class="parallax-layer parallax-layer-back">
-    <div class="h-screen w-full animated-gradient"></div>
-  </div>
-  
-  <div class="parallax-layer parallax-layer-mid">
-    <div class="absolute top-1/4 left-1/3 w-32 h-32 rounded-full bg-white opacity-10"></div>
-    <div class="absolute top-1/2 right-1/4 w-24 h-24 rounded-full bg-white opacity-5"></div>
-    <div class="absolute bottom-1/4 left-1/5 w-40 h-40 rounded-full bg-white opacity-5"></div>
-  </div>
-  
-  <div class="parallax-layer parallax-layer-front">
-    <div class="absolute top-20 right-20 w-16 h-16 rounded-full bg-white opacity-10 float"></div>
-    <div class="absolute bottom-40 left-1/4 w-12 h-12 rounded-full bg-white opacity-10 float" style="animation-delay: -2s;"></div>
-    <div class="absolute top-1/3 left-10 w-20 h-20 rounded-full bg-white opacity-10 float" style="animation-delay: -4s;"></div>
-  </div>
-  
-  <!-- Main Content -->
-  <div class="parallax-content">
-    <!-- Hero Section with Particles -->
-    <section class="relative min-h-screen flex items-center">
-      <div id="particles-js" class="absolute inset-0"></div>
-      
-      <div class="container mx-auto px-4 relative z-10">
-        <div class="max-w-4xl mx-auto text-center">
-          <h1 class="headline text-5xl sm:text-6xl mb-6 text-white text-shadow" id="welcome-text">
-            Welcome back, <span class="text-amber-300"><?php echo $user['username']; ?></span>!
-          </h1>
-          <p class="text-xl text-white text-opacity-90 mb-10">Your wild haven awaits your focused energy.</p>
-          
-          <div class="flex flex-col sm:flex-row justify-center items-center gap-6">
-            <a href="<?= $baseUrl ?>/focus" class="hero-button bg-accent text-white px-8 py-4 rounded-xl font-medium shadow-xl flex items-center justify-center text-lg group">
-              <i class="fas fa-clock mr-3 group-hover:rotate-12 transition-transform"></i>
-              <span>Start Focus Session</span>
-            </a>
-            <a href="<?= $baseUrl ?>/dashboard/visualization" class="hero-button glass text-white px-8 py-4 rounded-xl font-medium flex items-center justify-center text-lg group">
-              <i class="fas fa-chart-line mr-3 group-hover:scale-110 transition-transform"></i>
-              <span>View Analytics</span>
-            </a>
+  <!-- Main container with optimized parallax -->
+  <div class="parallax-container" data-barba="wrapper">
+    <!-- 3D Scene Container - optimized -->
+    <div id="scene-container"></div>
+    
+    <!-- Simplified Parallax Background Layers -->
+    <div class="parallax-layer parallax-layer-back">
+      <div class="h-screen w-full animated-gradient"></div>
+    </div>
+    
+    <div class="parallax-layer parallax-layer-mid">
+      <div class="absolute top-1/4 left-1/3 w-32 h-32 rounded-full bg-white opacity-10"></div>
+      <div class="absolute top-1/2 right-1/4 w-24 h-24 rounded-full bg-white opacity-5"></div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="parallax-content">
+      <!-- Hero Section with Optimized Particles -->
+      <section class="relative min-h-screen flex items-center">
+        <div id="particles-js" class="absolute inset-0"></div>
+        
+        <div class="container mx-auto px-4 relative z-10">
+          <div class="max-w-4xl mx-auto text-center">
+            <h1 class="headline text-5xl sm:text-6xl mb-6 text-white text-shadow" id="welcome-text">
+              Welcome back, <span class="text-amber-300"><?php echo $user['username']; ?></span>!
+            </h1>
+            <p class="text-xl text-white text-opacity-90 mb-10">Your wild haven awaits your focused energy.</p>
+            
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-6">
+              <a href="<?= $baseUrl ?>/focus" class="hero-button bg-accent text-white px-8 py-4 rounded-xl font-medium shadow-xl flex items-center justify-center text-lg group">
+                <i class="fas fa-clock mr-3 group-hover:rotate-12 transition-transform"></i>
+                <span>Start Focus Session</span>
+              </a>
+              <a href="<?= $baseUrl ?>/dashboard/visualization" class="hero-button glass text-white px-8 py-4 rounded-xl font-medium flex items-center justify-center text-lg group">
+                <i class="fas fa-chart-line mr-3 group-hover:scale-110 transition-transform"></i>
+                <span>View Analytics</span>
+              </a>
+            </div>
           </div>
         </div>
-      </div>
-      
-      <!-- Scroll indicator -->
-      <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white text-opacity-80 text-center">
-        <p class="mb-2 text-sm">Scroll to explore</p>
-        <div class="w-6 h-10 border-2 border-white border-opacity-50 rounded-full mx-auto flex justify-center">
-          <div class="w-1.5 h-1.5 bg-white rounded-full animate-bounce mt-1"></div>
+        
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white text-opacity-80 text-center">
+          <p class="mb-2 text-sm">Scroll to explore</p>
+          <div class="w-6 h-10 border-2 border-white border-opacity-50 rounded-full mx-auto flex justify-center">
+            <div class="w-1.5 h-1.5 bg-white rounded-full animate-bounce mt-1"></div>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Stats Section with 3D Transformations -->
-    <section class="relative py-24 bg-white">
-      <div class="container mx-auto px-4">
-        <h2 class="headline text-3xl mb-12 text-center fade-in">Your Focus Journey</h2>
-        
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
-          <!-- Focus Time Card -->
-          <div class="interactive-card bg-white p-6 stats-card" data-stats-value="<?= floor(($user['total_focus_time'] ?? 0) / 60) ?>">
-            <div class="flex items-center mb-3">
-              <div class="w-12 h-12 rounded-full flex items-center justify-center mr-3" style="background-color: var(--color-focus-light);">
-                <i class="fas fa-hourglass-half text-xl" style="color: var(--color-focus);"></i>
-              </div>
-              <h3 class="font-medium">Focus Time</h3>
-            </div>
-            
-            <div class="flex items-end">
-              <span class="text-3xl font-bold stats-number">0</span>
-              <span class="text-lg ml-1 text-gray-600">hrs</span>
-              <span class="text-xl font-bold ml-2 stats-decimal">0</span>
-              <span class="text-lg ml-1 text-gray-600">min</span>
-            </div>
-            
-            <div class="mt-3">
-              <div class="progress-bar">
-                <div class="progress-bar-fill" style="--progress-width: 75%"></div>
-              </div>
-              <div class="text-sm text-gray-500 mt-1 flex justify-between">
-                <span>Last week</span>
-                <span class="text-green-500"><i class="fas fa-arrow-up text-xs"></i> 12%</span>
-              </div>
-            </div>
-          </div>
+      <!-- Stats Section with Optimized Animations -->
+      <section class="relative py-24 bg-white">
+        <div class="container mx-auto px-4">
+          <h2 class="headline text-3xl mb-12 text-center fade-in">Your Focus Journey</h2>
           
-          <!-- Streak Card -->
-          <div class="interactive-card bg-white p-6 stats-card" data-stats-value="<?= $user['streak_days'] ?? 0 ?>">
-            <div class="flex items-center mb-3">
-              <div class="w-12 h-12 rounded-full flex items-center justify-center mr-3" style="background-color: var(--color-streak-light);">
-                <i class="fas fa-fire text-xl" style="color: var(--color-streak);"></i>
-              </div>
-              <h3 class="font-medium">Current Streak</h3>
-            </div>
-            
-            <div class="flex items-end">
-              <span class="text-3xl font-bold stats-number">0</span>
-              <span class="text-lg ml-1 text-gray-600">days</span>
-            </div>
-            
-            <div class="mt-3">
-              <div class="progress-bar">
-                <div class="progress-bar-fill" style="--progress-width: 65%"></div>
-              </div>
-              <div class="text-sm text-gray-500 mt-1">
-                <span>Personal best: 21 days</span>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Coins Card -->
-          <div class="interactive-card bg-white p-6 stats-card" data-stats-value="<?= $user['coins_balance'] ?? 0 ?>">
-            <div class="flex items-center mb-3">
-              <div class="w-12 h-12 rounded-full flex items-center justify-center mr-3" style="background-color: var(--color-coins-light);">
-                <i class="fas fa-coins text-xl" style="color: var(--color-coins);"></i>
-              </div>
-              <h3 class="font-medium">Wild Coins</h3>
-            </div>
-            
-            <div class="flex items-end">
-              <span class="text-3xl font-bold stats-number">0</span>
-            </div>
-            
-            <div class="mt-3">
-              <div class="progress-bar">
-                <div class="progress-bar-fill" style="--progress-width: 40%"></div>
-              </div>
-              <div class="text-sm text-gray-500 mt-1 flex justify-between">
-                <span>5% bonus active</span>
-                <a href="<?= $baseUrl ?>/shop" class="text-blue-500 hover:underline">Shop</a>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Conservation Card -->
-          <div class="interactive-card bg-white p-6 stats-card" data-stats-value="12">
-            <div class="flex items-center mb-3">
-              <div class="w-12 h-12 rounded-full flex items-center justify-center mr-3" style="background-color: var(--color-conservation-light);">
-                <i class="fas fa-leaf text-xl" style="color: var(--color-conservation);"></i>
-              </div>
-              <h3 class="font-medium">Trees Planted</h3>
-            </div>
-            
-            <div class="flex items-end">
-              <span class="text-3xl font-bold stats-number">0</span>
-            </div>
-            
-            <div class="mt-3">
-              <div class="progress-bar">
-                <div class="progress-bar-fill" style="--progress-width: 65%"></div>
-              </div>
-              <div class="text-sm text-gray-500 mt-1">
-                <span>65% to next tree</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    
-    <!-- Creatures Section with 3D Animated Creatures -->
-    <section class="relative py-24 bg-gradient-to-b from-emerald-50 to-emerald-100">
-      <div class="container mx-auto px-4">
-        <div class="max-w-3xl mx-auto text-center mb-12">
-          <h2 class="headline text-3xl mb-4 fade-in">Your Wildlife Collection</h2>
-          <p class="text-gray-600 fade-in">Nurture your magical creatures by focusing on what matters</p>
-        </div>
-        
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
-          <!-- Creature Card 1 - Water Dragon -->
-          <div class="creature-container fade-in">
-            <div class="bg-white rounded-2xl shadow-lg overflow-hidden h-full transform transition-transform">
-              <div class="h-32 bg-blue-50 relative overflow-hidden">
-                <!-- Animated water waves -->
-                <svg viewBox="0 0 100 20" class="absolute inset-0 w-full h-full opacity-20" preserveAspectRatio="none">
-                  <path d="M0,10 Q30,5 50,10 T100,10 V20 H0 Z" fill="#3B82F6">
-                    <animate attributeName="d" dur="6s" repeatCount="indefinite" values="M0,10 Q30,5 50,10 T100,10 V20 H0 Z; M0,10 Q30,15 50,10 T100,10 V20 H0 Z; M0,10 Q30,5 50,10 T100,10 V20 H0 Z"></animate>
-                  </path>
-                </svg>
-                
-                <div class="absolute inset-0 flex items-center justify-center">
-                  <i class="fas fa-dragon text-blue-500 text-5xl creature-icon float"></i>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
+            <!-- Focus Time Card -->
+            <div class="interactive-card bg-white p-6 stats-card" data-stats-value="<?= floor(($user['total_focus_time'] ?? 0) / 60) ?>">
+              <div class="flex items-center mb-3">
+                <div class="w-12 h-12 rounded-full flex items-center justify-center mr-3" style="background-color: var(--color-focus-light);">
+                  <i class="fas fa-hourglass-half text-xl" style="color: var(--color-focus);"></i>
                 </div>
+                <h3 class="font-medium">Focus Time</h3>
               </div>
               
-              <div class="p-4">
-                <h3 class="font-bold text-center">Aquaris</h3>
-                <p class="text-sm text-gray-500 text-center">Water Dragon • Adult</p>
-                
-                <div class="mt-2 flex justify-center space-x-2">
-                  <div class="text-xs flex items-center">
-                    <i class="fas fa-heart text-red-500 mr-1"></i>
-                    <span>92%</span>
-                  </div>
-                  <div class="text-xs flex items-center">
-                    <i class="fas fa-smile text-yellow-500 mr-1"></i>
-                    <span>87%</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Creature Card 2 - Fire Phoenix -->
-          <div class="creature-container fade-in">
-            <div class="bg-white rounded-2xl shadow-lg overflow-hidden h-full transform transition-transform">
-              <div class="h-32 bg-orange-50 relative overflow-hidden">
-                <!-- Animated flames -->
-                <svg viewBox="0 0 100 50" class="absolute inset-0 w-full h-full opacity-20" preserveAspectRatio="none">
-                  <path d="M10,50 Q30,30 50,50 T90,50" fill="#F97316">
-                    <animate attributeName="d" dur="3s" repeatCount="indefinite" values="M10,50 Q30,30 50,50 T90,50; M10,50 Q30,20 50,50 T90,50; M10,50 Q30,30 50,50 T90,50"></animate>
-                  </path>
-                </svg>
-                
-                <div class="absolute inset-0 flex items-center justify-center">
-                  <i class="fas fa-fire text-orange-500 text-5xl creature-icon float" style="animation-delay: -2s"></i>
-                </div>
+              <div class="flex items-end">
+                <span class="text-3xl font-bold stats-number">0</span>
+                <span class="text-lg ml-1 text-gray-600">hrs</span>
+                <span class="text-xl font-bold ml-2 stats-decimal">0</span>
+                <span class="text-lg ml-1 text-gray-600">min</span>
               </div>
               
-              <div class="p-4">
-                <h3 class="font-bold text-center">Ember</h3>
-                <p class="text-sm text-gray-500 text-center">Fire Phoenix • Adult</p>
-                
-                <div class="mt-2 flex justify-center space-x-2">
-                  <div class="text-xs flex items-center">
-                    <i class="fas fa-heart text-red-500 mr-1"></i>
-                    <span>96%</span>
-                  </div>
-                  <div class="text-xs flex items-center">
-                    <i class="fas fa-smile text-yellow-500 mr-1"></i>
-                    <span>92%</span>
-                  </div>
+              <div class="mt-3">
+                <div class="progress-bar">
+                  <div class="progress-bar-fill" style="--progress-width: 75%"></div>
+                </div>
+                <div class="text-sm text-gray-500 mt-1 flex justify-between">
+                  <span>Last week</span>
+                  <span class="text-green-500"><i class="fas fa-arrow-up text-xs"></i> 12%</span>
                 </div>
               </div>
             </div>
-          </div>
-          
-          <!-- Creature Card 3 - Forest Spirit -->
-          <div class="creature-container fade-in">
-            <div class="bg-white rounded-2xl shadow-lg overflow-hidden h-full transform transition-transform">
-              <div class="h-32 bg-green-50 relative overflow-hidden">
-                <!-- Animated leaves -->
-                <svg viewBox="0 0 100 50" class="absolute inset-0 w-full h-full opacity-20" preserveAspectRatio="none">
-                  <path d="M20,20 Q30,5 40,20 Q50,35 60,20 Q70,5 80,20" stroke="#22c55e" stroke-width="1" fill="none">
-                    <animate attributeName="d" dur="8s" repeatCount="indefinite" values="M20,20 Q30,5 40,20 Q50,35 60,20 Q70,5 80,20; M20,25 Q30,10 40,25 Q50,40 60,25 Q70,10 80,25; M20,20 Q30,5 40,20 Q50,35 60,20 Q70,5 80,20"></animate>
-                  </path>
-                </svg>
-                
-                <div class="absolute inset-0 flex items-center justify-center">
-                  <i class="fas fa-leaf text-green-500 text-5xl creature-icon float" style="animation-delay: -4s"></i>
+            
+            <!-- Streak Card -->
+            <div class="interactive-card bg-white p-6 stats-card" data-stats-value="<?= $user['streak_days'] ?? 0 ?>">
+              <div class="flex items-center mb-3">
+                <div class="w-12 h-12 rounded-full flex items-center justify-center mr-3" style="background-color: var(--color-streak-light);">
+                  <i class="fas fa-fire text-xl" style="color: var(--color-streak);"></i>
                 </div>
+                <h3 class="font-medium">Current Streak</h3>
               </div>
               
-              <div class="p-4">
-                <h3 class="font-bold text-center">Leafling</h3>
-                <p class="text-sm text-gray-500 text-center">Forest Spirit • Juvenile</p>
-                
-                <div class="mt-2 flex justify-center space-x-2">
-                  <div class="text-xs flex items-center">
-                    <i class="fas fa-heart text-red-500 mr-1"></i>
-                    <span>88%</span>
-                  </div>
-                  <div class="text-xs flex items-center">
-                    <i class="fas fa-smile text-yellow-500 mr-1"></i>
-                    <span>91%</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Creature Card 4 - Mystery Egg -->
-          <div class="creature-container fade-in">
-            <div class="bg-white rounded-2xl shadow-lg overflow-hidden h-full transform transition-transform">
-              <div class="h-32 bg-yellow-50 relative overflow-hidden">
-                <div class="absolute inset-0 flex items-center justify-center">
-                  <i class="fas fa-egg text-yellow-400 text-5xl creature-icon" id="mystery-egg"></i>
-                </div>
+              <div class="flex items-end">
+                <span class="text-3xl font-bold stats-number">0</span>
+                <span class="text-lg ml-1 text-gray-600">days</span>
               </div>
               
-              <div class="p-4">
-                <h3 class="font-bold text-center">Mystery Egg</h3>
-                <p class="text-sm text-gray-500 text-center">Unknown • Egg</p>
-                
-                <div class="mt-2">
-                  <div class="progress-bar">
-                    <div class="progress-bar-fill" style="--progress-width: 85%"></div>
-                  </div>
-                  <p class="text-xs text-center text-gray-500 mt-1">Ready to hatch!</p>
+              <div class="mt-3">
+                <div class="progress-bar">
+                  <div class="progress-bar-fill" style="--progress-width: 65%"></div>
+                </div>
+                <div class="text-sm text-gray-500 mt-1">
+                  <span>Personal best: 21 days</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Coins Card -->
+            <div class="interactive-card bg-white p-6 stats-card" data-stats-value="<?= $user['coins_balance'] ?? 0 ?>">
+              <div class="flex items-center mb-3">
+                <div class="w-12 h-12 rounded-full flex items-center justify-center mr-3" style="background-color: var(--color-coins-light);">
+                  <i class="fas fa-coins text-xl" style="color: var(--color-coins);"></i>
+                </div>
+                <h3 class="font-medium">Wild Coins</h3>
+              </div>
+              
+              <div class="flex items-end">
+                <span class="text-3xl font-bold stats-number">0</span>
+              </div>
+              
+              <div class="mt-3">
+                <div class="progress-bar">
+                  <div class="progress-bar-fill" style="--progress-width: 40%"></div>
+                </div>
+                <div class="text-sm text-gray-500 mt-1 flex justify-between">
+                  <span>5% bonus active</span>
+                  <a href="<?= $baseUrl ?>/shop" class="text-blue-500 hover:underline">Shop</a>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Conservation Card -->
+            <div class="interactive-card bg-white p-6 stats-card" data-stats-value="12">
+              <div class="flex items-center mb-3">
+                <div class="w-12 h-12 rounded-full flex items-center justify-center mr-3" style="background-color: var(--color-conservation-light);">
+                  <i class="fas fa-leaf text-xl" style="color: var(--color-conservation);"></i>
+                </div>
+                <h3 class="font-medium">Trees Planted</h3>
+              </div>
+              
+              <div class="flex items-end">
+                <span class="text-3xl font-bold stats-number">0</span>
+              </div>
+              
+              <div class="mt-3">
+                <div class="progress-bar">
+                  <div class="progress-bar-fill" style="--progress-width: 65%"></div>
+                </div>
+                <div class="text-sm text-gray-500 mt-1">
+                  <span>65% to next tree</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        
-        <div class="text-center">
-          <a href="<?= $baseUrl ?>/creatures" class="inline-flex items-center px-6 py-3 bg-emerald-600 text-white rounded-lg font-medium shadow-md hover:bg-emerald-700 transition-colors hero-button">
-            <span>View All Creatures</span>
-            <i class="fas fa-arrow-right ml-2"></i>
-          </a>
-        </div>
-      </div>
-    </section>
-    
-    <!-- Conservation Impact with Particle Effects -->
-    <section class="relative py-24 bg-white overflow-hidden">
-      <div class="container mx-auto px-4">
-        <div class="max-w-3xl mx-auto text-center mb-12">
-          <h2 class="headline text-3xl mb-4 fade-in">Your Conservation Impact</h2>
-          <p class="text-gray-600 fade-in">Your focus sessions have contributed to real-world conservation efforts</p>
-        </div>
-        
-        <div class="flex flex-wrap -mx-2 mb-10">
-          <div class="w-full md:w-1/3 px-2 mb-4 fade-in">
-            <div class="interactive-card bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-6 text-center h-full">
-              <div class="w-16 h-16 mx-auto bg-white rounded-full flex items-center justify-center text-green-600 mb-4 float">
-                <i class="fas fa-tree text-2xl"></i>
+      </section>
+      
+      <!-- Creatures Section with Optimized Animations -->
+      <section class="relative py-24 bg-gradient-to-b from-emerald-50 to-emerald-100">
+        <div class="container mx-auto px-4">
+          <div class="max-w-3xl mx-auto text-center mb-12">
+            <h2 class="headline text-3xl mb-4 fade-in">Your Wildlife Collection</h2>
+            <p class="text-gray-600 fade-in">Nurture your magical creatures by focusing on what matters</p>
+          </div>
+          
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
+            <!-- Creature Card 1 - Water Dragon -->
+            <div class="creature-container fade-in">
+              <div class="bg-white rounded-2xl shadow-lg overflow-hidden h-full">
+                <div class="h-32 bg-blue-50 relative overflow-hidden">
+                  <!-- Simplified water waves -->
+                  <div class="absolute inset-0 opacity-20 bg-blue-100"></div>
+                  <div class="absolute inset-0 flex items-center justify-center">
+                    <i class="fas fa-dragon text-blue-500 text-5xl float"></i>
+                  </div>
+                </div>
+                
+                <div class="p-4">
+                  <h3 class="font-bold text-center">Aquaris</h3>
+                  <p class="text-sm text-gray-500 text-center">Water Dragon • Adult</p>
+                  
+                  <div class="mt-2 flex justify-center space-x-2">
+                    <div class="text-xs flex items-center">
+                      <i class="fas fa-heart text-red-500 mr-1"></i>
+                      <span>92%</span>
+                    </div>
+                    <div class="text-xs flex items-center">
+                      <i class="fas fa-smile text-yellow-500 mr-1"></i>
+                      <span>87%</span>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <h4 class="text-2xl font-semibold text-gray-800 mb-1 stats-card" data-stats-value="12">
-                <span class="stats-number">0</span>
-              </h4>
-              <p class="text-gray-600">Trees Planted</p>
+            </div>
+            
+            <!-- Creature Card 2 - Fire Phoenix -->
+            <div class="creature-container fade-in">
+              <div class="bg-white rounded-2xl shadow-lg overflow-hidden h-full">
+                <div class="h-32 bg-orange-50 relative overflow-hidden">
+                  <!-- Simplified flames -->
+                  <div class="absolute inset-0 opacity-20 bg-orange-100"></div>
+                  <div class="absolute inset-0 flex items-center justify-center">
+                    <i class="fas fa-fire text-orange-500 text-5xl float" style="animation-delay: -2s"></i>
+                  </div>
+                </div>
+                
+                <div class="p-4">
+                  <h3 class="font-bold text-center">Ember</h3>
+                  <p class="text-sm text-gray-500 text-center">Fire Phoenix • Adult</p>
+                  
+                  <div class="mt-2 flex justify-center space-x-2">
+                    <div class="text-xs flex items-center">
+                      <i class="fas fa-heart text-red-500 mr-1"></i>
+                      <span>96%</span>
+                    </div>
+                    <div class="text-xs flex items-center">
+                      <i class="fas fa-smile text-yellow-500 mr-1"></i>
+                      <span>92%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Creature Card 3 - Forest Spirit -->
+            <div class="creature-container fade-in">
+              <div class="bg-white rounded-2xl shadow-lg overflow-hidden h-full">
+                <div class="h-32 bg-green-50 relative overflow-hidden">
+                  <!-- Simplified leaves -->
+                  <div class="absolute inset-0 opacity-20 bg-green-100"></div>
+                  <div class="absolute inset-0 flex items-center justify-center">
+                    <i class="fas fa-leaf text-green-500 text-5xl float" style="animation-delay: -4s"></i>
+                  </div>
+                </div>
+                
+                <div class="p-4">
+                  <h3 class="font-bold text-center">Leafling</h3>
+                  <p class="text-sm text-gray-500 text-center">Forest Spirit • Juvenile</p>
+                  
+                  <div class="mt-2 flex justify-center space-x-2">
+                    <div class="text-xs flex items-center">
+                      <i class="fas fa-heart text-red-500 mr-1"></i>
+                      <span>88%</span>
+                    </div>
+                    <div class="text-xs flex items-center">
+                      <i class="fas fa-smile text-yellow-500 mr-1"></i>
+                      <span>91%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Creature Card 4 - Mystery Egg -->
+            <div class="creature-container fade-in">
+              <div class="bg-white rounded-2xl shadow-lg overflow-hidden h-full">
+                <div class="h-32 bg-yellow-50 relative overflow-hidden">
+                  <div class="absolute inset-0 flex items-center justify-center">
+                    <i class="fas fa-egg text-yellow-400 text-5xl" id="mystery-egg"></i>
+                  </div>
+                </div>
+                
+                <div class="p-4">
+                  <h3 class="font-bold text-center">Mystery Egg</h3>
+                  <p class="text-sm text-gray-500 text-center">Unknown • Egg</p>
+                  
+                  <div class="mt-2">
+                    <div class="progress-bar">
+                      <div class="progress-bar-fill" style="--progress-width: 85%"></div>
+                    </div>
+                    <p class="text-xs text-center text-gray-500 mt-1">Ready to hatch!</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           
-          <div class="w-full md:w-1/3 px-2 mb-4 fade-in">
-            <div class="interactive-card bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-6 text-center h-full">
-              <div class="w-16 h-16 mx-auto bg-white rounded-full flex items-center justify-center text-blue-600 mb-4 float" style="animation-delay: -2s">
-                <i class="fas fa-paw text-2xl"></i>
-              </div>
-              <h4 class="text-2xl font-semibold text-gray-800 mb-1 stats-card" data-stats-value="4">
-                <span class="stats-number">0</span>
-              </h4>
-              <p class="text-gray-600">Wildlife Protected</p>
-            </div>
+          <div class="text-center">
+            <a href="<?= $baseUrl ?>/creatures" class="inline-flex items-center px-6 py-3 bg-emerald-600 text-white rounded-lg font-medium shadow-md hover:bg-emerald-700 transition-colors hero-button">
+              <span>View All Creatures</span>
+              <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Conservation Impact with Optimized Effects -->
+      <section class="relative py-24 bg-white">
+        <div class="container mx-auto px-4">
+          <div class="max-w-3xl mx-auto text-center mb-12">
+            <h2 class="headline text-3xl mb-4 fade-in">Your Conservation Impact</h2>
+            <p class="text-gray-600 fade-in">Your focus sessions have contributed to real-world conservation efforts</p>
           </div>
           
-          <div class="w-full md:w-1/3 px-2 mb-4 fade-in">
-            <div class="interactive-card bg-gradient-to-br from-amber-50 to-amber-100 rounded-lg p-6 text-center h-full">
-              <div class="w-16 h-16 mx-auto bg-white rounded-full flex items-center justify-center text-amber-600 mb-4 float" style="animation-delay: -4s">
-                <i class="fas fa-hand-holding-heart text-2xl"></i>
+          <div class="flex flex-wrap -mx-2 mb-10">
+            <div class="w-full md:w-1/3 px-2 mb-4 fade-in">
+              <div class="interactive-card bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-6 text-center h-full">
+                <div class="w-16 h-16 mx-auto bg-white rounded-full flex items-center justify-center text-green-600 mb-4 float">
+                  <i class="fas fa-tree text-2xl"></i>
+                </div>
+                <h4 class="text-2xl font-semibold text-gray-800 mb-1 stats-card" data-stats-value="12">
+                  <span class="stats-number">0</span>
+                </h4>
+                <p class="text-gray-600">Trees Planted</p>
               </div>
-              <h4 class="text-2xl font-semibold text-gray-800 mb-1 stats-card" data-stats-value="2">
-                <span class="stats-number">0</span>
-              </h4>
-              <p class="text-gray-600">Donations Made</p>
+            </div>
+            
+            <div class="w-full md:w-1/3 px-2 mb-4 fade-in">
+              <div class="interactive-card bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-6 text-center h-full">
+                <div class="w-16 h-16 mx-auto bg-white rounded-full flex items-center justify-center text-blue-600 mb-4 float" style="animation-delay: -2s">
+                  <i class="fas fa-paw text-2xl"></i>
+                </div>
+                <h4 class="text-2xl font-semibold text-gray-800 mb-1 stats-card" data-stats-value="4">
+                  <span class="stats-number">0</span>
+                </h4>
+                <p class="text-gray-600">Wildlife Protected</p>
+              </div>
+            </div>
+            
+            <div class="w-full md:w-1/3 px-2 mb-4 fade-in">
+              <div class="interactive-card bg-gradient-to-br from-amber-50 to-amber-100 rounded-lg p-6 text-center h-full">
+                <div class="w-16 h-16 mx-auto bg-white rounded-full flex items-center justify-center text-amber-600 mb-4 float" style="animation-delay: -4s">
+                  <i class="fas fa-hand-holding-heart text-2xl"></i>
+                </div>
+                <h4 class="text-2xl font-semibold text-gray-800 mb-1 stats-card" data-stats-value="2">
+                  <span class="stats-number">0</span>
+                </h4>
+                <p class="text-gray-600">Donations Made</p>
+              </div>
             </div>
           </div>
         </div>
-        
-      </div>
-    </section>
-    
-    
+      </section>
+    </div>
   </div>
 
-  <!-- Initialize Scripts -->
+  <!-- Initialize Scripts with Performance Optimizations -->
   <script>
-    // Initialize particles.js
+    // Debounce function to limit expensive operations
+    function debounce(func, wait) {
+      let timeout;
+      return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+      };
+    }
+    
+    // Initialize all effects when DOM is ready
     document.addEventListener('DOMContentLoaded', function() {
+      // Initialize particles.js with reduced particle count
+      initParticles();
+      
+      // Initialize 3D scene with optimized settings
+      initThreeJS();
+      
+      // Initialize GSAP animations
+      initGSAP();
+      
+      // Custom cursor follower with throttling
+      initCursorFollower();
+      
+      // Initialize scroll animations with IntersectionObserver
+      initScrollAnimations();
+      
+      // Animate stats numbers with requestAnimationFrame for better performance
+      initStatsAnimation();
+      
+      // Egg wobble animation - simplified
+      initEggAnimation();
+    });
+    
+    // Optimized particles initialization
+    function initParticles() {
       particlesJS('particles-js', {
         "particles": {
           "number": {
-            "value": 80,
+            "value": 40, // Reduced particle count
             "density": {
               "enable": true,
               "value_area": 800
@@ -677,11 +672,11 @@
             "random": true
           },
           "line_linked": {
-            "enable": false
+            "enable": false // Disable lines for better performance
           },
           "move": {
             "enable": true,
-            "speed": 1,
+            "speed": 0.8, // Slower speed for better performance
             "direction": "top",
             "random": true,
             "straight": false,
@@ -711,58 +706,40 @@
               "speed": 3
             },
             "push": {
-              "particles_nb": 4
+              "particles_nb": 2 // Reduced for performance
             }
           }
         },
-        "retina_detect": true
+        "retina_detect": false // Disable retina detection for performance
       });
-      
-      // Initialize 3D scene
-      initThreeJS();
-      
-      // Initialize GSAP animations
-      initGSAP();
-      
-      // Custom cursor follower
-      initCursorFollower();
-      
-      // Initialize scroll animations
-      initScrollAnimations();
-      
-      // Animate stats numbers
-      initStatsAnimation();
-      
-      // Egg wobble animation
-      initEggAnimation();
-    });
+    }
     
-    // Initialize Three.js scene
+    // Optimized Three.js scene
     function initThreeJS() {
       const container = document.getElementById('scene-container');
       
       if (!container) return;
       
-      // Create scene, camera and renderer
+      // Create scene, camera and renderer with performance settings
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
-      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      const renderer = new THREE.WebGLRenderer({ 
+        antialias: false, // Disable for performance
+        alpha: true,
+        powerPreference: 'high-performance'
+      });
       
       renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setPixelRatio(1); // Use lower pixel ratio for better performance
       container.appendChild(renderer.domElement);
       
       // Add lights
       const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
       scene.add(ambientLight);
       
-      const pointLight = new THREE.PointLight(0xffffff, 0.5);
-      pointLight.position.set(5, 5, 5);
-      scene.add(pointLight);
-      
-      // Create particles
+      // Create particles - reduced count
       const particlesGeometry = new THREE.BufferGeometry();
-      const particlesCount = 500;
+      const particlesCount = 200; // Reduced particle count
       
       const posArray = new Float32Array(particlesCount * 3);
       
@@ -773,10 +750,10 @@
       particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
       
       const particlesMaterial = new THREE.PointsMaterial({
-        size: 0.01,
+        size: 0.02,
         color: 0x4D724D,
         transparent: true,
-        opacity: 0.8
+        opacity: 0.5
       });
       
       const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
@@ -785,100 +762,129 @@
       // Position camera
       camera.position.z = 5;
       
-      // Animation loop
-      const animate = () => {
+      // Animation loop with frame limiting for performance
+      let lastTime = 0;
+      const frameLimit = 1000 / 30; // Limit to 30fps for better performance
+      
+      const animate = (timestamp) => {
+        const deltaTime = timestamp - lastTime;
+        
+        if (deltaTime > frameLimit) {
+          lastTime = timestamp - (deltaTime % frameLimit);
+          
+          particlesMesh.rotation.x += 0.0002;
+          particlesMesh.rotation.y += 0.0002;
+          
+          renderer.render(scene, camera);
+        }
+        
         requestAnimationFrame(animate);
-        
-        particlesMesh.rotation.x += 0.0005;
-        particlesMesh.rotation.y += 0.0005;
-        
-        renderer.render(scene, camera);
       };
       
-      animate();
+      animate(0);
       
-      // Handle window resize
-      window.addEventListener('resize', () => {
+      // Handle window resize with debounce
+      window.addEventListener('resize', debounce(() => {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
-      });
+      }, 250));
     }
     
-    // Initialize GSAP animations
+    // Optimized GSAP animations
     function initGSAP() {
       // Welcome text animation
       gsap.from("#welcome-text", {
-        y: -50,
+        y: -30,
         opacity: 0,
-        duration: 1.5,
-        ease: "elastic.out(1, 0.5)"
+        duration: 1,
+        ease: "power2.out"
       });
       
-      // Setup scroll triggers
+      // Setup scroll triggers with better performance settings
       gsap.registerPlugin(ScrollTrigger);
+      ScrollTrigger.config({ 
+        limitCallbacks: true,
+        ignoreMobileResize: true
+      });
       
-      // Creature cards animation
-      gsap.utils.toArray(".creature-container").forEach((card, i) => {
-        gsap.from(card, {
-          y: 50,
+      // Batch animations for better performance
+      const creatureContainers = document.querySelectorAll(".creature-container");
+      
+      // Create a single timeline for all creatures
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: creatureContainers[0],
+          start: "top bottom-=100",
+          toggleActions: "play none none none"
+        }
+      });
+      
+      creatureContainers.forEach((card, i) => {
+        tl.from(card, {
+          y: 30,
           opacity: 0,
-          duration: 0.8,
-          delay: i * 0.2,
-          scrollTrigger: {
-            trigger: card,
-            start: "top bottom-=100",
-            toggleActions: "play none none none"
-          }
-        });
+          duration: 0.4,
+          clearProps: "transform", // Clear props after animation
+        }, i * 0.1); // Stagger by 0.1s
       });
     }
     
-    // Custom cursor follower
+    // Optimized cursor follower
     function initCursorFollower() {
       const cursor = document.querySelector('.cursor-follower');
       
       if (!cursor) return;
       
+      // Use requestAnimationFrame for smoother cursor updates
+      let cursorX = 0;
+      let cursorY = 0;
+      let currentX = 0;
+      let currentY = 0;
+      
       document.addEventListener('mousemove', (e) => {
-        gsap.to(cursor, {
-          x: e.clientX,
-          y: e.clientY,
-          duration: 0.2
-        });
+        cursorX = e.clientX;
+        cursorY = e.clientY;
       });
+      
+      function updateCursor() {
+        // Smoothly interpolate cursor position
+        const easing = 0.2;
+        currentX += (cursorX - currentX) * easing;
+        currentY += (cursorY - currentY) * easing;
+        
+        cursor.style.transform = `translate(${currentX}px, ${currentY}px)`;
+        requestAnimationFrame(updateCursor);
+      }
+      
+      updateCursor();
       
       // Expand cursor on hoverable elements
       const hoverables = document.querySelectorAll('a, button, .interactive-card, .creature-container');
       
       hoverables.forEach(hoverable => {
         hoverable.addEventListener('mouseenter', () => {
-          gsap.to(cursor, {
-            width: 60,
-            height: 60,
-            opacity: 0.3,
-            duration: 0.3
-          });
+          cursor.style.width = '50px';
+          cursor.style.height = '50px';
+          cursor.style.opacity = '0.3';
         });
         
         hoverable.addEventListener('mouseleave', () => {
-          gsap.to(cursor, {
-            width: 30,
-            height: 30,
-            opacity: 0.6,
-            duration: 0.3
-          });
+          cursor.style.width = '30px';
+          cursor.style.height = '30px';
+          cursor.style.opacity = '0.6';
         });
       });
     }
     
-    // Initialize scroll animations
+    // Optimized scroll animations using Intersection Observer
     function initScrollAnimations() {
       const fadeElements = document.querySelectorAll('.fade-in');
       
+      // Use Intersection Observer for better scroll performance
       const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
+        rootMargin: '0px 0px -100px 0px',
+        threshold: 0.1
       };
       
       const observer = new IntersectionObserver((entries) => {
@@ -890,12 +896,15 @@
         });
       }, observerOptions);
       
-      fadeElements.forEach(element => {
-        observer.observe(element);
-      });
+      // Observe elements in batches for better performance
+      setTimeout(() => {
+        fadeElements.forEach(element => {
+          observer.observe(element);
+        });
+      }, 100);
     }
     
-    // Animate stats numbers
+    // Optimized stats number animation
     function initStatsAnimation() {
       const statsCards = document.querySelectorAll('.stats-card');
       
@@ -931,51 +940,51 @@
       });
     }
     
-    // Animate a number from start to end
+    // Optimized number animation using requestAnimationFrame
     function animateNumber(element, start, end) {
-      let startTimestamp = null;
-      const duration = 1500;
+      // Use shorter duration for better perceived performance
+      const duration = 1000;
+      const startTime = performance.now();
       
-      const step = (timestamp) => {
-        if (!startTimestamp) startTimestamp = timestamp;
-        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-        const value = Math.floor(progress * (end - start) + start);
+      // Clear any ongoing animation
+      if (element._animationFrame) {
+        cancelAnimationFrame(element._animationFrame);
+      }
+      
+      const updateNumber = (timestamp) => {
+        const elapsed = timestamp - startTime;
+        const progress = Math.min(elapsed / duration, 1);
         
-        element.textContent = value;
+        // Use easeOutExpo for smooth deceleration
+        const easedProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+        const currentValue = Math.floor(start + (end - start) * easedProgress);
+        
+        element.textContent = currentValue;
         
         if (progress < 1) {
-          window.requestAnimationFrame(step);
+          element._animationFrame = requestAnimationFrame(updateNumber);
+        } else {
+          element.textContent = end; // Ensure final value is exact
         }
       };
       
-      window.requestAnimationFrame(step);
+      element._animationFrame = requestAnimationFrame(updateNumber);
     }
     
-    // Egg wobble animation
+    // Simplified egg animation
     function initEggAnimation() {
       const egg = document.getElementById('mystery-egg');
       
       if (!egg) return;
       
-      // GSAP animation for egg wobbling
+      // Simplified GSAP animation with less complexity
       gsap.to(egg, {
-        rotation: 10,
-        duration: 1.5,
+        rotation: 5,
+        duration: 2,
         repeat: -1,
         yoyo: true,
-        ease: "power1.inOut"
+        ease: "sine.inOut"
       });
-      
-      // Occasional "crack" effect
-      setInterval(() => {
-        gsap.to(egg, {
-          scale: 1.1,
-          duration: 0.2,
-          yoyo: true,
-          repeat: 1,
-          ease: "elastic.out(1, 0.3)"
-        });
-      }, 5000);
     }
   </script>
 </body>
