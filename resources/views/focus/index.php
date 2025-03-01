@@ -77,7 +77,7 @@
   .model-container {
     position: relative;
     width: 100%;
-    height: 300px;
+    height: 650px;
     background-color: rgba(255, 255, 255, 0.7);
     border-radius: 12px;
     overflow: hidden;
