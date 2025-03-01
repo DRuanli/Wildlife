@@ -121,7 +121,25 @@ class ModelViewer {
 
         // Start animation loop
         this.animate();
+        this.loadDefaultModel();
     }
+
+    loadDefaultModel() {
+        // Create a simple default model or load one from your assets
+        const defaultModelPath = '/Wildlife/models/default/12213_Bird_v1_l3.obj';
+        const defaultMtlPath = '/Wildlife/models/default/12213_Bird_v1_l3.mtl';
+        
+        // Use your existing loading mechanism
+        this.mtlLoader.load(defaultMtlPath, (materials) => {
+          materials.preload();
+          this.objLoader.setMaterials(materials);
+          this.objLoader.load(defaultModelPath, (object) => {
+            this.configureModel(object);
+            this.defaultModel = object;
+            this.scene.add(object);
+          });
+        });
+      }
 
     createLoadingElement() {
         this.loadingElement = document.createElement('div');
