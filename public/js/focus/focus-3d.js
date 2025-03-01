@@ -126,8 +126,8 @@ class ModelViewer {
 
     loadDefaultModel() {
         // Create a simple default model or load one from your assets
-        const defaultModelPath = '/Wildlife/models/default/12213_Bird_v1_l3.obj';
-        const defaultMtlPath = '/Wildlife/models/default/12213_Bird_v1_l3.mtl';
+        const defaultModelPath = '/Wildlife/models/default/10054_Whale_v2_L3.obj';
+        const defaultMtlPath = '/Wildlife/models/default/10054_Whale_v2_L3.mtl';
         
         // Use your existing loading mechanism
         this.mtlLoader.load(defaultMtlPath, (materials) => {
