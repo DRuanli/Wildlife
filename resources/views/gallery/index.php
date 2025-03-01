@@ -161,93 +161,77 @@
   
   <!-- Main Gallery Content -->
   <section class="gallery-content" x-show="filteredCreatures.length > 0">
-    <!-- Grid View -->
-    <div class="grid-gallery" x-show="galleryView === 'grid'" x-transition:enter="transition-opacity" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
-      <template x-for="(creature, index) in filteredCreatures" :key="creature.id">
-        <div class="creature-card" 
-             :class="getHabitatClass(creature.habitat_type)"
-             x-intersect:enter="animateCardEntry($el, index)"
-             @click="openDetailsPanel(creature)">
-          <div class="card-image-container">
-            <img :src="getCreatureImage(creature)" :alt="creature.name" class="card-image">
-            <div class="card-badges">
-              <span class="rarity-badge" :class="getRarityClass(creature.rarity)" x-text="capitalizeFirstLetter(creature.rarity)"></span>
-              <span class="conservation-badge" :class="getConservationClass(creature.iucn_status)" x-text="creature.iucn_status"></span>
-            </div>
+    <!-- Grid View Fix -->
+<div class="grid-gallery" x-show="galleryView === 'grid'" x-transition:enter="transition-opacity" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+  <template x-for="(creature, index) in filteredCreatures" :key="creature.id">
+    <div class="creature-card" 
+         :class="getHabitatClass(creature.habitat_type)"
+         x-init="setTimeout(() => $el.classList.add('visible'), index * 50)"
+         @click="openDetailsPanel(creature)">
+      <div class="card-image-container">
+        <img :src="getCreatureImage(creature)" :alt="creature.name" class="card-image">
+        <div class="card-badges">
+          <span class="rarity-badge" :class="getRarityClass(creature.rarity)" x-text="capitalizeFirstLetter(creature.rarity)"></span>
+          <span class="conservation-badge" :class="getConservationClass(creature.iucn_status)" x-text="creature.iucn_status"></span>
+        </div>
+      </div>
+      <div class="card-info">
+        <h3 class="creature-name" x-text="creature.name"></h3>
+        <p class="species-name" x-text="creature.species_name"></p>
+        <div class="habitat-tag" :class="getHabitatClass(creature.habitat_type)">
+          <span x-text="capitalizeFirstLetter(creature.habitat_type)"></span>
+        </div>
+      </div>
+    </div>
+  </template>
+</div>
+
+<!-- Revamped Ethical Masonry View -->
+<div class="ethical-masonry" x-show="galleryView === 'masonry'" x-transition:enter="transition-opacity" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+  <template x-for="(creature, index) in filteredCreatures" :key="creature.id">
+    <div class="masonry-card" 
+         :class="[getHabitatClass(creature.habitat_type), getCreatureSizeClass(creature), getCreatureAspectRatio(creature)]"
+         @click="openDetailsPanel(creature)">
+      <div class="masonry-image-wrapper">
+        <img :src="getCreatureImage(creature)" :alt="creature.name" class="masonry-image">
+        
+        <div class="masonry-metadata">
+          <div class="masonry-badges">
+            <span class="rarity-badge" :class="getRarityClass(creature.rarity)" x-text="capitalizeFirstLetter(creature.rarity)"></span>
+            <span class="conservation-badge" :class="getConservationClass(creature.iucn_status)" x-text="creature.iucn_status"></span>
           </div>
-          <div class="card-info">
-            <h3 class="creature-name" x-text="creature.name"></h3>
-            <p class="species-name" x-text="creature.species_name"></p>
-            <div class="habitat-tag" :class="getHabitatClass(creature.habitat_type)">
-              <span x-text="capitalizeFirstLetter(creature.habitat_type)"></span>
-            </div>
+          
+          <!-- Behavioral Metadata Icons -->
+          <div class="behavior-indicators">
+            <template x-if="hasBehavioralTrait(creature, 'nocturnal')">
+              <span class="behavior-icon nocturnal" title="Nocturnal">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.5 5.5 0 0 1-4.96-8.65A9 9 0 0 0 12 3z"/></svg>
+              </span>
+            </template>
+            
+            <template x-if="hasBehavioralTrait(creature, 'social')">
+              <span class="behavior-icon social" title="Social">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              </span>
+            </template>
+            
+            <template x-if="isEndangered(creature)">
+              <span class="behavior-icon endangered" title="Endangered">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              </span>
+            </template>
           </div>
         </div>
-      </template>
-    </div>
-    
-    <!-- Masonry View -->
-    <div class="masonry-gallery" x-show="galleryView === 'masonry'" x-transition:enter="transition-opacity" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
-      <div class="masonry-column">
-        <template x-for="creature in getMasonryColumn(0)" :key="creature.id">
-          <div class="masonry-item" 
-               :class="getHabitatClass(creature.habitat_type)"
-               @click="openDetailsPanel(creature)">
-            <div class="masonry-image-container">
-              <img :src="getCreatureImage(creature)" :alt="creature.name" class="masonry-image">
-              <div class="masonry-badges">
-                <span class="rarity-badge" :class="getRarityClass(creature.rarity)" x-text="capitalizeFirstLetter(creature.rarity)"></span>
-                <span class="conservation-badge" :class="getConservationClass(creature.iucn_status)" x-text="creature.iucn_status"></span>
-              </div>
-            </div>
-            <div class="masonry-info">
-              <h3 class="creature-name" x-text="creature.name"></h3>
-              <p class="species-name" x-text="creature.species_name"></p>
-            </div>
-          </div>
-        </template>
       </div>
       
-      <div class="masonry-column">
-        <template x-for="creature in getMasonryColumn(1)" :key="creature.id">
-          <div class="masonry-item" 
-               :class="getHabitatClass(creature.habitat_type)"
-               @click="openDetailsPanel(creature)">
-            <div class="masonry-image-container">
-              <img :src="getCreatureImage(creature)" :alt="creature.name" class="masonry-image">
-              <div class="masonry-badges">
-                <span class="rarity-badge" :class="getRarityClass(creature.rarity)" x-text="capitalizeFirstLetter(creature.rarity)"></span>
-                <span class="conservation-badge" :class="getConservationClass(creature.iucn_status)" x-text="creature.iucn_status"></span>
-              </div>
-            </div>
-            <div class="masonry-info">
-              <h3 class="creature-name" x-text="creature.name"></h3>
-              <p class="species-name" x-text="creature.species_name"></p>
-            </div>
-          </div>
-        </template>
-      </div>
-      
-      <div class="masonry-column">
-        <template x-for="creature in getMasonryColumn(2)" :key="creature.id">
-          <div class="masonry-item" 
-               :class="getHabitatClass(creature.habitat_type)"
-               @click="openDetailsPanel(creature)">
-            <div class="masonry-image-container">
-              <img :src="getCreatureImage(creature)" :alt="creature.name" class="masonry-image">
-              <div class="masonry-badges">
-                <span class="rarity-badge" :class="getRarityClass(creature.rarity)" x-text="capitalizeFirstLetter(creature.rarity)"></span>
-                <span class="conservation-badge" :class="getConservationClass(creature.iucn_status)" x-text="creature.iucn_status"></span>
-              </div>
-            </div>
-            <div class="masonry-info">
-              <h3 class="creature-name" x-text="creature.name"></h3>
-              <p class="species-name" x-text="creature.species_name"></p>
-            </div>
-          </div>
-        </template>
+      <div class="masonry-info">
+        <h3 class="creature-name" x-text="creature.name"></h3>
+        <p class="species-name" x-text="creature.species_name"></p>
+        <p class="masonry-description" x-text="truncateText(creature.description, 120)"></p>
       </div>
     </div>
+  </template>
+</div>
     
     <!-- Carousel View -->
     <div class="carousel-gallery" x-show="galleryView === 'carousel'" x-transition:enter="transition-opacity" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
@@ -1067,6 +1051,7 @@
   padding: 2rem 1.5rem;
 }
 
+/* Grid Gallery Fixes */
 .grid-gallery {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -1078,17 +1063,23 @@
   overflow: hidden;
   background-color: white;
   box-shadow: var(--shadow-md);
-  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
   cursor: pointer;
   border: 1px solid #e5e7eb;
   opacity: 0;
   transform: translateY(20px);
+  transition: opacity 0.4s ease, transform 0.4s ease, box-shadow var(--transition-normal);
+}
+
+.creature-card.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .creature-card:hover {
   transform: translateY(-5px);
   box-shadow: var(--shadow-lg);
 }
+
 
 .card-image-container {
   position: relative;
@@ -1230,19 +1221,16 @@
 }
 
 /* Masonry Gallery Styles */
-.masonry-gallery {
+.ethical-masonry {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-auto-flow: dense;
   gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
 }
 
-.masonry-column {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.masonry-item {
+.masonry-card {
   border-radius: var(--radius-lg);
   overflow: hidden;
   background-color: white;
@@ -1250,26 +1238,52 @@
   transition: transform var(--transition-normal), box-shadow var(--transition-normal);
   cursor: pointer;
   border: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
 }
 
-.masonry-item:hover {
+.masonry-card:hover {
   transform: translateY(-5px);
   box-shadow: var(--shadow-lg);
 }
 
-.masonry-item:nth-child(3n+1) .masonry-image-container {
-  height: 320px;
+/* Variable sizing classes to prevent commodification gaze */
+.masonry-card.size-small {
+  grid-row: span 1;
 }
 
-.masonry-item:nth-child(3n+2) .masonry-image-container {
-  height: 260px;
+.masonry-card.size-medium {
+  grid-row: span 2;
 }
 
-.masonry-item:nth-child(3n+3) .masonry-image-container {
-  height: 380px;
+.masonry-card.size-large {
+  grid-row: span 3;
+  grid-column: span 1;
 }
 
-.masonry-image-container {
+.masonry-card.size-featured {
+  grid-row: span 3;
+  grid-column: span 2;
+}
+
+/* Aspect ratio classes to maintain individual animal identity */
+.masonry-card.ratio-square .masonry-image-wrapper {
+  aspect-ratio: 1 / 1; /* For cat-like creatures */
+}
+
+.masonry-card.ratio-portrait .masonry-image-wrapper {
+  aspect-ratio: 2 / 3; /* For general creatures */
+}
+
+.masonry-card.ratio-landscape .masonry-image-wrapper {
+  aspect-ratio: 3 / 2; /* For dog-like creatures */
+}
+
+.masonry-card.ratio-wide .masonry-image-wrapper {
+  aspect-ratio: 16 / 9; /* For landscape views or flying creatures */
+}
+
+.masonry-image-wrapper {
   position: relative;
   overflow: hidden;
   background-color: #f3f4f6;
@@ -1282,21 +1296,104 @@
   transition: transform var(--transition-normal);
 }
 
-.masonry-item:hover .masonry-image {
+.masonry-card:hover .masonry-image {
   transform: scale(1.05);
 }
 
-.masonry-badges {
+.masonry-metadata {
   position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  padding: 0.75rem;
+}
+
+.masonry-badges {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
   gap: 0.5rem;
+}
+
+/* Behavioral metadata via icon overlays */
+.behavior-indicators {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+.behavior-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.behavior-icon:hover {
+  transform: scale(1.1);
+}
+
+.behavior-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.behavior-icon.nocturnal {
+  color: #6366f1;
+}
+
+.behavior-icon.social {
+  color: #10b981;
+}
+
+.behavior-icon.endangered {
+  color: #ef4444;
 }
 
 .masonry-info {
   padding: 1rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.masonry-description {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .ethical-masonry {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+  
+  .masonry-card.size-featured {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 640px) {
+  .ethical-masonry {
+    grid-template-columns: 1fr;
+  }
+  
+  .masonry-card {
+    grid-column: span 1 !important;
+  }
 }
 
 /* Carousel Gallery Styles */
