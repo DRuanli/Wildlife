@@ -119,6 +119,7 @@
             background-color: #333;
         }
 
+
         /* 3D model container */
         .model-container {
             position: relative;
@@ -278,11 +279,43 @@
         /* Button effects */
         .focus-btn {
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            animation: gentle-pulse 3s infinite;
+            transform: scale(1.05);
+        }
+
+        .start-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(76, 175, 80, 0.3);
+            animation: gentle-pulse 3s infinite;
+            transform: scale(1.05);
+        }
+
+        .focus-btn:before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(45deg);
+            animation: shine 6s infinite;
+            pointer-events: none;
+        }
+
+        .start-btn:active {
+            transform: translateY(0) scale(1.02);
+            box-shadow: 0 2px 10px rgba(76, 175, 80, 0.3);
         }
 
         .focus-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-3px) scale(1.08);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.1);
         }
 
         .focus-btn:active {
@@ -740,7 +773,7 @@
                                 <i class="fas fa-wind mr-2"></i> Breathe
                             </button>
                             <button id="start-btn"
-                                    class="focus-btn px-5 py-3 bg-green-600 text-white font-medium rounded-lg flex items-center">
+                                    class="focus-btn start-btn px-5 py-3 bg-green-600 text-white font-medium rounded-lg flex items-center">
                                 <i class="fas fa-play mr-2"></i> Start Focus
                             </button>
                             <button id="pause-btn"
