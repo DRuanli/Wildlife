@@ -289,6 +289,7 @@ class FocusSession
             AND completed = 1
         ');
         
+        
         $stmt->bindParam(':user_id', $userId, \PDO::PARAM_INT);
         $stmt->execute();
         
