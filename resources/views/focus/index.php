@@ -245,18 +245,18 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.7);
             z-index: 30;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.8s ease;
+            backdrop-filter: blur(3px);
         }
 
         .focus-mode-active .focus-mode-overlay {
             opacity: 1;
             pointer-events: auto;
         }
-
         .focus-mode-content {
             transition: all 0.5s ease;
             z-index: 40;
@@ -264,6 +264,7 @@
 
         .focus-mode-active .focus-mode-content {
             transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
         }
         
         .fullscreen-mode .focus-content-wrapper {
@@ -274,6 +275,11 @@
             z-index: 50;
             width: 90%;
             max-width: 500px;
+        }
+        .focus-content-wrapper {
+            position: relative;
+            z-index: 40;
+            transition: all 0.5s ease;
         }
 
         /* Button effects */
@@ -321,6 +327,27 @@
         .focus-btn:active {
             transform: translateY(0);
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes gentle-pulse {
+            0% {
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            }
+            50% {
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            }
+            100% {
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            }
+        }
+
+        @keyframes shine {
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            }
+            30%, 100% {
+                transform: translateX(100%) translateY(100%) rotate(45deg);
+            }
         }
         
         /* Theme toggle */
