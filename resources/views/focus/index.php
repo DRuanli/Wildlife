@@ -1997,6 +1997,36 @@
                 creatureInfoPanel.classList.remove('opacity-0');
             }
 
+            window.addEventListener('beforeunload', function(e) {
+                // Only show confirmation if a timer is running and not paused
+                if (timerRunning && !timerPaused && activeSessionId) {
+                    // Standard way to show confirmation dialog
+                    const confirmationMessage = 'Your focus session will be marked as incomplete if you leave.';
+                    e.returnValue = confirmationMessage;
+                    fetch('<?= $baseUrl ?>/focus/session/cancel', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            session_id: activeSessionId
+                        }),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (!data.success) {
+                                console.error('Failed to cancel session:', data.message);
+                            }
+                            resetTimer();
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            resetTimer();
+                        });
+                    return confirmationMessage;
+                }
+            });
+
             /**
              * Load habitat environment
              * This function will be implemented in the future to load habitat 3D environments
