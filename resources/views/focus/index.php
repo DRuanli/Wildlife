@@ -166,14 +166,6 @@ include('public/loading-component.php');
                             </button>
                         </div>
 
-                        <!-- Focus Quote (New)
-                        <div class="focus-quote text-gray-600">
-                            <p id="focus-quote-text">"The successful warrior is the average man, with laser-like
-                                focus."</p>
-                            <p class="text-sm mt-1" id="focus-quote-author">— Bruce Lee</p>
-                        </div>
-                        -->
-
                         <!-- Session Settings -->
                         <div id="timer-settings" class="w-full max-w-md">
                             <!-- Pomodoro Settings (New) -->
@@ -391,6 +383,7 @@ include('public/loading-component.php');
                                         </div>
                                     </div>
                                 </div>
+                                
 
                                 <!-- Hidden select element to maintain compatibility with existing code -->
                                 <select id="creature-select" class="hidden">
@@ -411,6 +404,12 @@ include('public/loading-component.php');
                                 </select>
                             </div>
                         </div>
+                        <!-- Focus Quote (New) -->
+                        <div class="focus-quote text-gray-600">
+                                    <p id="focus-quote-text">"The successful warrior is the average man, with laser-like
+                                        focus."</p>
+                                    <p class="text-sm mt-1" id="focus-quote-author">— Bruce Lee</p>
+                                </div>
                     </div>
 
                     <!-- Focus Tips Card -->
