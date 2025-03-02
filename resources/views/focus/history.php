@@ -1,4 +1,6 @@
-<?php require_once ROOT_PATH . '/resources/views/layouts/header.php'; ?>
+<?php require_once ROOT_PATH . '/resources/views/layouts/header.php'; 
+include('public/loading-component.php');
+?>
 
 <div class="container mx-auto px-4 py-8">
     <!-- Page Header -->

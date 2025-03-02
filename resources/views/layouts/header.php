@@ -95,7 +95,8 @@ $baseUrl = '/Wildlife';
 </head>
 
 <body class="min-h-screen flex flex-col">
-  <!-- Header with Announcement Bar -->
+  
+  <!-- Header with Announcement Bar 
   <div class="bg-primary text-white text-center py-2 text-sm">
     <div class="container mx-auto px-4">
       <span class="flex items-center justify-center">
@@ -104,6 +105,7 @@ $baseUrl = '/Wildlife';
       </span>
     </div>
   </div>
+  -->
   
   <!-- Main Navigation -->
   <nav class="w-full bg-light border-b border-gray-200 sticky top-0 z-50 shadow-sm">
