@@ -262,10 +262,18 @@ include('public/loading-component.php');
     <img src="<?= $baseUrl ?>/public/img/IndochineseTiger.jpg">
     <img src="<?= $baseUrl ?>/public/img/snow_leopard.png">
     <img src="<?= $baseUrl ?>/public/img/zdenek-machacek-UxHol6SwLyM-unsplash.jpg">
-    <img src="<?= $baseUrl ?>/public/img/whale.png">
-    <img src="<?= $baseUrl ?>/public/img/whale.png">
-    <img src="<?= $baseUrl ?>/public/img/whale.png">
-    <img src="<?= $baseUrl ?>/public/img/whale.png">
+    <img src="<?= $baseUrl ?>/images/creatures/snow_leopard.png">
+    <img src="<?= $baseUrl ?>/images/creatures/philipin_edge.jpg">
+    <img src="<?= $baseUrl ?>/images/creatures/saola.png">
+    <img src="<?= $baseUrl ?>/images/creatures/hawaiiCrow.png">
+    <img src="<?= $baseUrl ?>/images/creatures/tasmaniaTiger.png">
+    <img src="<?= $baseUrl ?>/images/creatures/Chinese Giant Salamander.png">
+    <img src="<?= $baseUrl ?>/images/creatures/Vaquita.png">
+    <img src="<?= $baseUrl ?>/images/creatures/African Grey Parrot.png">
+    <img src="<?= $baseUrl ?>/images/creatures/Galápagos Tortoise.png">
+    <img src="<?= $baseUrl ?>/images/creatures/Iberian Lynx.png">
+    <img src="<?= $baseUrl ?>/images/creatures/Red Fox.png">
+    <img src="<?= $baseUrl ?>/images/creatures/Giant Manta Ray.png">
 
   </div>
 
