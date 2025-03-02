@@ -79,6 +79,9 @@ function getRoutes() {
         '/podcast' => 'PodcastController@index',
         '/podcast/:slug' => 'PodcastController@view',
         '/podcast/category/:slug' => 'PodcastController@category',
-        '/podcast/load-more' => 'PodcastController@loadMore'
+        '/podcast/load-more' => 'PodcastController@loadMore',
+
+        // About Us routes
+        '/about' => 'AboutController@index',
     ];
 }
