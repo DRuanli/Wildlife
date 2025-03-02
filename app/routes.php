@@ -83,5 +83,8 @@ function getRoutes() {
 
         // About Us routes
         '/about' => 'AboutController@index',
+
+        // Leaderboard routes
+        '/leaderboard' => 'LeaderboardController@index',
     ];
 }
