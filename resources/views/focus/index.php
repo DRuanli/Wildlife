@@ -92,7 +92,7 @@ include('public/loading-component.php');
         <button id="close-breathing-guide" class="close-breathing" aria-label="Close breathing guide">
             <i class="fas fa-times"></i>
         </button>
-        
+
         <div class="breathing-wrapper">
             <div class="breathing-circle-container">
                 <div class="breathing-circle" id="breathing-circle">
@@ -104,7 +104,7 @@ include('public/loading-component.php');
                     <circle class="breathing-progress-indicator" cx="50" cy="50" r="45"></circle>
                 </svg>
             </div>
-            
+
             <div class="breathing-label">
                 <div class="breathing-text" id="breathing-text">Prepare</div>
                 <div class="breathing-cycles" id="breathing-cycles">
@@ -139,13 +139,111 @@ include('public/loading-component.php');
                 <div class="lg:col-span-1 flex flex-col items-center focus-content-wrapper">
                     <div id="focus-mode-content"
                          class="focus-mode-content w-full bg-white rounded-xl shadow-md p-6 mb-6 flex flex-col items-center">
-                        <!-- Session Intent (New) -->
-                        <div class="session-intent w-full">
-                            <label for="session-intent"
-                                   class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Session
-                                Intent</label>
-                            <input type="text" id="session-intent" placeholder="What do you intend to focus on?"
-                                   class="w-full p-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 dark:border-gray-600">
+                        <div class="session-intent-container w-full mb-6 transition-all duration-300">
+                            <div class="intent-header flex items-center mb-2">
+                                <label for="session-intent"
+                                       class="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center">
+                                    <i class="fas fa-bullseye text-green-600 dark:text-green-400 mr-2"></i>
+                                    Session Intent
+                                </label>
+                                <div class="ml-auto flex items-center">
+                                    <button id="session-intent-history"
+                                            class="text-gray-500 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 text-sm mr-1"
+                                            title="Previous intents">
+                                        <i class="fas fa-history"></i>
+                                    </button>
+                                    <button id="session-intent-suggestions"
+                                            class="text-gray-500 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 text-sm"
+                                            title="Suggestions">
+                                        <i class="fas fa-lightbulb"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="intent-input-wrapper relative">
+                                <div class="intent-input-container relative rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 overflow-hidden transition-all duration-300 focus-within:ring-2 focus-within:ring-green-500 focus-within:border-green-500">
+                                    <input type="text" id="session-intent" placeholder="What do you intend to focus on?"
+                                           class="w-full p-3 outline-none bg-transparent text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 pr-10">
+                                    <div class="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center">
+                                        <span id="intent-word-count"
+                                              class="text-xs text-gray-400 dark:text-gray-500 mr-1">0/100</span>
+                                        <button id="clear-intent"
+                                                class="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 p-1 opacity-0 transition-opacity duration-200"
+                                                title="Clear">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Suggestions dropdown -->
+                                <div id="intent-suggestions"
+                                     class="suggestions-dropdown absolute z-10 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg hidden">
+                                    <div class="p-3 border-b border-gray-200 dark:border-gray-700">
+                                        <h5 class="text-sm font-medium text-gray-700 dark:text-gray-300">Common
+                                            Intents</h5>
+                                    </div>
+                                    <ul class="max-h-60 overflow-y-auto py-1">
+                                        <li class="suggestion-item px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-800 dark:text-gray-200">
+                                            <i class="fas fa-code text-blue-500 mr-2"></i> Complete programming task
+                                        </li>
+                                        <li class="suggestion-item px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-800 dark:text-gray-200">
+                                            <i class="fas fa-book text-indigo-500 mr-2"></i> Study for exam
+                                        </li>
+                                        <li class="suggestion-item px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-800 dark:text-gray-200">
+                                            <i class="fas fa-edit text-purple-500 mr-2"></i> Write essay/article
+                                        </li>
+                                        <li class="suggestion-item px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-800 dark:text-gray-200">
+                                            <i class="fas fa-file-alt text-green-500 mr-2"></i> Draft email/message
+                                        </li>
+                                        <li class="suggestion-item px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-800 dark:text-gray-200">
+                                            <i class="fas fa-chart-line text-red-500 mr-2"></i> Complete work
+                                            presentation
+                                        </li>
+                                        <li class="suggestion-item px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-800 dark:text-gray-200">
+                                            <i class="fas fa-tasks text-yellow-500 mr-2"></i> Clear my task backlog
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <!-- History dropdown -->
+                                <div id="intent-history"
+                                     class="history-dropdown absolute z-10 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg hidden">
+                                    <div class="p-3 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                                        <h5 class="text-sm font-medium text-gray-700 dark:text-gray-300">Recent
+                                            Intents</h5>
+                                        <button id="clear-history"
+                                                class="text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                                            Clear History
+                                        </button>
+                                    </div>
+                                    <ul id="history-list" class="max-h-60 overflow-y-auto py-1">
+                                        <!-- History items will be inserted here -->
+                                        <li class="history-item px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-800 dark:text-gray-200 flex justify-between items-center">
+                                            <span>Create website wireframes</span>
+                                            <span class="text-xs text-gray-500">Yesterday</span>
+                                        </li>
+                                        <li class="history-item px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-800 dark:text-gray-200 flex justify-between items-center">
+                                            <span>Study JavaScript promises</span>
+                                            <span class="text-xs text-gray-500">3 days ago</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Intent cards - visible when session is active -->
+                            <div id="active-intent-card"
+                                 class="hidden mt-3 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg animate-fadeIn">
+                                <div class="flex items-start">
+                                    <div class="text-green-600 dark:text-green-400 mr-3">
+                                        <i class="fas fa-check-circle text-xl"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h5 class="font-medium text-gray-800 dark:text-gray-200 leading-tight">Your
+                                            focus intention:</h5>
+                                        <p id="active-intent-text" class="text-gray-700 dark:text-gray-300 mt-1"></p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Focus Timer -->
@@ -406,7 +504,7 @@ include('public/loading-component.php');
                                         </div>
                                     </div>
                                 </div>
-                                
+
 
                                 <!-- Hidden select element to maintain compatibility with existing code -->
                                 <select id="creature-select" class="hidden">
@@ -429,10 +527,10 @@ include('public/loading-component.php');
                         </div>
                         <!-- Focus Quote (New) -->
                         <div class="focus-quote text-gray-600">
-                                    <p id="focus-quote-text">"The successful warrior is the average man, with laser-like
-                                        focus."</p>
-                                    <p class="text-sm mt-1" id="focus-quote-author">— Bruce Lee</p>
-                                </div>
+                            <p id="focus-quote-text">"The successful warrior is the average man, with laser-like
+                                focus."</p>
+                            <p class="text-sm mt-1" id="focus-quote-author">— Bruce Lee</p>
+                        </div>
                     </div>
 
                     <!-- Focus Tips Card -->
@@ -743,936 +841,1275 @@ include('public/loading-component.php');
     <script src="<?= $baseUrl ?>/public/js/focus/focus-3d.js"></script>
 
     <style>
-/* Enhanced Slider Styling */
-input[type="range"] {
-    -webkit-appearance: none;
-    height: 6px;
-    background: #e5e7eb;
-    border-radius: 5px;
-    background-image: linear-gradient(#4D724D, #4D724D);
-    background-size: 50% 100%;
-    background-repeat: no-repeat;
-}
+        /* Enhanced Slider Styling */
+        input[type="range"] {
+            -webkit-appearance: none;
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 5px;
+            background-image: linear-gradient(#4D724D, #4D724D);
+            background-size: 50% 100%;
+            background-repeat: no-repeat;
+        }
 
-input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    height: 18px;
-    width: 18px;
-    border-radius: 50%;
-    background: #4D724D;
-    cursor: pointer;
-    box-shadow: 0 0 2px 0 rgba(0,0,0,0.25);
-    transition: background .3s ease-in-out, transform 0.2s ease;
-}
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 18px;
+            width: 18px;
+            border-radius: 50%;
+            background: #4D724D;
+            cursor: pointer;
+            box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.25);
+            transition: background .3s ease-in-out, transform 0.2s ease;
+        }
 
-input[type="range"]::-webkit-slider-runnable-track {
-    -webkit-appearance: none;
-    box-shadow: none;
-    border: none;
-    background: transparent;
-}
+        input[type="range"]::-webkit-slider-runnable-track {
+            -webkit-appearance: none;
+            box-shadow: none;
+            border: none;
+            background: transparent;
+        }
 
-input[type="range"]::-webkit-slider-thumb:hover {
-    background: #2F4F2F;
-    transform: scale(1.2);
-}
+        input[type="range"]::-webkit-slider-thumb:hover {
+            background: #2F4F2F;
+            transform: scale(1.2);
+        }
 
-body.dark-mode input[type="range"] {
-    background: #4b5563;
-    background-image: linear-gradient(#C4D7C4, #C4D7C4);
-    background-size: 50% 100%;
-    background-repeat: no-repeat;
-}
+        body.dark-mode input[type="range"] {
+            background: #4b5563;
+            background-image: linear-gradient(#C4D7C4, #C4D7C4);
+            background-size: 50% 100%;
+            background-repeat: no-repeat;
+        }
 
-body.dark-mode input[type="range"]::-webkit-slider-thumb {
-    background: #C4D7C4;
-}
+        body.dark-mode input[type="range"]::-webkit-slider-thumb {
+            background: #C4D7C4;
+        }
 
-body.dark-mode input[type="range"]::-webkit-slider-thumb:hover {
-    background: #ffffff;
-}
+        body.dark-mode input[type="range"]::-webkit-slider-thumb:hover {
+            background: #ffffff;
+        }
 
-input[type="range"]:focus {
-    outline: none;
-}
+        input[type="range"]:focus {
+            outline: none;
+        }
 
-/* Preset buttons */
-.preset-btn {
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
+        /* Preset buttons */
+        .preset-btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
 
-.preset-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
+        .preset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
 
-.preset-btn.active {
-    background-color: rgba(74, 222, 128, 0.2) !important;
-    border: 2px solid #4ade80;
-    transform: translateY(-1px);
-}
+        .preset-btn.active {
+            background-color: rgba(74, 222, 128, 0.2) !important;
+            border: 2px solid #4ade80;
+            transform: translateY(-1px);
+        }
 
-body.dark-mode .preset-btn.active {
-    background-color: rgba(74, 222, 128, 0.1) !important;
-    border: 2px solid #22c55e;
-}
+        body.dark-mode .preset-btn.active {
+            background-color: rgba(74, 222, 128, 0.1) !important;
+            border: 2px solid #22c55e;
+        }
 
-/* Creature Cards */
-.creature-carousel {
-    scrollbar-width: thin;
-    scrollbar-color: #CBD5E0 #EDF2F7;
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
-    scroll-snap-type: x mandatory;
-}
+        /* Creature Cards */
+        .creature-carousel {
+            scrollbar-width: thin;
+            scrollbar-color: #CBD5E0 #EDF2F7;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+            scroll-snap-type: x mandatory;
+        }
 
-.creature-carousel::-webkit-scrollbar {
-    height: 6px;
-}
+        .creature-carousel::-webkit-scrollbar {
+            height: 6px;
+        }
 
-.creature-carousel::-webkit-scrollbar-track {
-    background: #EDF2F7;
-    border-radius: 3px;
-}
+        .creature-carousel::-webkit-scrollbar-track {
+            background: #EDF2F7;
+            border-radius: 3px;
+        }
 
-.creature-carousel::-webkit-scrollbar-thumb {
-    background-color: #CBD5E0;
-    border-radius: 3px;
-}
+        .creature-carousel::-webkit-scrollbar-thumb {
+            background-color: #CBD5E0;
+            border-radius: 3px;
+        }
 
-body.dark-mode .creature-carousel::-webkit-scrollbar-track {
-    background: #2D3748;
-}
+        body.dark-mode .creature-carousel::-webkit-scrollbar-track {
+            background: #2D3748;
+        }
 
-body.dark-mode .creature-carousel::-webkit-scrollbar-thumb {
-    background-color: #4A5568;
-}
+        body.dark-mode .creature-carousel::-webkit-scrollbar-thumb {
+            background-color: #4A5568;
+        }
 
-.creature-card {
-    position: relative;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    scroll-snap-align: center;
-}
+        .creature-card {
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            scroll-snap-align: center;
+        }
 
-.creature-card:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
+        .creature-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
 
-.creature-card.selected {
-    animation: pulse 2s infinite;
-}
+        .creature-card.selected {
+            animation: pulse 2s infinite;
+        }
 
-.carousel-prev, .carousel-next {
-    opacity: 0.7;
-    transition: all 0.2s ease;
-    z-index: 10;
-}
+        .carousel-prev, .carousel-next {
+            opacity: 0.7;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
 
-.carousel-prev:hover, .carousel-next:hover {
-    opacity: 1;
-    transform: translateY(-50%) scale(1.1);
-}
+        .carousel-prev:hover, .carousel-next:hover {
+            opacity: 1;
+            transform: translateY(-50%) scale(1.1);
+        }
 
-.carousel-prev:hover {
-    transform: translateY(-50%) translateX(-3px) scale(1.1);
-}
+        .carousel-prev:hover {
+            transform: translateY(-50%) translateX(-3px) scale(1.1);
+        }
 
-.carousel-next:hover {
-    transform: translateY(-50%) translateX(3px) scale(1.1);
-}
+        .carousel-next:hover {
+            transform: translateY(-50%) translateX(3px) scale(1.1);
+        }
 
-@keyframes pulse {
-    0% {
-        box-shadow: 0 0 0 0 rgba(77, 124, 77, 0.4);
-    }
-    70% {
-        box-shadow: 0 0 0 5px rgba(77, 124, 77, 0);
-    }
-    100% {
-        box-shadow: 0 0 0 0 rgba(77, 124, 77, 0);
-    }
-}
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(77, 124, 77, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 5px rgba(77, 124, 77, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(77, 124, 77, 0);
+            }
+        }
 
-/* Hover zoom effect for creature icons */
-.creature-card:hover i {
-    transform: scale(1.2);
-}
-</style>
+        /* Hover zoom effect for creature icons */
+        .creature-card:hover i {
+            transform: scale(1.2);
+        }
+    </style>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Pomodoro slider controls
-    const focusSlider = document.getElementById('pomodoro-focus');
-    const breakSlider = document.getElementById('pomodoro-break');
-    const focusDisplay = document.getElementById('focus-time-display');
-    const breakDisplay = document.getElementById('break-time-display');
-    
-    // Function to update slider fill visualization
-    function updateSliderFill(slider) {
-        if (!slider) return;
-        
-        const min = slider.min ? parseFloat(slider.min) : 0;
-        const max = slider.max ? parseFloat(slider.max) : 100;
-        const value = slider.value ? parseFloat(slider.value) : min;
-        const percentage = ((value - min) / (max - min)) * 100;
-        
-        slider.style.backgroundSize = `${percentage}% 100%`;
-    }
-    
-    // Initialize sliders
-    if (focusSlider && focusDisplay) {
-        updateSliderFill(focusSlider);
-        focusSlider.addEventListener('input', function() {
-            focusDisplay.textContent = `${this.value} minutes`;
-            updateSliderFill(this);
-            updateSessionDuration(parseInt(this.value));
-        });
-    }
-    
-    if (breakSlider && breakDisplay) {
-        updateSliderFill(breakSlider);
-        breakSlider.addEventListener('input', function() {
-            breakDisplay.textContent = `${this.value} minutes`;
-            updateSliderFill(this);
-        });
-    }
-    
-    // Preset buttons
-    const presetButtons = document.querySelectorAll('.preset-btn');
-    presetButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const focusValue = this.getAttribute('data-focus');
-            const breakValue = this.getAttribute('data-break');
-            
-            // Update sliders and displays
-            if (focusSlider && focusValue) {
-                focusSlider.value = focusValue;
-                focusDisplay.textContent = `${focusValue} minutes`;
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Pomodoro slider controls
+            const focusSlider = document.getElementById('pomodoro-focus');
+            const breakSlider = document.getElementById('pomodoro-break');
+            const focusDisplay = document.getElementById('focus-time-display');
+            const breakDisplay = document.getElementById('break-time-display');
+
+            // Function to update slider fill visualization
+            function updateSliderFill(slider) {
+                if (!slider) return;
+
+                const min = slider.min ? parseFloat(slider.min) : 0;
+                const max = slider.max ? parseFloat(slider.max) : 100;
+                const value = slider.value ? parseFloat(slider.value) : min;
+                const percentage = ((value - min) / (max - min)) * 100;
+
+                slider.style.backgroundSize = `${percentage}% 100%`;
+            }
+
+            // Initialize sliders
+            if (focusSlider && focusDisplay) {
                 updateSliderFill(focusSlider);
-                updateSessionDuration(parseInt(focusValue));
+                focusSlider.addEventListener('input', function () {
+                    focusDisplay.textContent = `${this.value} minutes`;
+                    updateSliderFill(this);
+                    updateSessionDuration(parseInt(this.value));
+                });
             }
-            
-            if (breakSlider && breakValue) {
-                breakSlider.value = breakValue;
-                breakDisplay.textContent = `${breakValue} minutes`;
+
+            if (breakSlider && breakDisplay) {
                 updateSliderFill(breakSlider);
+                breakSlider.addEventListener('input', function () {
+                    breakDisplay.textContent = `${this.value} minutes`;
+                    updateSliderFill(this);
+                });
             }
-            
-            // Add active class to clicked button and remove from others
-            presetButtons.forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Add subtle animation
-            this.classList.add('animate__animated', 'animate__pulse');
-            setTimeout(() => {
-                this.classList.remove('animate__animated', 'animate__pulse');
-            }, 1000);
-        });
-    });
-    
-    // Function to update session duration
-    function updateSessionDuration(minutes) {
-        if (typeof window.sessionDuration !== 'undefined') {
-            window.sessionDuration = minutes * 60;
-            window.timeRemaining = window.sessionDuration;
-            
-            // Update timer display
-            if (typeof window.updateTimerDisplay === 'function') {
-                window.updateTimerDisplay();
-            }
-        }
-    }
-    
-    // Creature selection carousel
-    const creatureCards = document.querySelectorAll('.creature-card');
-    const creatureSelect = document.getElementById('creature-select');
-    const selectedCreatureInfo = document.getElementById('selected-creature-info');
-    const selectedCreatureName = document.getElementById('selected-creature-name');
-    const selectedCreatureHabitat = document.getElementById('selected-creature-habitat');
-    const selectedCreatureIcon = document.getElementById('selected-creature-icon-element');
-    
-    // Make creature cards interactive
-    creatureCards.forEach(card => {
-        card.addEventListener('click', function() {
-            const creatureId = this.getAttribute('data-creature-id');
-            
-            // Clear selection from all cards
-            creatureCards.forEach(c => {
-                c.classList.remove('border-green-500', 'dark:border-green-400', 'bg-green-50', 'dark:bg-green-900/30', 'scale-105', 'selected');
+
+            // Preset buttons
+            const presetButtons = document.querySelectorAll('.preset-btn');
+            presetButtons.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const focusValue = this.getAttribute('data-focus');
+                    const breakValue = this.getAttribute('data-break');
+
+                    // Update sliders and displays
+                    if (focusSlider && focusValue) {
+                        focusSlider.value = focusValue;
+                        focusDisplay.textContent = `${focusValue} minutes`;
+                        updateSliderFill(focusSlider);
+                        updateSessionDuration(parseInt(focusValue));
+                    }
+
+                    if (breakSlider && breakValue) {
+                        breakSlider.value = breakValue;
+                        breakDisplay.textContent = `${breakValue} minutes`;
+                        updateSliderFill(breakSlider);
+                    }
+
+                    // Add active class to clicked button and remove from others
+                    presetButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // Add subtle animation
+                    this.classList.add('animate__animated', 'animate__pulse');
+                    setTimeout(() => {
+                        this.classList.remove('animate__animated', 'animate__pulse');
+                    }, 1000);
+                });
             });
-            
-            if (creatureId) {
-                // Apply selection styling
-                this.classList.add('border-green-500', 'dark:border-green-400', 'bg-green-50', 'dark:bg-green-900/30', 'scale-105', 'selected');
-                
-                // Update hidden select to maintain compatibility with existing code
-                if (creatureSelect) {
-                    creatureSelect.value = creatureId;
-                    
-                    // Trigger change event to ensure original handlers run
-                    const event = new Event('change');
-                    creatureSelect.dispatchEvent(event);
-                }
-                
-                // Update the creature info panel
-                if (selectedCreatureInfo) {
-                    selectedCreatureInfo.classList.remove('hidden');
-                    
-                    const name = this.getAttribute('data-name');
-                    const habitat = this.getAttribute('data-habitat');
-                    const stage = this.getAttribute('data-stage');
-                    
-                    if (selectedCreatureName) {
-                        selectedCreatureName.textContent = name;
-                    }
-                    
-                    if (selectedCreatureHabitat) {
-                        let habitatText = 'Unknown Habitat';
-                        let habitatIcon = '';
-                        
-                        switch(habitat) {
-                            case 'forest': 
-                                habitatText = 'Forest Habitat'; 
-                                habitatIcon = '<i class="fas fa-tree mr-1 text-green-600"></i>';
-                                break;
-                            case 'ocean': 
-                                habitatText = 'Ocean Habitat'; 
-                                habitatIcon = '<i class="fas fa-water mr-1 text-blue-600"></i>';
-                                break;
-                            case 'mountain': 
-                                habitatText = 'Mountain Habitat'; 
-                                habitatIcon = '<i class="fas fa-mountain mr-1 text-red-700"></i>';
-                                break;
-                            case 'sky': 
-                                habitatText = 'Sky Habitat'; 
-                                habitatIcon = '<i class="fas fa-cloud mr-1 text-blue-400"></i>';
-                                break;
-                            case 'cosmic': 
-                                habitatText = 'Cosmic Habitat'; 
-                                habitatIcon = '<i class="fas fa-star mr-1 text-purple-600"></i>';
-                                break;
-                            case 'enchanted': 
-                                habitatText = 'Enchanted Habitat'; 
-                                habitatIcon = '<i class="fas fa-magic mr-1 text-pink-600"></i>';
-                                break;
-                        }
-                        
-                        selectedCreatureHabitat.innerHTML = habitatIcon + habitatText;
-                    }
-                    
-                    if (selectedCreatureIcon) {
-                        // Set icon based on stage
-                        let iconClass = "fas ";
-                        switch(stage) {
-                            case 'egg': iconClass += "fa-egg"; break;
-                            case 'baby': iconClass += "fa-baby"; break;
-                            case 'juvenile': iconClass += "fa-paw"; break;
-                            case 'adult': iconClass += "fa-dragon"; break;
-                            case 'mythical': iconClass += "fa-dragon"; break;
-                            default: iconClass += "fa-question";
-                        }
-                        
-                        // Set color based on habitat
-                        let colorClass = "text-gray-400";
-                        switch(habitat) {
-                            case 'forest': colorClass = "text-green-600"; break;
-                            case 'ocean': colorClass = "text-blue-600"; break;
-                            case 'mountain': colorClass = "text-red-700"; break;
-                            case 'sky': colorClass = "text-blue-400"; break;
-                            case 'cosmic': colorClass = "text-purple-600"; break;
-                            case 'enchanted': colorClass = "text-pink-600"; break;
-                        }
-                        
-                        selectedCreatureIcon.className = `${iconClass} ${colorClass} text-2xl`;
+
+            // Function to update session duration
+            function updateSessionDuration(minutes) {
+                if (typeof window.sessionDuration !== 'undefined') {
+                    window.sessionDuration = minutes * 60;
+                    window.timeRemaining = window.sessionDuration;
+
+                    // Update timer display
+                    if (typeof window.updateTimerDisplay === 'function') {
+                        window.updateTimerDisplay();
                     }
                 }
-            } else {
-                // No creature selected (default card)
-                if (creatureSelect) {
-                    creatureSelect.value = '';
-                    const event = new Event('change');
-                    creatureSelect.dispatchEvent(event);
+            }
+
+            // Creature selection carousel
+            const creatureCards = document.querySelectorAll('.creature-card');
+            const creatureSelect = document.getElementById('creature-select');
+            const selectedCreatureInfo = document.getElementById('selected-creature-info');
+            const selectedCreatureName = document.getElementById('selected-creature-name');
+            const selectedCreatureHabitat = document.getElementById('selected-creature-habitat');
+            const selectedCreatureIcon = document.getElementById('selected-creature-icon-element');
+
+            // Make creature cards interactive
+            creatureCards.forEach(card => {
+                card.addEventListener('click', function () {
+                    const creatureId = this.getAttribute('data-creature-id');
+
+                    // Clear selection from all cards
+                    creatureCards.forEach(c => {
+                        c.classList.remove('border-green-500', 'dark:border-green-400', 'bg-green-50', 'dark:bg-green-900/30', 'scale-105', 'selected');
+                    });
+
+                    if (creatureId) {
+                        // Apply selection styling
+                        this.classList.add('border-green-500', 'dark:border-green-400', 'bg-green-50', 'dark:bg-green-900/30', 'scale-105', 'selected');
+
+                        // Update hidden select to maintain compatibility with existing code
+                        if (creatureSelect) {
+                            creatureSelect.value = creatureId;
+
+                            // Trigger change event to ensure original handlers run
+                            const event = new Event('change');
+                            creatureSelect.dispatchEvent(event);
+                        }
+
+                        // Update the creature info panel
+                        if (selectedCreatureInfo) {
+                            selectedCreatureInfo.classList.remove('hidden');
+
+                            const name = this.getAttribute('data-name');
+                            const habitat = this.getAttribute('data-habitat');
+                            const stage = this.getAttribute('data-stage');
+
+                            if (selectedCreatureName) {
+                                selectedCreatureName.textContent = name;
+                            }
+
+                            if (selectedCreatureHabitat) {
+                                let habitatText = 'Unknown Habitat';
+                                let habitatIcon = '';
+
+                                switch (habitat) {
+                                    case 'forest':
+                                        habitatText = 'Forest Habitat';
+                                        habitatIcon = '<i class="fas fa-tree mr-1 text-green-600"></i>';
+                                        break;
+                                    case 'ocean':
+                                        habitatText = 'Ocean Habitat';
+                                        habitatIcon = '<i class="fas fa-water mr-1 text-blue-600"></i>';
+                                        break;
+                                    case 'mountain':
+                                        habitatText = 'Mountain Habitat';
+                                        habitatIcon = '<i class="fas fa-mountain mr-1 text-red-700"></i>';
+                                        break;
+                                    case 'sky':
+                                        habitatText = 'Sky Habitat';
+                                        habitatIcon = '<i class="fas fa-cloud mr-1 text-blue-400"></i>';
+                                        break;
+                                    case 'cosmic':
+                                        habitatText = 'Cosmic Habitat';
+                                        habitatIcon = '<i class="fas fa-star mr-1 text-purple-600"></i>';
+                                        break;
+                                    case 'enchanted':
+                                        habitatText = 'Enchanted Habitat';
+                                        habitatIcon = '<i class="fas fa-magic mr-1 text-pink-600"></i>';
+                                        break;
+                                }
+
+                                selectedCreatureHabitat.innerHTML = habitatIcon + habitatText;
+                            }
+
+                            if (selectedCreatureIcon) {
+                                // Set icon based on stage
+                                let iconClass = "fas ";
+                                switch (stage) {
+                                    case 'egg':
+                                        iconClass += "fa-egg";
+                                        break;
+                                    case 'baby':
+                                        iconClass += "fa-baby";
+                                        break;
+                                    case 'juvenile':
+                                        iconClass += "fa-paw";
+                                        break;
+                                    case 'adult':
+                                        iconClass += "fa-dragon";
+                                        break;
+                                    case 'mythical':
+                                        iconClass += "fa-dragon";
+                                        break;
+                                    default:
+                                        iconClass += "fa-question";
+                                }
+
+                                // Set color based on habitat
+                                let colorClass = "text-gray-400";
+                                switch (habitat) {
+                                    case 'forest':
+                                        colorClass = "text-green-600";
+                                        break;
+                                    case 'ocean':
+                                        colorClass = "text-blue-600";
+                                        break;
+                                    case 'mountain':
+                                        colorClass = "text-red-700";
+                                        break;
+                                    case 'sky':
+                                        colorClass = "text-blue-400";
+                                        break;
+                                    case 'cosmic':
+                                        colorClass = "text-purple-600";
+                                        break;
+                                    case 'enchanted':
+                                        colorClass = "text-pink-600";
+                                        break;
+                                }
+
+                                selectedCreatureIcon.className = `${iconClass} ${colorClass} text-2xl`;
+                            }
+                        }
+                    } else {
+                        // No creature selected (default card)
+                        if (creatureSelect) {
+                            creatureSelect.value = '';
+                            const event = new Event('change');
+                            creatureSelect.dispatchEvent(event);
+                        }
+
+                        if (selectedCreatureInfo) {
+                            selectedCreatureInfo.classList.add('hidden');
+                        }
+                    }
+                });
+
+                // Add hover effects
+                card.addEventListener('mouseenter', function () {
+                    this.classList.add('transform', 'hover:scale-105');
+                });
+
+                card.addEventListener('mouseleave', function () {
+                    if (!this.classList.contains('selected')) {
+                        this.classList.remove('transform', 'hover:scale-105');
+                    }
+                });
+            });
+
+            // Carousel navigation
+            const carousel = document.querySelector('.creature-carousel');
+            const prevBtn = document.querySelector('.carousel-prev');
+            const nextBtn = document.querySelector('.carousel-next');
+
+            if (prevBtn && carousel) {
+                prevBtn.addEventListener('click', function () {
+                    carousel.scrollBy({left: -200, behavior: 'smooth'});
+                });
+            }
+
+            if (nextBtn && carousel) {
+                nextBtn.addEventListener('click', function () {
+                    carousel.scrollBy({left: 200, behavior: 'smooth'});
+                });
+            }
+
+            // Auto-select previously selected creature if any
+            if (creatureSelect && creatureSelect.value) {
+                const selectedId = creatureSelect.value;
+                const selectedCard = document.querySelector(`.creature-card[data-creature-id="${selectedId}"]`);
+                if (selectedCard) {
+                    // Simulate click to set up all visuals
+                    selectedCard.click();
+
+                    // Scroll to the selected card
+                    if (carousel) {
+                        setTimeout(() => {
+                            selectedCard.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'center'});
+                        }, 100);
+                    }
                 }
-                
-                if (selectedCreatureInfo) {
-                    selectedCreatureInfo.classList.add('hidden');
+            }
+
+            // Synchronize with existing pomodoro dropdown if present
+            const pomodoroFocusDropdown = document.getElementById('pomodoro-focus-old');
+            if (pomodoroFocusDropdown && focusSlider) {
+                // Update dropdown if slider changes
+                focusSlider.addEventListener('change', function () {
+                    const options = pomodoroFocusDropdown.options;
+                    for (let i = 0; i < options.length; i++) {
+                        if (options[i].value == this.value) {
+                            pomodoroFocusDropdown.selectedIndex = i;
+                            break;
+                        }
+                    }
+                });
+
+                // Update slider if dropdown changes
+                pomodoroFocusDropdown.addEventListener('change', function () {
+                    focusSlider.value = this.value;
+                    focusDisplay.textContent = `${this.value} minutes`;
+                    updateSliderFill(focusSlider);
+                });
+            }
+
+            const pomodoroBreakDropdown = document.getElementById('pomodoro-break-old');
+            if (pomodoroBreakDropdown && breakSlider) {
+                // Update dropdown if slider changes
+                breakSlider.addEventListener('change', function () {
+                    const options = pomodoroBreakDropdown.options;
+                    for (let i = 0; i < options.length; i++) {
+                        if (options[i].value == this.value) {
+                            pomodoroBreakDropdown.selectedIndex = i;
+                            break;
+                        }
+                    }
+                });
+
+                // Update slider if dropdown changes
+                pomodoroBreakDropdown.addEventListener('change', function () {
+                    breakSlider.value = this.value;
+                    breakDisplay.textContent = `${this.value} minutes`;
+                    updateSliderFill(breakSlider);
+                });
+            }
+        });
+    </script>
+
+    <style>
+        .breathing-guide {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .breathing-guide.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .breathing-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transform: translateY(30px);
+            opacity: 0;
+            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1),
+            opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .breathing-guide.active .breathing-wrapper {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .close-breathing {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 2;
+        }
+
+        .close-breathing:hover, .close-breathing:focus {
+            opacity: 1;
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.2);
+            outline: none;
+        }
+
+        .breathing-circle-container {
+            position: relative;
+            width: 250px;
+            height: 250px;
+            margin-bottom: 30px;
+        }
+
+        .breathing-circle {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+        }
+
+        .breathing-inner-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 30px rgba(66, 153, 225, 0.3);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            will-change: transform, opacity, width, height;
+        }
+
+        .breathing-ripple {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            opacity: 0;
+        }
+
+        .breathing-circle.inhale .breathing-inner-circle {
+            width: 200px;
+            height: 200px;
+            background: rgba(104, 211, 245, 0.2);
+            box-shadow: 0 0 40px rgba(104, 211, 245, 0.4);
+            transition: all 4s cubic-bezier(0.34, 0.13, 0.26, 0.99);
+        }
+
+        .breathing-circle.inhale .breathing-ripple {
+            animation: ripple-inhale 4s cubic-bezier(0.34, 0.13, 0.26, 0.99) forwards;
+        }
+
+        .breathing-circle.hold .breathing-inner-circle {
+            width: 200px;
+            height: 200px;
+            background: rgba(250, 176, 62, 0.2);
+            box-shadow: 0 0 40px rgba(250, 176, 62, 0.4);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .breathing-circle.exhale .breathing-inner-circle {
+            width: 150px;
+            height: 150px;
+            background: rgba(72, 187, 120, 0.2);
+            box-shadow: 0 0 30px rgba(72, 187, 120, 0.4);
+            transition: all 4s cubic-bezier(0.5, 0, 0.3, 1);
+        }
+
+        .breathing-circle.exhale .breathing-ripple {
+            animation: ripple-exhale 4s cubic-bezier(0.5, 0, 0.3, 1) forwards;
+        }
+
+        .breathing-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+            z-index: 0;
+        }
+
+        .breathing-progress-track {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.1);
+            stroke-width: 3;
+        }
+
+        .breathing-progress-indicator {
+            fill: none;
+            stroke-width: 3;
+            stroke-dasharray: 283;
+            stroke-dashoffset: 283;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.1s linear;
+        }
+
+        .breathing-circle.inhale + svg .breathing-progress-indicator {
+            stroke: #68d3f5;
+            animation: progress 4s linear forwards;
+        }
+
+        .breathing-circle.hold + svg .breathing-progress-indicator {
+            stroke: #fab03e;
+            animation: progress 4s linear forwards;
+        }
+
+        .breathing-circle.exhale + svg .breathing-progress-indicator {
+            stroke: #48bb78;
+            animation: progress 4s linear forwards;
+        }
+
+        .breathing-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .breathing-text {
+            color: white;
+            font-size: 2.2rem;
+            font-weight: 300;
+            opacity: 0.9;
+            margin-bottom: 15px;
+            transition: opacity 0.3s ease;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .breathing-cycles {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .breathing-cycles .cycle {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .breathing-cycles .cycle.active {
+            background: rgba(104, 211, 245, 0.7);
+            transform: scale(1.2);
+        }
+
+        .breathing-cycles .cycle.completed {
+            background: rgba(72, 187, 120, 0.7);
+        }
+
+        @keyframes ripple-inhale {
+            0% {
+                width: 150px;
+                height: 150px;
+                border-width: 2px;
+                opacity: 0.7;
+            }
+            100% {
+                width: 260px;
+                height: 260px;
+                border-width: 1px;
+                opacity: 0;
+            }
+        }
+
+        @keyframes ripple-exhale {
+            0% {
+                width: 200px;
+                height: 200px;
+                border-width: 2px;
+                opacity: 0.7;
+            }
+            100% {
+                width: 120px;
+                height: 120px;
+                border-width: 1px;
+                opacity: 0;
+            }
+        }
+
+        @keyframes progress {
+            from {
+                stroke-dashoffset: 283;
+            }
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.03);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .breathing-circle-container {
+                width: 200px;
+                height: 200px;
+            }
+
+            .breathing-inner-circle {
+                width: 120px;
+                height: 120px;
+            }
+
+            .breathing-circle.inhale .breathing-inner-circle {
+                width: 160px;
+                height: 160px;
+            }
+
+            .breathing-circle.hold .breathing-inner-circle {
+                width: 160px;
+                height: 160px;
+            }
+
+            .breathing-text {
+                font-size: 1.8rem;
+            }
+
+            @keyframes ripple-inhale {
+                0% {
+                    width: 120px;
+                    height: 120px;
+                }
+                100% {
+                    width: 220px;
+                    height: 220px;
                 }
             }
-        });
-        
-        // Add hover effects
-        card.addEventListener('mouseenter', function() {
-            this.classList.add('transform', 'hover:scale-105');
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            if (!this.classList.contains('selected')) {
-                this.classList.remove('transform', 'hover:scale-105');
-            }
-        });
-    });
-    
-    // Carousel navigation
-    const carousel = document.querySelector('.creature-carousel');
-    const prevBtn = document.querySelector('.carousel-prev');
-    const nextBtn = document.querySelector('.carousel-next');
-    
-    if (prevBtn && carousel) {
-        prevBtn.addEventListener('click', function() {
-            carousel.scrollBy({ left: -200, behavior: 'smooth' });
-        });
-    }
-    
-    if (nextBtn && carousel) {
-        nextBtn.addEventListener('click', function() {
-            carousel.scrollBy({ left: 200, behavior: 'smooth' });
-        });
-    }
-    
-    // Auto-select previously selected creature if any
-    if (creatureSelect && creatureSelect.value) {
-        const selectedId = creatureSelect.value;
-        const selectedCard = document.querySelector(`.creature-card[data-creature-id="${selectedId}"]`);
-        if (selectedCard) {
-            // Simulate click to set up all visuals
-            selectedCard.click();
-            
-            // Scroll to the selected card
-            if (carousel) {
-                setTimeout(() => {
-                    selectedCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-                }, 100);
-            }
-        }
-    }
-    
-    // Synchronize with existing pomodoro dropdown if present
-    const pomodoroFocusDropdown = document.getElementById('pomodoro-focus-old');
-    if (pomodoroFocusDropdown && focusSlider) {
-        // Update dropdown if slider changes
-        focusSlider.addEventListener('change', function() {
-            const options = pomodoroFocusDropdown.options;
-            for (let i = 0; i < options.length; i++) {
-                if (options[i].value == this.value) {
-                    pomodoroFocusDropdown.selectedIndex = i;
-                    break;
+
+            @keyframes ripple-exhale {
+                0% {
+                    width: 160px;
+                    height: 160px;
+                }
+                100% {
+                    width: 100px;
+                    height: 100px;
                 }
             }
-        });
-        
-        // Update slider if dropdown changes
-        pomodoroFocusDropdown.addEventListener('change', function() {
-            focusSlider.value = this.value;
-            focusDisplay.textContent = `${this.value} minutes`;
-            updateSliderFill(focusSlider);
-        });
-    }
-    
-    const pomodoroBreakDropdown = document.getElementById('pomodoro-break-old');
-    if (pomodoroBreakDropdown && breakSlider) {
-        // Update dropdown if slider changes
-        breakSlider.addEventListener('change', function() {
-            const options = pomodoroBreakDropdown.options;
-            for (let i = 0; i < options.length; i++) {
-                if (options[i].value == this.value) {
-                    pomodoroBreakDropdown.selectedIndex = i;
-                    break;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const breatheBtn = document.getElementById('breathe-btn');
+            const breathingGuide = document.getElementById('breathing-guide');
+            const breathingCircle = document.getElementById('breathing-circle');
+            const breathingText = document.getElementById('breathing-text');
+            const closeBreathingGuide = document.getElementById('close-breathing-guide');
+            const cycleIndicators = document.querySelectorAll('#breathing-cycles .cycle');
+
+            let timeouts = [];
+            let breathingInterval = null;
+            let isRunning = false;
+
+            // Close button event
+            if (closeBreathingGuide) {
+                closeBreathingGuide.addEventListener('click', () => endBreathingGuide(true));
+            }
+
+            // Breathe button event
+            if (breatheBtn) {
+                breatheBtn.addEventListener('click', startBreathingGuide);
+            }
+
+            // End the breathing guide
+            function endBreathingGuide(immediate = false) {
+                if (isRunning) {
+                    isRunning = false;
+
+                    // Clear all timeouts
+                    timeouts.forEach(id => clearTimeout(id));
+                    timeouts = [];
+
+                    // Clear interval
+                    if (breathingInterval) {
+                        clearInterval(breathingInterval);
+                        breathingInterval = null;
+                    }
+
+                    if (immediate) {
+                        // Reset UI immediately
+                        breathingGuide.classList.remove('active');
+                        breathingCircle.className = 'breathing-circle';
+
+                        // Reset cycle indicators
+                        cycleIndicators.forEach(dot => {
+                            dot.classList.remove('active', 'completed');
+                        });
+                        cycleIndicators[0]?.classList.add('active');
+                    } else {
+                        // Fade out smoothly
+                        timeouts.push(setTimeout(() => {
+                            // Graceful fade out
+                            breathingCircle.className = 'breathing-circle';
+                            breathingText.textContent = 'Complete';
+
+                            timeouts.push(setTimeout(() => {
+                                breathingGuide.classList.remove('active');
+
+                                // Reset cycle indicators after fade out
+                                timeouts.push(setTimeout(() => {
+                                    cycleIndicators.forEach(dot => {
+                                        dot.classList.remove('active', 'completed');
+                                    });
+                                    cycleIndicators[0]?.classList.add('active');
+                                }, 700));
+                            }, 2000));
+                        }, 500));
+                    }
                 }
             }
-        });
-        
-        // Update slider if dropdown changes
-        pomodoroBreakDropdown.addEventListener('change', function() {
-            breakSlider.value = this.value;
-            breakDisplay.textContent = `${this.value} minutes`;
-            updateSliderFill(breakSlider);
-        });
-    }
-});
-</script>
 
-<style>
-.breathing-guide {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.breathing-guide.active {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.breathing-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    transform: translateY(30px);
-    opacity: 0;
-    transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), 
-                opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.breathing-guide.active .breathing-wrapper {
-    transform: translateY(0);
-    opacity: 1;
-}
-
-.close-breathing {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
-    color: white;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    opacity: 0.7;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 2;
-}
-
-.close-breathing:hover, .close-breathing:focus {
-    opacity: 1;
-    transform: scale(1.1);
-    background: rgba(255, 255, 255, 0.2);
-    outline: none;
-}
-
-.breathing-circle-container {
-    position: relative;
-    width: 250px;
-    height: 250px;
-    margin-bottom: 30px;
-}
-
-.breathing-circle {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1;
-}
-
-.breathing-inner-circle {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 0 30px rgba(66, 153, 225, 0.3);
-    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-    will-change: transform, opacity, width, height;
-}
-
-.breathing-ripple {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    background: transparent;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    opacity: 0;
-}
-
-.breathing-circle.inhale .breathing-inner-circle {
-    width: 200px;
-    height: 200px;
-    background: rgba(104, 211, 245, 0.2);
-    box-shadow: 0 0 40px rgba(104, 211, 245, 0.4);
-    transition: all 4s cubic-bezier(0.34, 0.13, 0.26, 0.99);
-}
-
-.breathing-circle.inhale .breathing-ripple {
-    animation: ripple-inhale 4s cubic-bezier(0.34, 0.13, 0.26, 0.99) forwards;
-}
-
-.breathing-circle.hold .breathing-inner-circle {
-    width: 200px;
-    height: 200px;
-    background: rgba(250, 176, 62, 0.2);
-    box-shadow: 0 0 40px rgba(250, 176, 62, 0.4);
-    animation: pulse 4s ease-in-out infinite;
-}
-
-.breathing-circle.exhale .breathing-inner-circle {
-    width: 150px;
-    height: 150px;
-    background: rgba(72, 187, 120, 0.2);
-    box-shadow: 0 0 30px rgba(72, 187, 120, 0.4);
-    transition: all 4s cubic-bezier(0.5, 0, 0.3, 1);
-}
-
-.breathing-circle.exhale .breathing-ripple {
-    animation: ripple-exhale 4s cubic-bezier(0.5, 0, 0.3, 1) forwards;
-}
-
-.breathing-progress {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    transform: rotate(-90deg);
-    z-index: 0;
-}
-
-.breathing-progress-track {
-    fill: none;
-    stroke: rgba(255, 255, 255, 0.1);
-    stroke-width: 3;
-}
-
-.breathing-progress-indicator {
-    fill: none;
-    stroke-width: 3;
-    stroke-dasharray: 283;
-    stroke-dashoffset: 283;
-    stroke-linecap: round;
-    transition: stroke-dashoffset 0.1s linear;
-}
-
-.breathing-circle.inhale + svg .breathing-progress-indicator {
-    stroke: #68d3f5;
-    animation: progress 4s linear forwards;
-}
-
-.breathing-circle.hold + svg .breathing-progress-indicator {
-    stroke: #fab03e;
-    animation: progress 4s linear forwards;
-}
-
-.breathing-circle.exhale + svg .breathing-progress-indicator {
-    stroke: #48bb78;
-    animation: progress 4s linear forwards;
-}
-
-.breathing-label {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.breathing-text {
-    color: white;
-    font-size: 2.2rem;
-    font-weight: 300;
-    opacity: 0.9;
-    margin-bottom: 15px;
-    transition: opacity 0.3s ease;
-    min-height: 48px;
-    display: flex;
-    align-items: center;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-}
-
-.breathing-cycles {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-}
-
-.breathing-cycles .cycle {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
-}
-
-.breathing-cycles .cycle.active {
-    background: rgba(104, 211, 245, 0.7);
-    transform: scale(1.2);
-}
-
-.breathing-cycles .cycle.completed {
-    background: rgba(72, 187, 120, 0.7);
-}
-
-@keyframes ripple-inhale {
-    0% {
-        width: 150px;
-        height: 150px;
-        border-width: 2px;
-        opacity: 0.7;
-    }
-    100% {
-        width: 260px;
-        height: 260px;
-        border-width: 1px;
-        opacity: 0;
-    }
-}
-
-@keyframes ripple-exhale {
-    0% {
-        width: 200px;
-        height: 200px;
-        border-width: 2px;
-        opacity: 0.7;
-    }
-    100% {
-        width: 120px;
-        height: 120px;
-        border-width: 1px;
-        opacity: 0;
-    }
-}
-
-@keyframes progress {
-    from { stroke-dashoffset: 283; }
-    to { stroke-dashoffset: 0; }
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.03); }
-    100% { transform: scale(1); }
-}
-
-@media (max-width: 600px) {
-    .breathing-circle-container {
-        width: 200px;
-        height: 200px;
-    }
-    
-    .breathing-inner-circle {
-        width: 120px;
-        height: 120px;
-    }
-    
-    .breathing-circle.inhale .breathing-inner-circle {
-        width: 160px;
-        height: 160px;
-    }
-    
-    .breathing-circle.hold .breathing-inner-circle {
-        width: 160px;
-        height: 160px;
-    }
-    
-    .breathing-text {
-        font-size: 1.8rem;
-    }
-    
-    @keyframes ripple-inhale {
-        0% {
-            width: 120px;
-            height: 120px;
-        }
-        100% {
-            width: 220px;
-            height: 220px;
-        }
-    }
-    
-    @keyframes ripple-exhale {
-        0% {
-            width: 160px;
-            height: 160px;
-        }
-        100% {
-            width: 100px;
-            height: 100px;
-        }
-    }
-}
-</style>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const breatheBtn = document.getElementById('breathe-btn');
-    const breathingGuide = document.getElementById('breathing-guide');
-    const breathingCircle = document.getElementById('breathing-circle');
-    const breathingText = document.getElementById('breathing-text');
-    const closeBreathingGuide = document.getElementById('close-breathing-guide');
-    const cycleIndicators = document.querySelectorAll('#breathing-cycles .cycle');
-    
-    let timeouts = [];
-    let breathingInterval = null;
-    let isRunning = false;
-    
-    // Close button event
-    if (closeBreathingGuide) {
-        closeBreathingGuide.addEventListener('click', () => endBreathingGuide(true));
-    }
-    
-    // Breathe button event
-    if (breatheBtn) {
-        breatheBtn.addEventListener('click', startBreathingGuide);
-    }
-    
-    // End the breathing guide
-    function endBreathingGuide(immediate = false) {
-        if (isRunning) {
-            isRunning = false;
-            
-            // Clear all timeouts
-            timeouts.forEach(id => clearTimeout(id));
-            timeouts = [];
-            
-            // Clear interval
-            if (breathingInterval) {
-                clearInterval(breathingInterval);
-                breathingInterval = null;
+            // Update cycle indicators
+            function updateCycleIndicators(currentCycle) {
+                cycleIndicators.forEach((dot, index) => {
+                    dot.classList.remove('active');
+                    if (index < currentCycle) {
+                        dot.classList.add('completed');
+                    } else if (index === currentCycle) {
+                        dot.classList.add('active');
+                    }
+                });
             }
-            
-            if (immediate) {
-                // Reset UI immediately
-                breathingGuide.classList.remove('active');
-                breathingCircle.className = 'breathing-circle';
-                
+
+            // Start the breathing guide
+            function startBreathingGuide() {
+                if (isRunning) return;
+                isRunning = true;
+
+                // Reset timeouts
+                timeouts.forEach(id => clearTimeout(id));
+                timeouts = [];
+
                 // Reset cycle indicators
                 cycleIndicators.forEach(dot => {
                     dot.classList.remove('active', 'completed');
                 });
                 cycleIndicators[0]?.classList.add('active');
-            } else {
-                // Fade out smoothly
+
+                // Activate the guide with smooth transition
+                breathingGuide.classList.add('active');
+                breathingText.textContent = 'Prepare';
+                breathingCircle.className = 'breathing-circle';
+
+                // Start breathing sequence after preparation
                 timeouts.push(setTimeout(() => {
-                    // Graceful fade out
-                    breathingCircle.className = 'breathing-circle';
-                    breathingText.textContent = 'Complete';
-                    
-                    timeouts.push(setTimeout(() => {
-                        breathingGuide.classList.remove('active');
-                        
-                        // Reset cycle indicators after fade out
+                    let breathCycle = 0;
+
+                    // Function to run a breath cycle
+                    function runBreathCycle() {
+                        updateCycleIndicators(breathCycle);
+
+                        // Inhale phase - smooth transition
+                        breathingText.textContent = 'Inhale';
+                        breathingCircle.className = 'breathing-circle inhale';
+
+                        // Hold phase - smooth transition
                         timeouts.push(setTimeout(() => {
-                            cycleIndicators.forEach(dot => {
-                                dot.classList.remove('active', 'completed');
-                            });
-                            cycleIndicators[0]?.classList.add('active');
-                        }, 700));
-                    }, 2000));
-                }, 500));
-            }
-        }
-    }
-    
-    // Update cycle indicators
-    function updateCycleIndicators(currentCycle) {
-        cycleIndicators.forEach((dot, index) => {
-            dot.classList.remove('active');
-            if (index < currentCycle) {
-                dot.classList.add('completed');
-            } else if (index === currentCycle) {
-                dot.classList.add('active');
-            }
-        });
-    }
-    
-    // Start the breathing guide
-    function startBreathingGuide() {
-        if (isRunning) return;
-        isRunning = true;
-        
-        // Reset timeouts
-        timeouts.forEach(id => clearTimeout(id));
-        timeouts = [];
-        
-        // Reset cycle indicators
-        cycleIndicators.forEach(dot => {
-            dot.classList.remove('active', 'completed');
-        });
-        cycleIndicators[0]?.classList.add('active');
-        
-        // Activate the guide with smooth transition
-        breathingGuide.classList.add('active');
-        breathingText.textContent = 'Prepare';
-        breathingCircle.className = 'breathing-circle';
-        
-        // Start breathing sequence after preparation
-        timeouts.push(setTimeout(() => {
-            let breathCycle = 0;
-            
-            // Function to run a breath cycle
-            function runBreathCycle() {
-                updateCycleIndicators(breathCycle);
-                
-                // Inhale phase - smooth transition
-                breathingText.textContent = 'Inhale';
-                breathingCircle.className = 'breathing-circle inhale';
-                
-                // Hold phase - smooth transition
-                timeouts.push(setTimeout(() => {
-                    breathingText.textContent = 'Hold';
-                    breathingCircle.className = 'breathing-circle hold';
-                }, 4000));
-                
-                // Exhale phase - smooth transition
-                timeouts.push(setTimeout(() => {
-                    breathingText.textContent = 'Exhale';
-                    breathingCircle.className = 'breathing-circle exhale';
-                }, 8000));
-            }
-            
-            // Initial cycle
-            runBreathCycle();
-            
-            // Setup 4 breath cycles with perfect timing
-            breathingInterval = setInterval(() => {
-                breathCycle++;
-                
-                if (breathCycle >= 4) {
-                    // End after 4 cycles
-                    clearInterval(breathingInterval);
-                    breathingInterval = null;
-                    
-                    // Complete all cycle indicators
-                    cycleIndicators.forEach(dot => {
-                        dot.classList.remove('active');
-                        dot.classList.add('completed');
-                    });
-                    
-                    // Auto-close with delay for smooth experience
-                    endBreathingGuide(false);
-                } else {
+                            breathingText.textContent = 'Hold';
+                            breathingCircle.className = 'breathing-circle hold';
+                        }, 4000));
+
+                        // Exhale phase - smooth transition
+                        timeouts.push(setTimeout(() => {
+                            breathingText.textContent = 'Exhale';
+                            breathingCircle.className = 'breathing-circle exhale';
+                        }, 8000));
+                    }
+
+                    // Initial cycle
                     runBreathCycle();
+
+                    // Setup 4 breath cycles with perfect timing
+                    breathingInterval = setInterval(() => {
+                        breathCycle++;
+
+                        if (breathCycle >= 4) {
+                            // End after 4 cycles
+                            clearInterval(breathingInterval);
+                            breathingInterval = null;
+
+                            // Complete all cycle indicators
+                            cycleIndicators.forEach(dot => {
+                                dot.classList.remove('active');
+                                dot.classList.add('completed');
+                            });
+
+                            // Auto-close with delay for smooth experience
+                            endBreathingGuide(false);
+                        } else {
+                            runBreathCycle();
+                        }
+                    }, 12000); // 12 seconds per full breath cycle
+                }, 3000)); // 3 seconds preparation time
+            }
+
+            // Escape key to exit
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && breathingGuide.classList.contains('active')) {
+                    endBreathingGuide(true);
                 }
-            }, 12000); // 12 seconds per full breath cycle
-        }, 3000)); // 3 seconds preparation time
-    }
-    
-    // Escape key to exit
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && breathingGuide.classList.contains('active')) {
-            endBreathingGuide(true);
+            });
+
+            // Prevent guide from getting stuck if page is hidden/inactive
+            document.addEventListener('visibilitychange', function () {
+                if (document.hidden && isRunning) {
+                    endBreathingGuide(true);
+                }
+            });
+        });
+    </script>
+
+    <style>
+        /* Animations and transitions */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-    });
-    
-    // Prevent guide from getting stuck if page is hidden/inactive
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden && isRunning) {
-            endBreathingGuide(true);
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(76, 76, 76);
+            }
+            70% {
+                box-shadow: 0 0 0 6px rgba(74, 222, 128, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(74, 222, 128, 0);
+            }
         }
-    });
-});
-</script>
+
+        .animate-fadeIn {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        .animate-pulse-green {
+            animation: pulse 2s infinite;
+        }
+
+        /* Enhanced input styles */
+        .intent-input-container {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .intent-input-container:focus-within {
+            border-color:rgb(76, 76, 76);
+            box-shadow: 0 0 0 2px rgba(76, 76, 76, 0.2);
+        }
+
+        #session-intent:focus + div #clear-intent {
+            opacity: 1;
+        }
+
+        /* Dropdowns */
+        .suggestions-dropdown, .history-dropdown {
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.2s ease-out;
+        }
+
+        .suggestions-dropdown.visible, .history-dropdown.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Active intent styling */
+        #active-intent-card {
+            transition: all 0.3s ease;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+            .intent-input-container {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Elements
+            const sessionIntent = document.getElementById('session-intent');
+            const clearIntentBtn = document.getElementById('clear-intent');
+            const wordCount = document.getElementById('intent-word-count');
+            const suggestionsBtn = document.getElementById('session-intent-suggestions');
+            const suggestionsDropdown = document.getElementById('intent-suggestions');
+            const suggestionItems = document.querySelectorAll('.suggestion-item');
+            const historyBtn = document.getElementById('session-intent-history');
+            const historyDropdown = document.getElementById('intent-history');
+            const historyItems = document.querySelectorAll('.history-item');
+            const clearHistoryBtn = document.getElementById('clear-history');
+            const activeIntentCard = document.getElementById('active-intent-card');
+            const activeIntentText = document.getElementById('active-intent-text');
+
+            // Variables
+            let intentHistory = JSON.parse(localStorage.getItem('intentHistory') || '[]');
+            let currentDropdown = null;
+
+            // Function to update word count
+            function updateWordCount() {
+                const count = sessionIntent.value.length;
+                wordCount.textContent = `${count}/100`;
+
+                // Change color when approaching limit
+                if (count > 80) {
+                    wordCount.classList.add('text-yellow-500');
+                    wordCount.classList.remove('text-gray-400', 'text-red-500');
+                } else if (count > 100) {
+                    wordCount.classList.add('text-red-500');
+                    wordCount.classList.remove('text-gray-400', 'text-yellow-500');
+                } else {
+                    wordCount.classList.add('text-gray-400');
+                    wordCount.classList.remove('text-yellow-500', 'text-red-500');
+                }
+
+                // Show/hide clear button
+                if (count > 0) {
+                    clearIntentBtn.style.opacity = '1';
+                } else {
+                    clearIntentBtn.style.opacity = '0';
+                }
+            }
+
+            // Function to toggle dropdown visibility
+            function toggleDropdown(dropdown) {
+                // Close current dropdown if open
+                if (currentDropdown && currentDropdown !== dropdown) {
+                    currentDropdown.classList.remove('visible');
+                    currentDropdown.classList.add('hidden');
+                }
+
+                // Toggle clicked dropdown
+                if (dropdown.classList.contains('hidden')) {
+                    dropdown.classList.remove('hidden');
+                    setTimeout(() => dropdown.classList.add('visible'), 10);
+                    currentDropdown = dropdown;
+                } else {
+                    dropdown.classList.remove('visible');
+                    setTimeout(() => dropdown.classList.add('hidden'), 200);
+                    currentDropdown = null;
+                }
+            }
+
+            // Function to add intent to history
+            function addToHistory(intent) {
+                if (!intent.trim()) return;
+
+                // Remove if already exists
+                intentHistory = intentHistory.filter(item => item.text !== intent);
+
+                // Add to beginning
+                intentHistory.unshift({
+                    text: intent,
+                    timestamp: new Date().toISOString()
+                });
+
+                // Limit history to 10 items
+                if (intentHistory.length > 10) {
+                    intentHistory.pop();
+                }
+
+                // Save to localStorage
+                localStorage.setItem('intentHistory', JSON.stringify(intentHistory));
+
+                // Update history list
+                updateHistoryList();
+            }
+
+            // Function to update history list in UI
+            function updateHistoryList() {
+                const historyList = document.getElementById('history-list');
+                historyList.innerHTML = '';
+
+                if (intentHistory.length === 0) {
+                    historyList.innerHTML = '<li class="px-3 py-2 text-gray-500 dark:text-gray-400 text-sm">No history yet</li>';
+                    return;
+                }
+
+                intentHistory.forEach(item => {
+                    const li = document.createElement('li');
+                    li.className = 'history-item px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-800 dark:text-gray-200 flex justify-between items-center';
+
+                    // Format timestamp
+                    const timestamp = new Date(item.timestamp);
+                    const now = new Date();
+                    let timeText;
+
+                    if (timestamp.toDateString() === now.toDateString()) {
+                        timeText = 'Today';
+                    } else if (new Date(now - 86400000).toDateString() === timestamp.toDateString()) {
+                        timeText = 'Yesterday';
+                    } else {
+                        timeText = timestamp.toLocaleDateString();
+                    }
+
+                    li.innerHTML = `
+                <span>${item.text}</span>
+                <span class="text-xs text-gray-500">${timeText}</span>
+            `;
+
+                    li.addEventListener('click', () => {
+                        sessionIntent.value = item.text;
+                        updateWordCount();
+                        toggleDropdown(historyDropdown);
+                    });
+
+                    historyList.appendChild(li);
+                });
+            }
+
+            // Function to activate intent UI when session starts
+            function activateIntent() {
+                const intentText = sessionIntent.value.trim();
+                if (!intentText) return;
+
+                // Set active intent text
+                activeIntentText.textContent = intentText;
+
+                // Show active intent card with animation
+                activeIntentCard.classList.remove('hidden');
+
+                // Add to history
+                addToHistory(intentText);
+            }
+
+            // Event for start focus button
+            const startFocusBtn = document.querySelector('#start-btn, button.start-btn, button:contains("Start Focus")');
+            if (startFocusBtn) {
+                const originalClick = startFocusBtn.onclick;
+                startFocusBtn.onclick = function (e) {
+                    activateIntent();
+                    if (originalClick) {
+                        return originalClick.call(this, e);
+                    }
+                };
+            }
+
+            // Initialize
+            updateWordCount();
+            updateHistoryList();
+
+            // Event Listeners
+            sessionIntent.addEventListener('input', updateWordCount);
+
+            clearIntentBtn.addEventListener('click', function () {
+                sessionIntent.value = '';
+                updateWordCount();
+                sessionIntent.focus();
+            });
+
+            suggestionsBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                toggleDropdown(suggestionsDropdown);
+            });
+
+            historyBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                toggleDropdown(historyDropdown);
+            });
+
+            suggestionItems.forEach(item => {
+                item.addEventListener('click', function () {
+                    sessionIntent.value = this.textContent.trim();
+                    updateWordCount();
+                    toggleDropdown(suggestionsDropdown);
+                    sessionIntent.focus();
+                });
+            });
+
+            clearHistoryBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                if (confirm('Clear all intent history?')) {
+                    intentHistory = [];
+                    localStorage.setItem('intentHistory', JSON.stringify(intentHistory));
+                    updateHistoryList();
+                }
+            });
+
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function (e) {
+                if (currentDropdown &&
+                    !currentDropdown.contains(e.target) &&
+                    e.target !== suggestionsBtn &&
+                    e.target !== historyBtn) {
+                    toggleDropdown(currentDropdown);
+                }
+            });
+
+            // Close dropdowns when pressing escape
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && currentDropdown) {
+                    toggleDropdown(currentDropdown);
+                }
+            });
+
+            // Handle session complete event to reset intent
+            const completeBtn = document.getElementById('complete-btn');
+            if (completeBtn) {
+                const originalCompleteClick = completeBtn.onclick;
+                completeBtn.onclick = function (e) {
+                    setTimeout(() => {
+                        activeIntentCard.classList.add('hidden');
+                    }, 500);
+
+                    if (originalCompleteClick) {
+                        return originalCompleteClick.call(this, e);
+                    }
+                };
+            }
+        });
+    </script>
 
 <?php require_once ROOT_PATH . '/resources/views/layouts/footer.php'; ?>
