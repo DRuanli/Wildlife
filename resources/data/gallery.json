@@ -94,11 +94,11 @@
       "conservation_fact": "Snow Leopards are Vulnerable, with their populations declining due to increasing human pressures.",
       "last_interaction_at": "2023-11-23 08:30:00",
       "image_urls": {
-        "egg": "/Wildlife/images/creatures/4_egg.png",
-        "baby": "/Wildlife/images/creatures/4_baby.png",
-        "juvenile": "/Wildlife/images/creatures/4_juvenile.png",
-        "adult": "/Wildlife/images/creatures/4_adult.png",
-        "mythical": "/Wildlife/images/creatures/4_mythical.png"
+        "egg": "/Wildlife/images/creatures/snow_leopard.png",
+        "baby": "/Wildlife/images/creatures/snow_leopard.png",
+        "juvenile": "/Wildlife/images/creatures/snow_leopard.png",
+        "adult": "/Wildlife/images/creatures/snow_leopard.png",
+        "mythical": "/Wildlife/images/creatures/snow_leopard.png"
       },
       "audio_url": "/Wildlife/audio/creatures/frost_whisper.mp3",
       "exhibition_note": "A ghost of the high peaks, its silent elegance underscores the urgency of protecting fragile mountain ecosystems."
@@ -120,11 +120,11 @@
       "conservation_fact": "The Philippine Eagle is Critically Endangered due to rampant deforestation and hunting.",
       "last_interaction_at": "2023-11-19 16:20:00",
       "image_urls": {
-        "egg": "/Wildlife/images/creatures/5_egg.png",
-        "baby": "/Wildlife/images/creatures/5_baby.png",
-        "juvenile": "/Wildlife/images/creatures/5_juvenile.png",
-        "adult": "/Wildlife/images/creatures/5_adult.png",
-        "mythical": "/Wildlife/images/creatures/5_mythical.png"
+        "egg": "/Wildlife/images/creatures/philipin_edge.jpg",
+        "baby": "/Wildlife/images/creatures/philipin_edge.jpg",
+        "juvenile": "/Wildlife/images/creatures/philipin_edge.jpg",
+        "adult": "/Wildlife/images/creatures/philipin_edge.jpg",
+        "mythical": "/Wildlife/images/creatures/philipin_edge.jpg"
       },
       "audio_url": "/Wildlife/audio/creatures/sky_sovereign.mp3",
       "exhibition_note": "A soaring emblem of untamed beauty, it reminds us that urgent action is needed to preserve critical habitats."
@@ -146,11 +146,11 @@
       "conservation_fact": "Saolas are Critically Endangered, with their survival imperiled by habitat loss and hunting.",
       "last_interaction_at": "2023-11-18 10:05:00",
       "image_urls": {
-        "egg": "/Wildlife/images/creatures/6_egg.png",
-        "baby": "/Wildlife/images/creatures/6_baby.png",
-        "juvenile": "/Wildlife/images/creatures/6_juvenile.png",
-        "adult": "/Wildlife/images/creatures/6_adult.png",
-        "mythical": "/Wildlife/images/creatures/6_mythical.png"
+        "egg": "/Wildlife/images/creatures/saola.png",
+        "baby": "/Wildlife/images/creatures/saola.png",
+        "juvenile": "/Wildlife/images/creatures/saola.png",
+        "adult": "/Wildlife/images/creatures/saola.png",
+        "mythical": "/Wildlife/images/creatures/saola.png"
       },
       "audio_url": "/Wildlife/audio/creatures/mystic_horn.mp3",
       "exhibition_note": "A creature of myth and mystery, its rarity calls for heightened efforts to uncover and protect nature’s hidden treasures."
@@ -172,11 +172,11 @@
       "conservation_fact": "Hawaiian Crows are Extinct in the Wild due to severe habitat loss and invasive species pressures.",
       "last_interaction_at": null,
       "image_urls": {
-        "egg": "/Wildlife/images/creatures/7_egg.png",
-        "baby": "/Wildlife/images/creatures/7_baby.png",
-        "juvenile": "/Wildlife/images/creatures/7_juvenile.png",
-        "adult": "/Wildlife/images/creatures/7_adult.png",
-        "mythical": "/Wildlife/images/creatures/7_mythical.png"
+        "egg": "/Wildlife/images/creatures/hawaiiCrow.png",
+        "baby": "/Wildlife/images/creatures/hawaiiCrow.png",
+        "juvenile": "/Wildlife/images/creatures/hawaiiCrow.png",
+        "adult": "/Wildlife/images/creatures/hawaiiCrow.png",
+        "mythical": "/Wildlife/images/creatures/hawaiiCrow.png"
       },
       "audio_url": "/Wildlife/audio/creatures/nightflare.mp3",
       "exhibition_note": "A poignant reminder of nature’s fragility, urging us to learn from past losses to safeguard future biodiversity."
@@ -198,11 +198,11 @@
       "conservation_fact": "The Tasmanian Tiger is classified as Extinct, a somber testament to the irreversible consequences of habitat destruction.",
       "last_interaction_at": null,
       "image_urls": {
-        "egg": "/Wildlife/images/creatures/8_egg.png",
-        "baby": "/Wildlife/images/creatures/8_baby.png",
-        "juvenile": "/Wildlife/images/creatures/8_juvenile.png",
-        "adult": "/Wildlife/images/creatures/8_adult.png",
-        "mythical": "/Wildlife/images/creatures/8_mythical.png"
+        "egg": "/Wildlife/images/creatures/tasmaniaTiger.png",
+        "baby": "/Wildlife/images/creatures/tasmaniaTiger.png",
+        "juvenile": "/Wildlife/images/creatures/tasmaniaTiger.png",
+        "adult": "/Wildlife/images/creatures/tasmaniaTiger.png",
+        "mythical": "/Wildlife/images/creatures/tasmaniaTiger.png"
       },
       "audio_url": "/Wildlife/audio/creatures/ghost_stalker.mp3",
       "exhibition_note": "An emblem of vanished beauty, its memory challenges us to protect the remaining wonders of our natural world."
@@ -224,11 +224,11 @@
       "conservation_fact": "Chinese Giant Salamanders are Critically Endangered, with wild populations in steep decline.",
       "last_interaction_at": "2023-11-14 09:30:00",
       "image_urls": {
-        "egg": "/Wildlife/images/creatures/9_egg.png",
-        "baby": "/Wildlife/images/creatures/9_baby.png",
-        "juvenile": "/Wildlife/images/creatures/9_juvenile.png",
-        "adult": "/Wildlife/images/creatures/9_adult.png",
-        "mythical": "/Wildlife/images/creatures/9_mythical.png"
+        "egg": "/Wildlife/images/creatures/Chinese Giant Salamander.png",
+        "baby": "/Wildlife/images/creatures/Chinese Giant Salamander.png",
+        "juvenile": "/Wildlife/images/creatures/Chinese Giant Salamander.png",
+        "adult": "/Wildlife/images/creatures/Chinese Giant Salamander.png",
+        "mythical": "/Wildlife/images/creatures/Chinese Giant Salamander.png"
       },
       "audio_url": "/Wildlife/audio/creatures/crystal_warden.mp3",
       "exhibition_note": "A living relic of ancient waters, it compels us to protect the delicate balance of freshwater ecosystems."
@@ -250,11 +250,11 @@
       "conservation_fact": "Vaquitas are Critically Endangered, their numbers dwindling primarily due to bycatch in illegal fishing operations.",
       "last_interaction_at": "2023-11-13 15:50:00",
       "image_urls": {
-        "egg": "/Wildlife/images/creatures/10_egg.png",
-        "baby": "/Wildlife/images/creatures/10_baby.png",
-        "juvenile": "/Wildlife/images/creatures/10_juvenile.png",
-        "adult": "/Wildlife/images/creatures/10_adult.png",
-        "mythical": "/Wildlife/images/creatures/10_mythical.png"
+        "egg": "/Wildlife/images/creatures/Vaquita.png",
+        "baby": "/Wildlife/images/creatures/Vaquita.png",
+        "juvenile": "/Wildlife/images/creatures/Vaquita.png",
+        "adult": "/Wildlife/images/creatures/Vaquita.png",
+        "mythical": "/Wildlife/images/creatures/Vaquita.png"
       },
       "audio_url": "/Wildlife/audio/creatures/silent_echo.mp3",
       "exhibition_note": "A fragile whisper of the sea, its plight calls for immediate global conservation action."
@@ -276,11 +276,11 @@
       "conservation_fact": "African Grey Parrots are Endangered, with wild populations under continuous threat from human exploitation.",
       "last_interaction_at": "2023-11-12 12:00:00",
       "image_urls": {
-        "egg": "/Wildlife/images/creatures/11_egg.png",
-        "baby": "/Wildlife/images/creatures/11_baby.png",
-        "juvenile": "/Wildlife/images/creatures/11_juvenile.png",
-        "adult": "/Wildlife/images/creatures/11_adult.png",
-        "mythical": "/Wildlife/images/creatures/11_mythical.png"
+        "egg": "/Wildlife/images/creatures/African Grey Parrot.png",
+        "baby": "/Wildlife/images/creatures/African Grey Parrot.png",
+        "juvenile": "/Wildlife/images/creatures/African Grey Parrot.png",
+        "adult": "/Wildlife/images/creatures/African Grey Parrot.png",
+        "mythical": "/Wildlife/images/creatures/African Grey Parrot.png"
       },
       "audio_url": "/Wildlife/audio/creatures/echoing_scholar.mp3",
       "exhibition_note": "A living library of nature’s wisdom, it inspires reverence for wild habitats and the importance of preserving biodiversity."
@@ -302,11 +302,11 @@
       "conservation_fact": "Galápagos Tortoises are Vulnerable due to habitat disruption and invasive species, despite ongoing conservation efforts.",
       "last_interaction_at": "2023-11-22 14:00:00",
       "image_urls": {
-        "egg": "/Wildlife/images/creatures/12_egg.png",
-        "baby": "/Wildlife/images/creatures/12_baby.png",
-        "juvenile": "/Wildlife/images/creatures/12_juvenile.png",
-        "adult": "/Wildlife/images/creatures/12_adult.png",
-        "mythical": "/Wildlife/images/creatures/12_mythical.png"
+        "egg": "/Wildlife/images/creatures/Galápagos Tortoise.png",
+        "baby": "/Wildlife/images/creatures/Galápagos Tortoise.png",
+        "juvenile": "/Wildlife/images/creatures/Galápagos Tortoise.png",
+        "adult": "/Wildlife/images/creatures/Galápagos Tortoise.png",
+        "mythical": "/Wildlife/images/creatures/Galápagos Tortoise.png"
       },
       "audio_url": "/Wildlife/audio/creatures/greenwarden.mp3",
       "exhibition_note": "A testament to endurance and natural history, it calls on us to preserve our planet’s evolutionary legacy."
@@ -354,11 +354,11 @@
       "conservation_fact": "Red Foxes are classified as Least Concern, though they can be impacted by localized habitat changes.",
       "last_interaction_at": "2023-11-23 08:45:00",
       "image_urls": {
-        "egg": "/Wildlife/images/creatures/14_egg.png",
-        "baby": "/Wildlife/images/creatures/14_baby.png",
-        "juvenile": "/Wildlife/images/creatures/14_juvenile.png",
-        "adult": "/Wildlife/images/creatures/14_adult.png",
-        "mythical": "/Wildlife/images/creatures/14_mythical.png"
+        "egg": "/Wildlife/images/creatures/Red Fox.png",
+        "baby": "/Wildlife/images/creatures/Red Fox.png",
+        "juvenile": "/Wildlife/images/creatures/Red Fox.png",
+        "adult": "/Wildlife/images/creatures/Red Fox.png",
+        "mythical": "/Wildlife/images/creatures/Red Fox.png"
       },
       "audio_url": "/Wildlife/audio/creatures/rustic_ember.mp3",
       "exhibition_note": "A testament to nature’s adaptability, the Red Fox thrives by seamlessly integrating into its environment."
@@ -380,11 +380,11 @@
       "conservation_fact": "Giant Manta Rays are Vulnerable, with their numbers declining in the face of unsustainable fishing practices.",
       "last_interaction_at": "2023-11-23 14:00:00",
       "image_urls": {
-        "egg": "/Wildlife/images/creatures/15_egg.png",
-        "baby": "/Wildlife/images/creatures/15_baby.png",
-        "juvenile": "/Wildlife/images/creatures/15_juvenile.png",
-        "adult": "/Wildlife/images/creatures/15_adult.png",
-        "mythical": "/Wildlife/images/creatures/15_mythical.png"
+        "egg": "/Wildlife/images/creatures/Giant Manta Ray.png",
+        "baby": "/Wildlife/images/creatures/Giant Manta Ray.png",
+        "juvenile": "/Wildlife/images/creatures/Giant Manta Ray.png",
+        "adult": "/Wildlife/images/creatures/Giant Manta Ray.png",
+        "mythical": "/Wildlife/images/creatures/Giant Manta Ray.png"
       },
       "audio_url": "/Wildlife/audio/creatures/oceanic_dancer.mp3",
       "exhibition_note": "A ballet of the deep blue, it embodies the fragile beauty and vast mystery of marine life."
