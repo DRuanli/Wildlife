@@ -328,11 +328,11 @@
       "conservation_fact": "The Iberian Lynx is Endangered, with targeted conservation programs working to restore its numbers.",
       "last_interaction_at": "2023-11-23 18:20:00",
       "image_urls": {
-        "egg": "/Wildlife/images/creatures/13_egg.png",
-        "baby": "/Wildlife/images/creatures/13_baby.png",
-        "juvenile": "/Wildlife/images/creatures/13_juvenile.png",
-        "adult": "/Wildlife/images/creatures/13_adult.png",
-        "mythical": "/Wildlife/images/creatures/13_mythical.png"
+        "egg": "/Wildlife/images/creatures/Iberian Lynx.png",
+        "baby": "/Wildlife/images/creatures/13_baIberian Lynxby.png",
+        "juvenile": "/Wildlife/images/creatures/Iberian Lynx.png",
+        "adult": "/Wildlife/images/creatures/Iberian Lynx.png",
+        "mythical": "/Wildlife/images/creatures/Iberian Lynx.png"
       },
       "audio_url": "/Wildlife/audio/creatures/mooncrest.mp3",
       "exhibition_note": "A symbol of delicate balance in nature, it inspires efforts to safeguard species on the brink of disappearance."
