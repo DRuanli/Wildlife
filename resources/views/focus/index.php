@@ -89,9 +89,15 @@ include('public/loading-component.php');
 
     <!-- Breathing Guide -->
     <div class="breathing-guide" id="breathing-guide">
+        <button id="close-breathing-guide" class="close-breathing">
+            <i class="fas fa-times"></i>
+        </button>
+        
         <div class="breathing-circle" id="breathing-circle">
-            <span id="breathing-text">Prepare</span>
+            <div class="breathing-inner-circle"></div>
         </div>
+        
+        <div class="breathing-text" id="breathing-text">Prepare</div>
     </div>
 
     <div id="focus-app" class="min-h-screen pt-6 pb-12">
@@ -1167,6 +1173,253 @@ document.addEventListener('DOMContentLoaded', function() {
             updateSliderFill(breakSlider);
         });
     }
+});
+</script>
+
+<style>
+.breathing-guide {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 40, 0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+.breathing-guide.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.close-breathing {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.close-breathing:hover {
+    opacity: 1;
+}
+
+.breathing-circle {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.breathing-inner-circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    transition: all 0.3s ease;
+}
+
+.breathing-circle.inhale .breathing-inner-circle {
+    animation: inhale 4s ease-in-out forwards;
+}
+
+.breathing-circle.hold .breathing-inner-circle {
+    width: 200px;
+    height: 200px;
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.breathing-circle.exhale .breathing-inner-circle {
+    animation: exhale 4s ease-in-out forwards;
+}
+
+.breathing-text {
+    color: white;
+    font-size: 2rem;
+    font-weight: 300;
+    opacity: 0.9;
+}
+
+@keyframes inhale {
+    from { 
+        width: 150px;
+        height: 150px;
+        background: rgba(255, 255, 255, 0.15);
+    }
+    to { 
+        width: 200px;
+        height: 200px;
+        background: rgba(255, 255, 255, 0.25);
+    }
+}
+
+@keyframes exhale {
+    from { 
+        width: 200px;
+        height: 200px;
+        background: rgba(255, 255, 255, 0.25);
+    }
+    to { 
+        width: 150px;
+        height: 150px;
+        background: rgba(255, 255, 255, 0.15);
+    }
+}
+
+@media (max-width: 600px) {
+    .breathing-circle {
+        width: 180px;
+        height: 180px;
+    }
+    
+    .breathing-inner-circle {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .breathing-text {
+        font-size: 1.5rem;
+    }
+    
+    @keyframes inhale {
+        from { width: 120px; height: 120px; }
+        to { width: 160px; height: 160px; }
+    }
+    
+    @keyframes exhale {
+        from { width: 160px; height: 160px; }
+        to { width: 120px; height: 120px; }
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const breatheBtn = document.getElementById('breathe-btn');
+    const breathingGuide = document.getElementById('breathing-guide');
+    const breathingCircle = document.getElementById('breathing-circle');
+    const breathingText = document.getElementById('breathing-text');
+    const closeBreathingGuide = document.getElementById('close-breathing-guide');
+    
+    let timeouts = [];
+    let breathingInterval = null;
+    
+    // Close button event
+    if (closeBreathingGuide) {
+        closeBreathingGuide.addEventListener('click', () => endBreathingGuide(true));
+    }
+    
+    // Breathe button event
+    if (breatheBtn) {
+        breatheBtn.addEventListener('click', startBreathingGuide);
+    }
+    
+    // End the breathing guide
+    function endBreathingGuide(immediate = false) {
+        if (immediate) {
+            // Clear all timeouts
+            timeouts.forEach(id => clearTimeout(id));
+            timeouts = [];
+            
+            // Clear interval
+            if (breathingInterval) {
+                clearInterval(breathingInterval);
+                breathingInterval = null;
+            }
+            
+            // Reset UI
+            breathingGuide.classList.remove('active');
+            breathingCircle.className = 'breathing-circle';
+        } else {
+            // Fade out gracefully
+            timeouts.push(setTimeout(() => {
+                breathingGuide.classList.remove('active');
+                breathingCircle.className = 'breathing-circle';
+            }, 1000));
+        }
+    }
+    
+    // Start the breathing guide
+    function startBreathingGuide() {
+        // Reset timeouts
+        timeouts.forEach(id => clearTimeout(id));
+        timeouts = [];
+        
+        // Activate the guide
+        breathingGuide.classList.add('active');
+        breathingText.textContent = 'Prepare';
+        
+        // Start breathing sequence after preparation
+        timeouts.push(setTimeout(() => {
+            let breathCycle = 0;
+            
+            // Function to run a breath cycle
+            function runBreathCycle() {
+                // Inhale
+                breathingText.textContent = 'Inhale';
+                breathingCircle.className = 'breathing-circle inhale';
+                
+                // Hold
+                timeouts.push(setTimeout(() => {
+                    breathingText.textContent = 'Hold';
+                    breathingCircle.className = 'breathing-circle hold';
+                }, 4000));
+                
+                // Exhale
+                timeouts.push(setTimeout(() => {
+                    breathingText.textContent = 'Exhale';
+                    breathingCircle.className = 'breathing-circle exhale';
+                }, 8000));
+            }
+            
+            // Initial cycle
+            runBreathCycle();
+            
+            // Setup 4 breath cycles
+            breathingInterval = setInterval(() => {
+                breathCycle++;
+                
+                if (breathCycle >= 4) {
+                    // End after 4 cycles
+                    clearInterval(breathingInterval);
+                    
+                    // Show completion
+                    timeouts.push(setTimeout(() => {
+                        breathingText.textContent = 'Complete';
+                        breathingCircle.className = 'breathing-circle';
+                        
+                        // Auto-close
+                        endBreathingGuide(false);
+                    }, 4000));
+                } else {
+                    runBreathCycle();
+                }
+            }, 12000);
+        }, 3000));
+    }
+    
+    // Escape key to exit
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && breathingGuide.classList.contains('active')) {
+            endBreathingGuide(true);
+        }
+    });
 });
 </script>
 
