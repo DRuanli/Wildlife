@@ -1,4 +1,6 @@
-<?php require_once ROOT_PATH . '/resources/views/layouts/header.php'; ?>
+<?php require_once ROOT_PATH . '/resources/views/layouts/header.php'; 
+include('public/loading-component.php');
+?>
 <?php require_once ROOT_PATH . '/public/js/focus/focus_style.php'; ?>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>

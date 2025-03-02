@@ -1,4 +1,6 @@
-<?php require_once ROOT_PATH . '/resources/views/layouts/header.php'; ?>
+<?php require_once ROOT_PATH . '/resources/views/layouts/header.php'; 
+include('public/loading-component.php');
+?>
 
 <!-- Include Alpine.js and GSAP for animations -->
 <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>

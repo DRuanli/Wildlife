@@ -1,4 +1,6 @@
-<?php require_once ROOT_PATH . '/resources/views/layouts/header.php'; ?>
+<?php require_once ROOT_PATH . '/resources/views/layouts/header.php'; 
+include('public/loading-component.php');?>
+
 
 <div class="min-h-screen bg-[#F9F8F4]">
     <!-- Page Header - Inspired by Anthropic's clean headers -->

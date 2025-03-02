@@ -1,3 +1,12 @@
+<?php
+// Optional: Configure the loading screen
+$loading_duration = 2000; // milliseconds
+$loading_text = "LOADING WILDLIFE HAVEN"; // custom text
+
+// Include the loading component at the beginning of your file
+include('public/loading-component.php');
+?>
+
 <?php require_once ROOT_PATH . '/resources/views/layouts/header.php'; ?>
 
 <!DOCTYPE html>
