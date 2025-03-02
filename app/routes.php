@@ -86,5 +86,8 @@ function getRoutes() {
 
         // Leaderboard routes
         '/leaderboard' => 'LeaderboardController@index',
+
+        // Contact routes
+        '/contact' => 'ContactController@index',
     ];
 }
