@@ -89,15 +89,32 @@ include('public/loading-component.php');
 
     <!-- Breathing Guide -->
     <div class="breathing-guide" id="breathing-guide">
-        <button id="close-breathing-guide" class="close-breathing">
+        <button id="close-breathing-guide" class="close-breathing" aria-label="Close breathing guide">
             <i class="fas fa-times"></i>
         </button>
         
-        <div class="breathing-circle" id="breathing-circle">
-            <div class="breathing-inner-circle"></div>
+        <div class="breathing-wrapper">
+            <div class="breathing-circle-container">
+                <div class="breathing-circle" id="breathing-circle">
+                    <div class="breathing-inner-circle"></div>
+                    <div class="breathing-ripple"></div>
+                </div>
+                <svg class="breathing-progress" viewBox="0 0 100 100">
+                    <circle class="breathing-progress-track" cx="50" cy="50" r="45"></circle>
+                    <circle class="breathing-progress-indicator" cx="50" cy="50" r="45"></circle>
+                </svg>
+            </div>
+            
+            <div class="breathing-label">
+                <div class="breathing-text" id="breathing-text">Prepare</div>
+                <div class="breathing-cycles" id="breathing-cycles">
+                    <span class="cycle active"></span>
+                    <span class="cycle"></span>
+                    <span class="cycle"></span>
+                    <span class="cycle"></span>
+                </div>
+            </div>
         </div>
-        
-        <div class="breathing-text" id="breathing-text">Prepare</div>
     </div>
 
     <div id="focus-app" class="min-h-screen pt-6 pb-12">
@@ -1183,15 +1200,14 @@ document.addEventListener('DOMContentLoaded', function() {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 40, 0.9);
+    background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%);
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     z-index: 1000;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.5s ease;
+    transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .breathing-guide.active {
@@ -1199,32 +1215,66 @@ document.addEventListener('DOMContentLoaded', function() {
     pointer-events: auto;
 }
 
+.breathing-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(30px);
+    opacity: 0;
+    transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), 
+                opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.breathing-guide.active .breathing-wrapper {
+    transform: translateY(0);
+    opacity: 1;
+}
+
 .close-breathing {
     position: absolute;
     top: 20px;
     right: 20px;
-    background: transparent;
+    background: rgba(255, 255, 255, 0.1);
     border: none;
     color: white;
-    font-size: 1.5rem;
-    cursor: pointer;
-    opacity: 0.7;
-    transition: opacity 0.3s ease;
-}
-
-.close-breathing:hover {
-    opacity: 1;
-}
-
-.breathing-circle {
-    width: 220px;
-    height: 220px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    border: 2px solid rgba(255, 255, 255, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 2;
+}
+
+.close-breathing:hover, .close-breathing:focus {
+    opacity: 1;
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.2);
+    outline: none;
+}
+
+.breathing-circle-container {
+    position: relative;
+    width: 250px;
+    height: 250px;
     margin-bottom: 30px;
+}
+
+.breathing-circle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
 }
 
 .breathing-inner-circle {
@@ -1232,60 +1282,183 @@ document.addEventListener('DOMContentLoaded', function() {
     height: 150px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.15);
-    transition: all 0.3s ease;
+    box-shadow: 0 0 30px rgba(66, 153, 225, 0.3);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: transform, opacity, width, height;
+}
+
+.breathing-ripple {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    opacity: 0;
 }
 
 .breathing-circle.inhale .breathing-inner-circle {
-    animation: inhale 4s ease-in-out forwards;
+    width: 200px;
+    height: 200px;
+    background: rgba(104, 211, 245, 0.2);
+    box-shadow: 0 0 40px rgba(104, 211, 245, 0.4);
+    transition: all 4s cubic-bezier(0.34, 0.13, 0.26, 0.99);
+}
+
+.breathing-circle.inhale .breathing-ripple {
+    animation: ripple-inhale 4s cubic-bezier(0.34, 0.13, 0.26, 0.99) forwards;
 }
 
 .breathing-circle.hold .breathing-inner-circle {
     width: 200px;
     height: 200px;
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(250, 176, 62, 0.2);
+    box-shadow: 0 0 40px rgba(250, 176, 62, 0.4);
+    animation: pulse 4s ease-in-out infinite;
 }
 
 .breathing-circle.exhale .breathing-inner-circle {
-    animation: exhale 4s ease-in-out forwards;
+    width: 150px;
+    height: 150px;
+    background: rgba(72, 187, 120, 0.2);
+    box-shadow: 0 0 30px rgba(72, 187, 120, 0.4);
+    transition: all 4s cubic-bezier(0.5, 0, 0.3, 1);
+}
+
+.breathing-circle.exhale .breathing-ripple {
+    animation: ripple-exhale 4s cubic-bezier(0.5, 0, 0.3, 1) forwards;
+}
+
+.breathing-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+    z-index: 0;
+}
+
+.breathing-progress-track {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.1);
+    stroke-width: 3;
+}
+
+.breathing-progress-indicator {
+    fill: none;
+    stroke-width: 3;
+    stroke-dasharray: 283;
+    stroke-dashoffset: 283;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.1s linear;
+}
+
+.breathing-circle.inhale + svg .breathing-progress-indicator {
+    stroke: #68d3f5;
+    animation: progress 4s linear forwards;
+}
+
+.breathing-circle.hold + svg .breathing-progress-indicator {
+    stroke: #fab03e;
+    animation: progress 4s linear forwards;
+}
+
+.breathing-circle.exhale + svg .breathing-progress-indicator {
+    stroke: #48bb78;
+    animation: progress 4s linear forwards;
+}
+
+.breathing-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .breathing-text {
     color: white;
-    font-size: 2rem;
+    font-size: 2.2rem;
     font-weight: 300;
     opacity: 0.9;
+    margin-bottom: 15px;
+    transition: opacity 0.3s ease;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
-@keyframes inhale {
-    from { 
+.breathing-cycles {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.breathing-cycles .cycle {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.breathing-cycles .cycle.active {
+    background: rgba(104, 211, 245, 0.7);
+    transform: scale(1.2);
+}
+
+.breathing-cycles .cycle.completed {
+    background: rgba(72, 187, 120, 0.7);
+}
+
+@keyframes ripple-inhale {
+    0% {
         width: 150px;
         height: 150px;
-        background: rgba(255, 255, 255, 0.15);
+        border-width: 2px;
+        opacity: 0.7;
     }
-    to { 
-        width: 200px;
-        height: 200px;
-        background: rgba(255, 255, 255, 0.25);
+    100% {
+        width: 260px;
+        height: 260px;
+        border-width: 1px;
+        opacity: 0;
     }
 }
 
-@keyframes exhale {
-    from { 
+@keyframes ripple-exhale {
+    0% {
         width: 200px;
         height: 200px;
-        background: rgba(255, 255, 255, 0.25);
+        border-width: 2px;
+        opacity: 0.7;
     }
-    to { 
-        width: 150px;
-        height: 150px;
-        background: rgba(255, 255, 255, 0.15);
+    100% {
+        width: 120px;
+        height: 120px;
+        border-width: 1px;
+        opacity: 0;
     }
+}
+
+@keyframes progress {
+    from { stroke-dashoffset: 283; }
+    to { stroke-dashoffset: 0; }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); }
 }
 
 @media (max-width: 600px) {
-    .breathing-circle {
-        width: 180px;
-        height: 180px;
+    .breathing-circle-container {
+        width: 200px;
+        height: 200px;
     }
     
     .breathing-inner-circle {
@@ -1293,18 +1466,40 @@ document.addEventListener('DOMContentLoaded', function() {
         height: 120px;
     }
     
+    .breathing-circle.inhale .breathing-inner-circle {
+        width: 160px;
+        height: 160px;
+    }
+    
+    .breathing-circle.hold .breathing-inner-circle {
+        width: 160px;
+        height: 160px;
+    }
+    
     .breathing-text {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
     }
     
-    @keyframes inhale {
-        from { width: 120px; height: 120px; }
-        to { width: 160px; height: 160px; }
+    @keyframes ripple-inhale {
+        0% {
+            width: 120px;
+            height: 120px;
+        }
+        100% {
+            width: 220px;
+            height: 220px;
+        }
     }
     
-    @keyframes exhale {
-        from { width: 160px; height: 160px; }
-        to { width: 120px; height: 120px; }
+    @keyframes ripple-exhale {
+        0% {
+            width: 160px;
+            height: 160px;
+        }
+        100% {
+            width: 100px;
+            height: 100px;
+        }
     }
 }
 </style>
@@ -1316,9 +1511,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const breathingCircle = document.getElementById('breathing-circle');
     const breathingText = document.getElementById('breathing-text');
     const closeBreathingGuide = document.getElementById('close-breathing-guide');
+    const cycleIndicators = document.querySelectorAll('#breathing-cycles .cycle');
     
     let timeouts = [];
     let breathingInterval = null;
+    let isRunning = false;
     
     // Close button event
     if (closeBreathingGuide) {
@@ -1332,7 +1529,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // End the breathing guide
     function endBreathingGuide(immediate = false) {
-        if (immediate) {
+        if (isRunning) {
+            isRunning = false;
+            
             // Clear all timeouts
             timeouts.forEach(id => clearTimeout(id));
             timeouts = [];
@@ -1343,27 +1542,70 @@ document.addEventListener('DOMContentLoaded', function() {
                 breathingInterval = null;
             }
             
-            // Reset UI
-            breathingGuide.classList.remove('active');
-            breathingCircle.className = 'breathing-circle';
-        } else {
-            // Fade out gracefully
-            timeouts.push(setTimeout(() => {
+            if (immediate) {
+                // Reset UI immediately
                 breathingGuide.classList.remove('active');
                 breathingCircle.className = 'breathing-circle';
-            }, 1000));
+                
+                // Reset cycle indicators
+                cycleIndicators.forEach(dot => {
+                    dot.classList.remove('active', 'completed');
+                });
+                cycleIndicators[0]?.classList.add('active');
+            } else {
+                // Fade out smoothly
+                timeouts.push(setTimeout(() => {
+                    // Graceful fade out
+                    breathingCircle.className = 'breathing-circle';
+                    breathingText.textContent = 'Complete';
+                    
+                    timeouts.push(setTimeout(() => {
+                        breathingGuide.classList.remove('active');
+                        
+                        // Reset cycle indicators after fade out
+                        timeouts.push(setTimeout(() => {
+                            cycleIndicators.forEach(dot => {
+                                dot.classList.remove('active', 'completed');
+                            });
+                            cycleIndicators[0]?.classList.add('active');
+                        }, 700));
+                    }, 2000));
+                }, 500));
+            }
         }
+    }
+    
+    // Update cycle indicators
+    function updateCycleIndicators(currentCycle) {
+        cycleIndicators.forEach((dot, index) => {
+            dot.classList.remove('active');
+            if (index < currentCycle) {
+                dot.classList.add('completed');
+            } else if (index === currentCycle) {
+                dot.classList.add('active');
+            }
+        });
     }
     
     // Start the breathing guide
     function startBreathingGuide() {
+        if (isRunning) return;
+        isRunning = true;
+        
         // Reset timeouts
         timeouts.forEach(id => clearTimeout(id));
         timeouts = [];
         
-        // Activate the guide
+        // Reset cycle indicators
+        cycleIndicators.forEach(dot => {
+            dot.classList.remove('active', 'completed');
+        });
+        cycleIndicators[0]?.classList.add('active');
+        
+        // Activate the guide with smooth transition
         breathingGuide.classList.add('active');
         breathingText.textContent = 'Prepare';
+        breathingCircle.className = 'breathing-circle';
         
         // Start breathing sequence after preparation
         timeouts.push(setTimeout(() => {
@@ -1371,17 +1613,19 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Function to run a breath cycle
             function runBreathCycle() {
-                // Inhale
+                updateCycleIndicators(breathCycle);
+                
+                // Inhale phase - smooth transition
                 breathingText.textContent = 'Inhale';
                 breathingCircle.className = 'breathing-circle inhale';
                 
-                // Hold
+                // Hold phase - smooth transition
                 timeouts.push(setTimeout(() => {
                     breathingText.textContent = 'Hold';
                     breathingCircle.className = 'breathing-circle hold';
                 }, 4000));
                 
-                // Exhale
+                // Exhale phase - smooth transition
                 timeouts.push(setTimeout(() => {
                     breathingText.textContent = 'Exhale';
                     breathingCircle.className = 'breathing-circle exhale';
@@ -1391,32 +1635,40 @@ document.addEventListener('DOMContentLoaded', function() {
             // Initial cycle
             runBreathCycle();
             
-            // Setup 4 breath cycles
+            // Setup 4 breath cycles with perfect timing
             breathingInterval = setInterval(() => {
                 breathCycle++;
                 
                 if (breathCycle >= 4) {
                     // End after 4 cycles
                     clearInterval(breathingInterval);
+                    breathingInterval = null;
                     
-                    // Show completion
-                    timeouts.push(setTimeout(() => {
-                        breathingText.textContent = 'Complete';
-                        breathingCircle.className = 'breathing-circle';
-                        
-                        // Auto-close
-                        endBreathingGuide(false);
-                    }, 4000));
+                    // Complete all cycle indicators
+                    cycleIndicators.forEach(dot => {
+                        dot.classList.remove('active');
+                        dot.classList.add('completed');
+                    });
+                    
+                    // Auto-close with delay for smooth experience
+                    endBreathingGuide(false);
                 } else {
                     runBreathCycle();
                 }
-            }, 12000);
-        }, 3000));
+            }, 12000); // 12 seconds per full breath cycle
+        }, 3000)); // 3 seconds preparation time
     }
     
     // Escape key to exit
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && breathingGuide.classList.contains('active')) {
+            endBreathingGuide(true);
+        }
+    });
+    
+    // Prevent guide from getting stuck if page is hidden/inactive
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden && isRunning) {
             endBreathingGuide(true);
         }
     });
