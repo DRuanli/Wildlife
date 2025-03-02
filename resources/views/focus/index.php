@@ -819,22 +819,22 @@ include('public/loading-component.php');
 
     <!-- Audio elements for ambient sounds -->
     <audio id="sound-rain" loop preload="none">
-        <source src="<?= $baseUrl ?>/public/sounds/rain.mp3" type="audio/mp3">
+        <source src="<?= $baseUrl ?>/public/sounds/Howl.mp3" type="audio/mp3">
     </audio>
     <audio id="sound-forest" loop preload="none">
-        <source src="<?= $baseUrl ?>/public/sounds/forest.mp3" type="audio/mp3">
+        <source src="<?= $baseUrl ?>/public/sounds/AOT.mp3" type="audio/mp3">
     </audio>
     <audio id="sound-waves" loop preload="none">
-        <source src="<?= $baseUrl ?>/public/sounds/waves.mp3" type="audio/mp3">
+        <source src="<?= $baseUrl ?>/public/sounds/trung.mp3" type="audio/mp3">
     </audio>
     <audio id="sound-cafe" loop preload="none">
-        <source src="<?= $baseUrl ?>/public/sounds/cafe.mp3" type="audio/mp3">
+        <source src="<?= $baseUrl ?>/public/sounds/nga.mp3" type="audio/mp3">
     </audio>
     <audio id="sound-fire" loop preload="none">
-        <source src="<?= $baseUrl ?>/public/sounds/fire.mp3" type="audio/mp3">
+        <source src="<?= $baseUrl ?>/public/sounds/viet.mp3" type="audio/mp3">
     </audio>
     <audio id="sound-white-noise" loop preload="none">
-        <source src="<?= $baseUrl ?>/public/sounds/white-noise.mp3" type="audio/mp3">
+        <source src="<?= $baseUrl ?>/public/sounds/nhat.mp3" type="audio/mp3">
     </audio>
 
     <div id="focus-mode-overlay" class="focus-mode-overlay"></div>
