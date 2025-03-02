@@ -419,3 +419,47 @@ CREATE TABLE IF NOT EXISTS UserWishlist (
     FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE,
     FOREIGN KEY (item_id) REFERENCES Items(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS PodcastCategories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    slug VARCHAR(100) NOT NULL UNIQUE,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_slug (slug)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Podcasts table
+CREATE TABLE IF NOT EXISTS Podcasts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) NOT NULL UNIQUE,
+    description TEXT,
+    duration INT NOT NULL, -- in seconds
+    audio_url VARCHAR(255) NOT NULL,
+    image_url VARCHAR(255),
+    publish_date DATETIME NOT NULL,
+    featured BOOLEAN DEFAULT FALSE,
+    category_id INT,
+    host_id INT, -- can be null if no specific host
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (category_id) REFERENCES PodcastCategories(id) ON DELETE SET NULL,
+    FOREIGN KEY (host_id) REFERENCES Users(id) ON DELETE SET NULL,
+    INDEX idx_publish_date (publish_date),
+    INDEX idx_featured (featured),
+    INDEX idx_category (category_id),
+    INDEX idx_slug (slug)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- PodcastHosts table - for podcast hosts who aren't necessarily users
+CREATE TABLE IF NOT EXISTS PodcastHosts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    title VARCHAR(100),
+    bio TEXT,
+    image_url VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
