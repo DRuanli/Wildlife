@@ -73,8 +73,12 @@ function getRoutes() {
         
         // Learn routes
         '/learn/support' => 'LearnController@support',
-        '/learn/faq/:category' => 'LearnController@faq'
+        '/learn/faq/:category' => 'LearnController@faq',
 
-        
+        // Podcast routes
+        '/podcast' => 'PodcastController@index',
+        '/podcast/:slug' => 'PodcastController@view',
+        '/podcast/category/:slug' => 'PodcastController@category',
+        '/podcast/load-more' => 'PodcastController@loadMore'
     ];
 }

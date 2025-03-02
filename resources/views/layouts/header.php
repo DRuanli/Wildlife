@@ -133,12 +133,14 @@ $baseUrl = '/Wildlife';
               <a href="<?= $baseUrl ?>/conservation" class="block px-4 py-2 hover:bg-gray-50">Conservation</a>
               <a href="<?= $baseUrl ?>/community" class="block px-4 py-2 hover:bg-gray-50">Community</a>
               <a href="<?= $baseUrl ?>/gallery" class="block px-4 py-2 hover:bg-gray-50">Gallery</a>
+              <a href="<?= $baseUrl ?>/podcast" class="block px-4 py-2 hover:bg-gray-50">Podcast</a>
             </div>
           </div>
         <?php else: ?>
           <a href="<?= $baseUrl ?>/#features" class="nav-link text-dark">Features</a>
           <a href="<?= $baseUrl ?>/#creature-gallery" class="nav-link text-dark">Creatures</a>
           <a href="<?= $baseUrl ?>/#testimonials" class="nav-link text-dark">Testimonials</a>
+          <a href="<?= $baseUrl ?>/podcast" class="nav-link text-dark">Podcast</a>
           <a href="<?= $baseUrl ?>/about" class="nav-link text-dark">About Us</a>
         <?php endif; ?>
       </div>
