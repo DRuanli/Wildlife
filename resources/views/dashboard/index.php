@@ -64,7 +64,7 @@ include('public/loading-component.php');
       margin: 0;
       padding: 0;
       height: 100vh;
-      background: linear-gradient(135deg, #6a85b6 0%, #4b6cb7 100%);
+      background: linear-gradient(135deg, #4D724D 0%, #4D724D 100%);
       cursor: none; /* Hide default cursor */
     }
     

@@ -1,4 +1,4 @@
-<?php require_once ROOT_PATH . '/resources/views/layouts/header.php'; 
+<?php require_once ROOT_PATH . '/resources/views/layouts/header.php';
 include('public/loading-component.php');
 ?>
 <?php require_once ROOT_PATH . '/public/js/focus/focus_style.php'; ?>
@@ -11,17 +11,17 @@ include('public/loading-component.php');
     <div class="theme-toggle" id="theme-toggle">
         <i class="fas fa-moon"></i>
     </div>
-    
+
     <!-- Fullscreen Toggle -->
     <div class="fullscreen-toggle" id="fullscreen-toggle">
         <i class="fas fa-expand"></i>
     </div>
-    
+
     <!-- Ambient Sound Toggle -->
     <div class="ambient-toggle" id="ambient-toggle">
         <i class="fas fa-volume-up"></i>
     </div>
-    
+
     <!-- Ambient Sounds Player (hidden by default) -->
     <div class="ambient-player" id="ambient-player" style="display: none;">
         <h4 class="text-sm font-bold mb-2">Ambient Sounds</h4>
@@ -56,20 +56,22 @@ include('public/loading-component.php');
             <input type="range" id="volume-control" min="0" max="100" value="50" class="w-full">
         </div>
     </div>
-    
+
     <!-- Distraction Log -->
     <div class="distraction-log" id="distraction-log">
         <i class="fas fa-exclamation-circle"></i>
     </div>
-    
+
     <!-- Distraction Panel -->
     <div class="distraction-panel" id="distraction-panel">
         <h4 class="font-bold mb-2">Distraction Log</h4>
         <p class="text-sm mb-3">Log distractions to improve focus over time</p>
-        
+
         <form id="distraction-form" class="mb-4">
-            <input type="text" id="distraction-input" placeholder="What distracted you?" class="w-full p-2 rounded border mb-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white dark:bg-gray-700">
-            <select id="distraction-type" class="w-full p-2 rounded border mb-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white dark:bg-gray-700">
+            <input type="text" id="distraction-input" placeholder="What distracted you?"
+                   class="w-full p-2 rounded border mb-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white dark:bg-gray-700">
+            <select id="distraction-type"
+                    class="w-full p-2 rounded border mb-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white dark:bg-gray-700">
                 <option value="thought">Thought/Idea</option>
                 <option value="notification">Notification</option>
                 <option value="noise">Noise</option>
@@ -78,13 +80,13 @@ include('public/loading-component.php');
             </select>
             <button type="submit" class="w-full bg-green-600 text-white py-2 rounded">Log Distraction</button>
         </form>
-        
+
         <h5 class="font-medium mb-2">Recent Distractions</h5>
         <div id="distraction-list" class="space-y-2 max-h-32 overflow-y-auto">
             <!-- Distractions will be added here -->
         </div>
     </div>
-    
+
     <!-- Breathing Guide -->
     <div class="breathing-guide" id="breathing-guide">
         <div class="breathing-circle" id="breathing-circle">
@@ -116,11 +118,13 @@ include('public/loading-component.php');
                          class="focus-mode-content w-full bg-white rounded-xl shadow-md p-6 mb-6 flex flex-col items-center">
                         <!-- Session Intent (New) -->
                         <div class="session-intent w-full">
-                            <label for="session-intent" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Session Intent</label>
+                            <label for="session-intent"
+                                   class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Session
+                                Intent</label>
                             <input type="text" id="session-intent" placeholder="What do you intend to focus on?"
                                    class="w-full p-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 dark:border-gray-600">
                         </div>
-                         
+
                         <!-- Focus Timer -->
                         <div class="timer-container mb-6">
                             <div class="timer-circle timer-background"></div>
@@ -161,51 +165,235 @@ include('public/loading-component.php');
                                 <i class="fas fa-times mr-2"></i> Cancel
                             </button>
                         </div>
-                        
-                        <!-- Focus Quote (New) -->
+
+                        <!-- Focus Quote (New)
                         <div class="focus-quote text-gray-600">
-                            <p id="focus-quote-text">"The successful warrior is the average man, with laser-like focus."</p>
+                            <p id="focus-quote-text">"The successful warrior is the average man, with laser-like
+                                focus."</p>
                             <p class="text-sm mt-1" id="focus-quote-author">— Bruce Lee</p>
                         </div>
+                        -->
 
                         <!-- Session Settings -->
                         <div id="timer-settings" class="w-full max-w-md">
                             <!-- Pomodoro Settings (New) -->
-                            <div class="pomodoro-settings mb-4">
-                                <h3 class="font-medium text-gray-700 dark:text-gray-300 mb-2">Pomodoro Technique</h3>
-                                <div class="grid grid-cols-2 gap-3">
-                                    <div>
-                                        <label class="block text-sm text-gray-600 dark:text-gray-400 mb-1">Focus Time</label>
-                                        <select id="pomodoro-focus" class="w-full p-2 rounded border focus:outline-none focus:ring-2 focus:ring-green-500 bg-white dark:bg-gray-700 dark:border-gray-600">
-                                            <option value="25">25 minutes</option>
-                                            <option value="30">30 minutes</option>
-                                            <option value="45">45 minutes</option>
-                                            <option value="60">60 minutes</option>
-                                            <option value="90">90 minutes</option>
-                                        </select>
+                            <!-- Improved Pomodoro Settings -->
+                            <div class="pomodoro-settings mb-4 p-5 rounded-lg bg-white dark:bg-gray-800 shadow-sm">
+                                <h3 class="font-medium text-gray-700 dark:text-gray-300 mb-4">Pomodoro Technique</h3>
+
+                                <!-- Focus Time Slider -->
+                                <div class="mb-4">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <label class="text-sm text-gray-600 dark:text-gray-400">Focus Time</label>
+                                        <span id="focus-time-display"
+                                              class="text-sm font-medium bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100 px-2 py-1 rounded-full">25 minutes</span>
                                     </div>
-                                    <div>
-                                        <label class="block text-sm text-gray-600 dark:text-gray-400 mb-1">Break Time</label>
-                                        <select id="pomodoro-break" class="w-full p-2 rounded border focus:outline-none focus:ring-2 focus:ring-green-500 bg-white dark:bg-gray-700 dark:border-gray-600">
-                                            <option value="5">5 minutes</option>
-                                            <option value="10">10 minutes</option>
-                                            <option value="15">15 minutes</option>
-                                            <option value="20">20 minutes</option>
-                                        </select>
+                                    <input type="range" id="pomodoro-focus"
+                                           class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                                           min="5" max="90" step="5" value="25">
+                                    <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                        <span>5m</span>
+                                        <span>25m</span>
+                                        <span>45m</span>
+                                        <span>90m</span>
                                     </div>
                                 </div>
-                                <div class="flex items-center mt-2">
-                                    <input type="checkbox" id="pomodoro-auto" class="mr-2">
-                                    <label for="pomodoro-auto" class="text-sm text-gray-600 dark:text-gray-400">Auto-start next session</label>
+
+                                <!-- Break Time Slider -->
+                                <div class="mb-4">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <label class="text-sm text-gray-600 dark:text-gray-400">Break Time</label>
+                                        <span id="break-time-display"
+                                              class="text-sm font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100 px-2 py-1 rounded-full">5 minutes</span>
+                                    </div>
+                                    <input type="range" id="pomodoro-break"
+                                           class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                                           min="1" max="30" step="1" value="5">
+                                    <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                        <span>1m</span>
+                                        <span>5m</span>
+                                        <span>15m</span>
+                                        <span>30m</span>
+                                    </div>
+                                </div>
+
+                                <!-- Pomodoro Presets -->
+                                <div class="mb-4">
+                                    <label class="block text-sm text-gray-600 dark:text-gray-400 mb-2">Quick
+                                        Presets</label>
+                                    <div class="flex flex-wrap gap-2">
+                                        <button type="button"
+                                                class="preset-btn px-3 py-2 text-sm rounded-lg bg-gray-100 hover:bg-green-100 dark:bg-gray-700 dark:hover:bg-green-900 transition-all"
+                                                data-focus="25" data-break="5">
+                                            <span class="font-medium">25/5</span>
+                                            <span class="text-xs block">Classic</span>
+                                        </button>
+                                        <button type="button"
+                                                class="preset-btn px-3 py-2 text-sm rounded-lg bg-gray-100 hover:bg-green-100 dark:bg-gray-700 dark:hover:bg-green-900 transition-all"
+                                                data-focus="50" data-break="10">
+                                            <span class="font-medium">50/10</span>
+                                            <span class="text-xs block">Extended</span>
+                                        </button>
+                                        <button type="button"
+                                                class="preset-btn px-3 py-2 text-sm rounded-lg bg-gray-100 hover:bg-green-100 dark:bg-gray-700 dark:hover:bg-green-900 transition-all"
+                                                data-focus="90" data-break="20">
+                                            <span class="font-medium">90/20</span>
+                                            <span class="text-xs block">Deep Work</span>
+                                        </button>
+                                        <button type="button"
+                                                class="preset-btn px-3 py-2 text-sm rounded-lg bg-gray-100 hover:bg-green-100 dark:bg-gray-700 dark:hover:bg-green-900 transition-all"
+                                                data-focus="10" data-break="2">
+                                            <span class="font-medium">10/2</span>
+                                            <span class="text-xs block">Quick</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center p-2 bg-gray-50 dark:bg-gray-900 rounded-lg">
+                                    <input type="checkbox" id="pomodoro-auto"
+                                           class="w-4 h-4 text-green-600 rounded focus:ring-green-500 mr-2">
+                                    <label for="pomodoro-auto" class="text-sm text-gray-600 dark:text-gray-400">Auto-start
+                                        next session</label>
                                 </div>
                             </div>
 
-                            <!-- Creature Selection -->
+                            <!-- Improved Creature Selection -->
                             <div class="mb-4">
-                                <label for="creature-select" class="block text-gray-700 font-medium mb-2">Choose a
-                                    creature to grow:</label>
-                                <select id="creature-select"
-                                        class="w-full p-3 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 dark:border-gray-600">
+                                <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Choose a creature
+                                    to grow:</label>
+
+                                <!-- Creature Selection Carousel -->
+                                <div class="relative">
+                                    <div class="creature-carousel flex overflow-x-auto py-3 pb-5 space-x-4 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
+                                        <!-- Default "Select a creature" card -->
+                                        <div class="creature-card cursor-pointer flex-none w-28 h-32 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                                             data-creature-id="">
+                                            <div class="text-center">
+                                                <div class="text-gray-400 text-xl">
+                                                    <i class="fas fa-plus"></i>
+                                                </div>
+                                                <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Select</div>
+                                            </div>
+                                        </div>
+
+                                        <?php foreach ($creatures as $creature): ?>
+                                            <div class="creature-card cursor-pointer flex-none w-28 h-32 rounded-lg border-2 hover:border-green-500 dark:hover:border-green-400 transition-all transform hover:scale-105 <?= $creature['id'] === ($selectedCreatureId ?? '') ? 'border-green-500 dark:border-green-400 bg-green-50 dark:bg-green-900/30' : 'border-gray-200 dark:border-gray-700' ?>"
+                                                 data-creature-id="<?= $creature['id'] ?>"
+                                                 data-stage="<?= $creature['stage'] ?>"
+                                                 data-species="<?= $creature['species_id'] ?>"
+                                                 data-habitat="<?= $creature['habitat_type'] ?>"
+                                                 data-health="<?= $creature['health'] ?>"
+                                                 data-happiness="<?= $creature['happiness'] ?>"
+                                                 data-growth="<?= $creature['growth_progress'] ?>"
+                                                 data-name="<?= htmlspecialchars($creature['name'] ?? 'Unnamed ' . $creature['species_name']) ?>">
+
+                                                <!-- Creature Icon -->
+                                                <div class="h-16 flex items-center justify-center pt-2">
+                                                    <?php
+                                                    $iconClass = "text-gray-400";
+                                                    $icon = "fa-question";
+
+                                                    switch ($creature['habitat_type']) {
+                                                        case 'forest':
+                                                            $iconClass = "text-green-600";
+                                                            break;
+                                                        case 'ocean':
+                                                            $iconClass = "text-blue-600";
+                                                            break;
+                                                        case 'mountain':
+                                                            $iconClass = "text-red-700";
+                                                            break;
+                                                        case 'sky':
+                                                            $iconClass = "text-blue-400";
+                                                            break;
+                                                        case 'cosmic':
+                                                            $iconClass = "text-purple-600";
+                                                            break;
+                                                        case 'enchanted':
+                                                            $iconClass = "text-pink-600";
+                                                            break;
+                                                    }
+
+                                                    switch ($creature['stage']) {
+                                                        case 'egg':
+                                                            $icon = "fa-egg";
+                                                            break;
+                                                        case 'baby':
+                                                            $icon = "fa-baby";
+                                                            break;
+                                                        case 'juvenile':
+                                                            $icon = "fa-paw";
+                                                            break;
+                                                        case 'adult':
+                                                        case 'mythical':
+                                                            $icon = "fa-dragon";
+                                                            break;
+                                                    }
+                                                    ?>
+                                                    <i class="fas <?= $icon ?> <?= $iconClass ?> text-3xl transition-all"></i>
+                                                </div>
+
+                                                <!-- Creature Name -->
+                                                <div class="text-center text-xs font-medium text-gray-700 dark:text-gray-300 px-1 truncate">
+                                                    <?= htmlspecialchars($creature['name'] ?? 'Unnamed ' . $creature['species_name']) ?>
+                                                </div>
+
+                                                <!-- Creature Stage -->
+                                                <div class="absolute top-1 right-1">
+                        <span class="px-1.5 py-0.5 text-[10px] font-medium rounded-full <?= 'badge-' . $creature['stage'] ?>">
+                            <?= ucfirst($creature['stage']) ?>
+                        </span>
+                                                </div>
+
+                                                <!-- Growth Progress Bar (tiny) -->
+                                                <div class="absolute bottom-0 left-0 right-0 h-1 bg-gray-200 dark:bg-gray-700">
+                                                    <?php
+                                                    $growthPercentage = 0;
+                                                    if ($creature['stage'] === 'egg') {
+                                                        $growthPercentage = ($creature['growth_progress'] / 100) * 100;
+                                                    } elseif ($creature['stage'] === 'mythical') {
+                                                        $growthPercentage = 100;
+                                                    } else {
+                                                        $growthPercentage = ($creature['growth_progress'] / 200) * 100;
+                                                    }
+                                                    ?>
+                                                    <div class="h-full bg-green-500 rounded-r-sm"
+                                                         style="width: <?= $growthPercentage ?>%"></div>
+                                                </div>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+
+                                    <!-- Navigation buttons for larger screens -->
+                                    <button class="carousel-prev absolute top-1/2 left-0 transform -translate-y-1/2 -translate-x-3 bg-white dark:bg-gray-800 rounded-full w-8 h-8 flex items-center justify-center shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 md:flex hidden">
+                                        <i class="fas fa-chevron-left text-gray-600 dark:text-gray-300"></i>
+                                    </button>
+                                    <button class="carousel-next absolute top-1/2 right-0 transform -translate-y-1/2 translate-x-3 bg-white dark:bg-gray-800 rounded-full w-8 h-8 flex items-center justify-center shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 md:flex hidden">
+                                        <i class="fas fa-chevron-right text-gray-600 dark:text-gray-300"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Selected Creature Information -->
+                                <div id="selected-creature-info"
+                                     class="mt-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 <?= isset($selectedCreatureId) ? '' : 'hidden' ?>">
+                                    <div class="flex items-center">
+                                        <div id="selected-creature-icon"
+                                             class="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center mr-3">
+                                            <i id="selected-creature-icon-element"
+                                               class="fas fa-dragon text-gray-400 text-xl"></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <h4 id="selected-creature-name"
+                                                class="font-medium text-gray-800 dark:text-gray-200">Select a
+                                                creature</h4>
+                                            <p id="selected-creature-habitat"
+                                               class="text-xs text-gray-500 dark:text-gray-400">No habitat selected</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Hidden select element to maintain compatibility with existing code -->
+                                <select id="creature-select" class="hidden">
                                     <option value="">Select a creature</option>
                                     <?php foreach ($creatures as $creature): ?>
                                         <option value="<?= $creature['id'] ?>"
@@ -531,4 +719,456 @@ include('public/loading-component.php');
 
     <div id="focus-mode-overlay" class="focus-mode-overlay"></div>
     <script src="<?= $baseUrl ?>/public/js/focus/focus-3d.js"></script>
+
+    <style>
+/* Enhanced Slider Styling */
+input[type="range"] {
+    -webkit-appearance: none;
+    height: 6px;
+    background: #e5e7eb;
+    border-radius: 5px;
+    background-image: linear-gradient(#4D724D, #4D724D);
+    background-size: 50% 100%;
+    background-repeat: no-repeat;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+    background: #4D724D;
+    cursor: pointer;
+    box-shadow: 0 0 2px 0 rgba(0,0,0,0.25);
+    transition: background .3s ease-in-out, transform 0.2s ease;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+    -webkit-appearance: none;
+    box-shadow: none;
+    border: none;
+    background: transparent;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    background: #2F4F2F;
+    transform: scale(1.2);
+}
+
+body.dark-mode input[type="range"] {
+    background: #4b5563;
+    background-image: linear-gradient(#C4D7C4, #C4D7C4);
+    background-size: 50% 100%;
+    background-repeat: no-repeat;
+}
+
+body.dark-mode input[type="range"]::-webkit-slider-thumb {
+    background: #C4D7C4;
+}
+
+body.dark-mode input[type="range"]::-webkit-slider-thumb:hover {
+    background: #ffffff;
+}
+
+input[type="range"]:focus {
+    outline: none;
+}
+
+/* Preset buttons */
+.preset-btn {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.preset-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.preset-btn.active {
+    background-color: rgba(74, 222, 128, 0.2) !important;
+    border: 2px solid #4ade80;
+    transform: translateY(-1px);
+}
+
+body.dark-mode .preset-btn.active {
+    background-color: rgba(74, 222, 128, 0.1) !important;
+    border: 2px solid #22c55e;
+}
+
+/* Creature Cards */
+.creature-carousel {
+    scrollbar-width: thin;
+    scrollbar-color: #CBD5E0 #EDF2F7;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+}
+
+.creature-carousel::-webkit-scrollbar {
+    height: 6px;
+}
+
+.creature-carousel::-webkit-scrollbar-track {
+    background: #EDF2F7;
+    border-radius: 3px;
+}
+
+.creature-carousel::-webkit-scrollbar-thumb {
+    background-color: #CBD5E0;
+    border-radius: 3px;
+}
+
+body.dark-mode .creature-carousel::-webkit-scrollbar-track {
+    background: #2D3748;
+}
+
+body.dark-mode .creature-carousel::-webkit-scrollbar-thumb {
+    background-color: #4A5568;
+}
+
+.creature-card {
+    position: relative;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    scroll-snap-align: center;
+}
+
+.creature-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.creature-card.selected {
+    animation: pulse 2s infinite;
+}
+
+.carousel-prev, .carousel-next {
+    opacity: 0.7;
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.carousel-prev:hover, .carousel-next:hover {
+    opacity: 1;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-prev:hover {
+    transform: translateY(-50%) translateX(-3px) scale(1.1);
+}
+
+.carousel-next:hover {
+    transform: translateY(-50%) translateX(3px) scale(1.1);
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(77, 124, 77, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 5px rgba(77, 124, 77, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(77, 124, 77, 0);
+    }
+}
+
+/* Hover zoom effect for creature icons */
+.creature-card:hover i {
+    transform: scale(1.2);
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Pomodoro slider controls
+    const focusSlider = document.getElementById('pomodoro-focus');
+    const breakSlider = document.getElementById('pomodoro-break');
+    const focusDisplay = document.getElementById('focus-time-display');
+    const breakDisplay = document.getElementById('break-time-display');
+    
+    // Function to update slider fill visualization
+    function updateSliderFill(slider) {
+        if (!slider) return;
+        
+        const min = slider.min ? parseFloat(slider.min) : 0;
+        const max = slider.max ? parseFloat(slider.max) : 100;
+        const value = slider.value ? parseFloat(slider.value) : min;
+        const percentage = ((value - min) / (max - min)) * 100;
+        
+        slider.style.backgroundSize = `${percentage}% 100%`;
+    }
+    
+    // Initialize sliders
+    if (focusSlider && focusDisplay) {
+        updateSliderFill(focusSlider);
+        focusSlider.addEventListener('input', function() {
+            focusDisplay.textContent = `${this.value} minutes`;
+            updateSliderFill(this);
+            updateSessionDuration(parseInt(this.value));
+        });
+    }
+    
+    if (breakSlider && breakDisplay) {
+        updateSliderFill(breakSlider);
+        breakSlider.addEventListener('input', function() {
+            breakDisplay.textContent = `${this.value} minutes`;
+            updateSliderFill(this);
+        });
+    }
+    
+    // Preset buttons
+    const presetButtons = document.querySelectorAll('.preset-btn');
+    presetButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const focusValue = this.getAttribute('data-focus');
+            const breakValue = this.getAttribute('data-break');
+            
+            // Update sliders and displays
+            if (focusSlider && focusValue) {
+                focusSlider.value = focusValue;
+                focusDisplay.textContent = `${focusValue} minutes`;
+                updateSliderFill(focusSlider);
+                updateSessionDuration(parseInt(focusValue));
+            }
+            
+            if (breakSlider && breakValue) {
+                breakSlider.value = breakValue;
+                breakDisplay.textContent = `${breakValue} minutes`;
+                updateSliderFill(breakSlider);
+            }
+            
+            // Add active class to clicked button and remove from others
+            presetButtons.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Add subtle animation
+            this.classList.add('animate__animated', 'animate__pulse');
+            setTimeout(() => {
+                this.classList.remove('animate__animated', 'animate__pulse');
+            }, 1000);
+        });
+    });
+    
+    // Function to update session duration
+    function updateSessionDuration(minutes) {
+        if (typeof window.sessionDuration !== 'undefined') {
+            window.sessionDuration = minutes * 60;
+            window.timeRemaining = window.sessionDuration;
+            
+            // Update timer display
+            if (typeof window.updateTimerDisplay === 'function') {
+                window.updateTimerDisplay();
+            }
+        }
+    }
+    
+    // Creature selection carousel
+    const creatureCards = document.querySelectorAll('.creature-card');
+    const creatureSelect = document.getElementById('creature-select');
+    const selectedCreatureInfo = document.getElementById('selected-creature-info');
+    const selectedCreatureName = document.getElementById('selected-creature-name');
+    const selectedCreatureHabitat = document.getElementById('selected-creature-habitat');
+    const selectedCreatureIcon = document.getElementById('selected-creature-icon-element');
+    
+    // Make creature cards interactive
+    creatureCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const creatureId = this.getAttribute('data-creature-id');
+            
+            // Clear selection from all cards
+            creatureCards.forEach(c => {
+                c.classList.remove('border-green-500', 'dark:border-green-400', 'bg-green-50', 'dark:bg-green-900/30', 'scale-105', 'selected');
+            });
+            
+            if (creatureId) {
+                // Apply selection styling
+                this.classList.add('border-green-500', 'dark:border-green-400', 'bg-green-50', 'dark:bg-green-900/30', 'scale-105', 'selected');
+                
+                // Update hidden select to maintain compatibility with existing code
+                if (creatureSelect) {
+                    creatureSelect.value = creatureId;
+                    
+                    // Trigger change event to ensure original handlers run
+                    const event = new Event('change');
+                    creatureSelect.dispatchEvent(event);
+                }
+                
+                // Update the creature info panel
+                if (selectedCreatureInfo) {
+                    selectedCreatureInfo.classList.remove('hidden');
+                    
+                    const name = this.getAttribute('data-name');
+                    const habitat = this.getAttribute('data-habitat');
+                    const stage = this.getAttribute('data-stage');
+                    
+                    if (selectedCreatureName) {
+                        selectedCreatureName.textContent = name;
+                    }
+                    
+                    if (selectedCreatureHabitat) {
+                        let habitatText = 'Unknown Habitat';
+                        let habitatIcon = '';
+                        
+                        switch(habitat) {
+                            case 'forest': 
+                                habitatText = 'Forest Habitat'; 
+                                habitatIcon = '<i class="fas fa-tree mr-1 text-green-600"></i>';
+                                break;
+                            case 'ocean': 
+                                habitatText = 'Ocean Habitat'; 
+                                habitatIcon = '<i class="fas fa-water mr-1 text-blue-600"></i>';
+                                break;
+                            case 'mountain': 
+                                habitatText = 'Mountain Habitat'; 
+                                habitatIcon = '<i class="fas fa-mountain mr-1 text-red-700"></i>';
+                                break;
+                            case 'sky': 
+                                habitatText = 'Sky Habitat'; 
+                                habitatIcon = '<i class="fas fa-cloud mr-1 text-blue-400"></i>';
+                                break;
+                            case 'cosmic': 
+                                habitatText = 'Cosmic Habitat'; 
+                                habitatIcon = '<i class="fas fa-star mr-1 text-purple-600"></i>';
+                                break;
+                            case 'enchanted': 
+                                habitatText = 'Enchanted Habitat'; 
+                                habitatIcon = '<i class="fas fa-magic mr-1 text-pink-600"></i>';
+                                break;
+                        }
+                        
+                        selectedCreatureHabitat.innerHTML = habitatIcon + habitatText;
+                    }
+                    
+                    if (selectedCreatureIcon) {
+                        // Set icon based on stage
+                        let iconClass = "fas ";
+                        switch(stage) {
+                            case 'egg': iconClass += "fa-egg"; break;
+                            case 'baby': iconClass += "fa-baby"; break;
+                            case 'juvenile': iconClass += "fa-paw"; break;
+                            case 'adult': iconClass += "fa-dragon"; break;
+                            case 'mythical': iconClass += "fa-dragon"; break;
+                            default: iconClass += "fa-question";
+                        }
+                        
+                        // Set color based on habitat
+                        let colorClass = "text-gray-400";
+                        switch(habitat) {
+                            case 'forest': colorClass = "text-green-600"; break;
+                            case 'ocean': colorClass = "text-blue-600"; break;
+                            case 'mountain': colorClass = "text-red-700"; break;
+                            case 'sky': colorClass = "text-blue-400"; break;
+                            case 'cosmic': colorClass = "text-purple-600"; break;
+                            case 'enchanted': colorClass = "text-pink-600"; break;
+                        }
+                        
+                        selectedCreatureIcon.className = `${iconClass} ${colorClass} text-2xl`;
+                    }
+                }
+            } else {
+                // No creature selected (default card)
+                if (creatureSelect) {
+                    creatureSelect.value = '';
+                    const event = new Event('change');
+                    creatureSelect.dispatchEvent(event);
+                }
+                
+                if (selectedCreatureInfo) {
+                    selectedCreatureInfo.classList.add('hidden');
+                }
+            }
+        });
+        
+        // Add hover effects
+        card.addEventListener('mouseenter', function() {
+            this.classList.add('transform', 'hover:scale-105');
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            if (!this.classList.contains('selected')) {
+                this.classList.remove('transform', 'hover:scale-105');
+            }
+        });
+    });
+    
+    // Carousel navigation
+    const carousel = document.querySelector('.creature-carousel');
+    const prevBtn = document.querySelector('.carousel-prev');
+    const nextBtn = document.querySelector('.carousel-next');
+    
+    if (prevBtn && carousel) {
+        prevBtn.addEventListener('click', function() {
+            carousel.scrollBy({ left: -200, behavior: 'smooth' });
+        });
+    }
+    
+    if (nextBtn && carousel) {
+        nextBtn.addEventListener('click', function() {
+            carousel.scrollBy({ left: 200, behavior: 'smooth' });
+        });
+    }
+    
+    // Auto-select previously selected creature if any
+    if (creatureSelect && creatureSelect.value) {
+        const selectedId = creatureSelect.value;
+        const selectedCard = document.querySelector(`.creature-card[data-creature-id="${selectedId}"]`);
+        if (selectedCard) {
+            // Simulate click to set up all visuals
+            selectedCard.click();
+            
+            // Scroll to the selected card
+            if (carousel) {
+                setTimeout(() => {
+                    selectedCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                }, 100);
+            }
+        }
+    }
+    
+    // Synchronize with existing pomodoro dropdown if present
+    const pomodoroFocusDropdown = document.getElementById('pomodoro-focus-old');
+    if (pomodoroFocusDropdown && focusSlider) {
+        // Update dropdown if slider changes
+        focusSlider.addEventListener('change', function() {
+            const options = pomodoroFocusDropdown.options;
+            for (let i = 0; i < options.length; i++) {
+                if (options[i].value == this.value) {
+                    pomodoroFocusDropdown.selectedIndex = i;
+                    break;
+                }
+            }
+        });
+        
+        // Update slider if dropdown changes
+        pomodoroFocusDropdown.addEventListener('change', function() {
+            focusSlider.value = this.value;
+            focusDisplay.textContent = `${this.value} minutes`;
+            updateSliderFill(focusSlider);
+        });
+    }
+    
+    const pomodoroBreakDropdown = document.getElementById('pomodoro-break-old');
+    if (pomodoroBreakDropdown && breakSlider) {
+        // Update dropdown if slider changes
+        breakSlider.addEventListener('change', function() {
+            const options = pomodoroBreakDropdown.options;
+            for (let i = 0; i < options.length; i++) {
+                if (options[i].value == this.value) {
+                    pomodoroBreakDropdown.selectedIndex = i;
+                    break;
+                }
+            }
+        });
+        
+        // Update slider if dropdown changes
+        pomodoroBreakDropdown.addEventListener('change', function() {
+            breakSlider.value = this.value;
+            breakDisplay.textContent = `${this.value} minutes`;
+            updateSliderFill(breakSlider);
+        });
+    }
+});
+</script>
+
 <?php require_once ROOT_PATH . '/resources/views/layouts/footer.php'; ?>
