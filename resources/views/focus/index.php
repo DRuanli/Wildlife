@@ -122,16 +122,6 @@ include('public/loading-component.php');
             <!-- Header Section -->
             <div class="mb-8 flex justify-between items-center">
                 <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Focus Session</h1>
-                <div class="flex items-center space-x-2">
-                    <a href="<?= $baseUrl ?>/focus/history"
-                       class="text-sm text-gray-600 hover:text-gray-800 flex items-center">
-                        <i class="fas fa-history mr-1"></i> History
-                    </a>
-                    <a href="<?= $baseUrl ?>/dashboard"
-                       class="text-sm text-gray-600 hover:text-gray-800 flex items-center">
-                        <i class="fas fa-tachometer-alt mr-1"></i> Dashboard
-                    </a>
-                </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -146,18 +136,6 @@ include('public/loading-component.php');
                                     <i class="fas fa-bullseye text-green-600 dark:text-green-400 mr-2"></i>
                                     Session Intent
                                 </label>
-                                <div class="ml-auto flex items-center">
-                                    <button id="session-intent-history"
-                                            class="text-gray-500 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 text-sm mr-1"
-                                            title="Previous intents">
-                                        <i class="fas fa-history"></i>
-                                    </button>
-                                    <button id="session-intent-suggestions"
-                                            class="text-gray-500 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 text-sm"
-                                            title="Suggestions">
-                                        <i class="fas fa-lightbulb"></i>
-                                    </button>
-                                </div>
                             </div>
 
                             <div class="intent-input-wrapper relative">
@@ -173,60 +151,6 @@ include('public/loading-component.php');
                                             <i class="fas fa-times"></i>
                                         </button>
                                     </div>
-                                </div>
-
-                                <!-- Suggestions dropdown -->
-                                <div id="intent-suggestions"
-                                     class="suggestions-dropdown absolute z-10 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg hidden">
-                                    <div class="p-3 border-b border-gray-200 dark:border-gray-700">
-                                        <h5 class="text-sm font-medium text-gray-700 dark:text-gray-300">Common
-                                            Intents</h5>
-                                    </div>
-                                    <ul class="max-h-60 overflow-y-auto py-1">
-                                        <li class="suggestion-item px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-800 dark:text-gray-200">
-                                            <i class="fas fa-code text-blue-500 mr-2"></i> Complete programming task
-                                        </li>
-                                        <li class="suggestion-item px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-800 dark:text-gray-200">
-                                            <i class="fas fa-book text-indigo-500 mr-2"></i> Study for exam
-                                        </li>
-                                        <li class="suggestion-item px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-800 dark:text-gray-200">
-                                            <i class="fas fa-edit text-purple-500 mr-2"></i> Write essay/article
-                                        </li>
-                                        <li class="suggestion-item px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-800 dark:text-gray-200">
-                                            <i class="fas fa-file-alt text-green-500 mr-2"></i> Draft email/message
-                                        </li>
-                                        <li class="suggestion-item px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-800 dark:text-gray-200">
-                                            <i class="fas fa-chart-line text-red-500 mr-2"></i> Complete work
-                                            presentation
-                                        </li>
-                                        <li class="suggestion-item px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-800 dark:text-gray-200">
-                                            <i class="fas fa-tasks text-yellow-500 mr-2"></i> Clear my task backlog
-                                        </li>
-                                    </ul>
-                                </div>
-
-                                <!-- History dropdown -->
-                                <div id="intent-history"
-                                     class="history-dropdown absolute z-10 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg hidden">
-                                    <div class="p-3 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
-                                        <h5 class="text-sm font-medium text-gray-700 dark:text-gray-300">Recent
-                                            Intents</h5>
-                                        <button id="clear-history"
-                                                class="text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-                                            Clear History
-                                        </button>
-                                    </div>
-                                    <ul id="history-list" class="max-h-60 overflow-y-auto py-1">
-                                        <!-- History items will be inserted here -->
-                                        <li class="history-item px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-800 dark:text-gray-200 flex justify-between items-center">
-                                            <span>Create website wireframes</span>
-                                            <span class="text-xs text-gray-500">Yesterday</span>
-                                        </li>
-                                        <li class="history-item px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-800 dark:text-gray-200 flex justify-between items-center">
-                                            <span>Study JavaScript promises</span>
-                                            <span class="text-xs text-gray-500">3 days ago</span>
-                                        </li>
-                                    </ul>
                                 </div>
                             </div>
 
@@ -277,7 +201,7 @@ include('public/loading-component.php');
                                     class="focus-btn px-5 py-3 bg-green-600 text-white font-medium rounded-lg flex items-center hidden">
                                 <i class="fas fa-play mr-2"></i> Resume
                             </button>
-                            <button id="complete-btn"
+                            <button id="complete-btn" style="display: none"
                                     class="focus-btn px-5 py-3 bg-blue-600 text-white font-medium rounded-lg flex items-center hidden">
                                 <i class="fas fa-check mr-2"></i> Complete
                             </button>
@@ -542,6 +466,58 @@ include('public/loading-component.php');
                             <p id="focus-quote-text">"The successful warrior is the average man, with laser-like
                                 focus."</p>
                             <p class="text-sm mt-1" id="focus-quote-author">— Bruce Lee</p>
+                        </div>
+                    </div>
+
+                    <div id="focus-tips"
+                        class="w-full bg-white rounded-xl shadow-md p-6 transition-all duration-300 hover:shadow-lg dark:bg-gray-800">
+                        <h3 class="font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
+                            <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                            <span>Personalized Focus Tips</span>
+                            <div class="ml-auto">
+                                <button id="refresh-tips" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                                <button id="tips-info" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 ml-1">
+                                    <i class="fas fa-info-circle"></i>
+                                </button>
+                            </div>
+                        </h3>
+
+                        <div class="tips-container space-y-3">
+                            <?php if (empty($personalizedTips)): ?>
+                                <!-- Show default tips when no personalized data is available -->
+                                <div class="tip-card p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <div class="flex items-start">
+                                        <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                        <div>
+                                            <h4 class="font-medium text-gray-700 dark:text-gray-200">Find your focus zone</h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Create a dedicated space with minimal
+                                                distractions for your focus sessions.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- More default tips -->
+                            <?php else: ?>
+                                <?php foreach ($personalizedTips as $tip): ?>
+                                    <div class="tip-card p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded-lg transform transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+                                        <div class="flex items-start">
+                                            <div class="text-blue-500 dark:text-blue-400 mt-1 mr-3 text-lg">
+                                                <i class="<?= $tip['icon'] ?>"></i>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-medium text-gray-800 dark:text-gray-200"><?= $tip['title'] ?></h4>
+                                                <p class="text-sm text-gray-600 dark:text-gray-400"><?= $tip['description'] ?></p>
+                                                <?php if (isset($tip['stat'])): ?>
+                                                    <div class="mt-2 text-xs font-medium text-gray-500 dark:text-gray-500">
+                                                        <?= $tip['stat'] ?>
+                                                    </div>
+                                                <?php endif; ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </div>
                     </div>
 
@@ -814,57 +790,6 @@ include('public/loading-component.php');
         </div>
     </div>
 
-    <div id="focus-tips"
-         class="w-full bg-white rounded-xl shadow-md p-6 transition-all duration-300 hover:shadow-lg dark:bg-gray-800">
-        <h3 class="font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
-            <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
-            <span>Personalized Focus Tips</span>
-            <div class="ml-auto">
-                <button id="refresh-tips" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1">
-                    <i class="fas fa-sync-alt"></i>
-                </button>
-                <button id="tips-info" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 ml-1">
-                    <i class="fas fa-info-circle"></i>
-                </button>
-            </div>
-        </h3>
-
-        <div class="tips-container space-y-3">
-            <?php if (empty($personalizedTips)): ?>
-                <!-- Show default tips when no personalized data is available -->
-                <div class="tip-card p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                    <div class="flex items-start">
-                        <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                        <div>
-                            <h4 class="font-medium text-gray-700 dark:text-gray-200">Find your focus zone</h4>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">Create a dedicated space with minimal
-                                distractions for your focus sessions.</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- More default tips -->
-            <?php else: ?>
-                <?php foreach ($personalizedTips as $tip): ?>
-                    <div class="tip-card p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded-lg transform transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
-                        <div class="flex items-start">
-                            <div class="text-blue-500 dark:text-blue-400 mt-1 mr-3 text-lg">
-                                <i class="<?= $tip['icon'] ?>"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-medium text-gray-800 dark:text-gray-200"><?= $tip['title'] ?></h4>
-                                <p class="text-sm text-gray-600 dark:text-gray-400"><?= $tip['description'] ?></p>
-                                <?php if (isset($tip['stat'])): ?>
-                                    <div class="mt-2 text-xs font-medium text-gray-500 dark:text-gray-500">
-                                        <?= $tip['stat'] ?>
-                                    </div>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            <?php endif; ?>
-        </div>
-    </div>
 
     <!-- Audio elements for ambient sounds -->
     <audio id="sound-rain" loop preload="none">

@@ -280,7 +280,7 @@ include('public/loading-component.php');
         <i class="fas fa-clock mr-3"></i>
         <span">Start Focus Session</span>
       </a>
-      <a href="<?= $baseUrl ?>/dashboard/visualization" class="hero-button analytics-button">
+      <a href="<?= $baseUrl ?>/focus/history" class="hero-button analytics-button">
         <i class="fas fa-chart-line mr-3"></i>
         <span>View Analytics</span>
       </a>
