@@ -11,7 +11,7 @@
     --sky: #0369a1;
     --cosmic: #4c1d95;
     --enchanted: #9d174d;
-    
+
     /* Dark mode colors */
     --dark-bg: #121212;
     --dark-surface: #1e1e1e;
@@ -113,6 +113,7 @@ body.dark-mode .timer-background {
 body.dark-mode .timer-inner {
     background-color: #333;
 }
+
 /* 3D model container */
 .model-container {
     position: relative;
@@ -250,6 +251,7 @@ body.dark-mode .progress-bar {
     opacity: 1;
     pointer-events: auto;
 }
+
 .focus-mode-content {
     transition: all 0.5s ease;
     z-index: 40;
@@ -269,6 +271,7 @@ body.dark-mode .progress-bar {
     width: 90%;
     max-width: 500px;
 }
+
 .focus-content-wrapper {
     position: relative;
     z-index: 40;
@@ -301,7 +304,7 @@ body.dark-mode .progress-bar {
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 70%);
     transform: rotate(45deg);
     animation: shine 6s infinite;
     pointer-events: none;
@@ -536,13 +539,21 @@ body.dark-mode .focus-quote {
 }
 
 @keyframes inhale {
-    from { transform: scale(1); }
-    to { transform: scale(1.5); }
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.5);
+    }
 }
 
 @keyframes exhale {
-    from { transform: scale(1.5); }
-    to { transform: scale(1); }
+    from {
+        transform: scale(1.5);
+    }
+    to {
+        transform: scale(1);
+    }
 }
 
 /* Session intent */
@@ -646,14 +657,60 @@ body.dark-mode .distraction-panel {
     .model-container {
         height: 250px;
     }
-    
+
     .theme-toggle, .fullscreen-toggle {
         top: 10px;
         width: 36px;
         height: 36px;
     }
-    
+
     .fullscreen-toggle {
         right: 56px;
     }
+}
+
+/* Add these to your focus.css file */
+.tip-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.tip-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-color: currentColor;
+    opacity: 0.5;
+}
+
+@keyframes tipPulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.01);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.tips-container:hover .tip-card {
+    animation: tipPulse 2s infinite;
+    animation-delay: calc(var(--tip-index) * 0.3s);
+}
+
+.tip-card:nth-child(1) {
+    --tip-index: 0;
+}
+
+.tip-card:nth-child(2) {
+    --tip-index: 1;
+}
+
+.tip-card:nth-child(3) {
+    --tip-index: 2;
 }

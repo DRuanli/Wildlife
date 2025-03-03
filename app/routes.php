@@ -89,5 +89,6 @@ function getRoutes() {
 
         // Contact routes
         '/contact' => 'ContactController@index',
+
     ];
 }

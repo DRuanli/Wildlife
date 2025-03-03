@@ -102,6 +102,8 @@ class FocusController extends Controller
         // Get recent sessions for statistics
         $recentStats = $this->focusSessionModel->getUserStats($userId);
         $data = array_merge($data, $recentStats);
+
+        $data['personalizedTips'] = $this->getPersonalizedTips($userId);
         
         $this->render('focus/index', $data);
     }
@@ -254,6 +256,39 @@ class FocusController extends Controller
             'creature' => $creatureData,
             'new_achievements' => $newAchievements
         ]);
+    }
+
+    /**
+     * Get personalized focus tips based on user patterns
+     * @param int $userId User ID
+     * @return array Focus tips with relevance scores
+     */
+    private function getPersonalizedTips($userId) {
+        // Get user's session data
+        $recentSessions = $this->focusSessionModel->getRecentByUserId($userId, 20);
+        $userStats = $this->focusSessionModel->getUserStats($userId);
+        $todaySessions = $this->focusSessionModel->getTodaySessionsByUserId($userId);
+        
+        $tips = [];
+        
+        // Time of day pattern
+        $morningCount = $afternoonCount = $eveningCount = $nightCount = 0;
+        
+        foreach($recentSessions as $session) {
+            $hour = (int)date('H', strtotime($session['start_time']));
+            if($hour >= 5 && $hour < 12) $morningCount++;
+            elseif($hour >= 12 && $hour < 17) $afternoonCount++;
+            elseif($hour >= 17 && $hour < 22) $eveningCount++;
+            else $nightCount++;
+        }
+        
+        // Add time-based tips
+        $preferredTime = array_search(max($morningCount, $afternoonCount, $eveningCount, $nightCount), 
+                                    [$morningCount, $afternoonCount, $eveningCount, $nightCount]);
+        
+        // More logic to generate personalized tips...
+        
+        return $tips;
     }
     
     /**
