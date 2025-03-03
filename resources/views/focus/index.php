@@ -375,7 +375,8 @@ include('public/loading-component.php');
                             </div>
 
                             <!-- Select Creature Button -->
-                            <button id="show-creature-selection" class="w-full py-3 px-4 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-between mb-4">
+                            <button id="show-creature-selection"
+                                    class="w-full py-3 px-4 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-between mb-4">
                                 <span class="flex items-center">
                                     <i class="fas fa-dragon text-green-600 mr-2"></i>
                                     <span class="text-gray-700 dark:text-gray-300 font-medium">Choose a creature to grow</span>
@@ -544,7 +545,7 @@ include('public/loading-component.php');
                         </div>
                     </div>
 
-                    
+
                 </div>
 
                 <!-- Middle and Right Columns: Habitat Visualization and Stats -->
@@ -676,11 +677,12 @@ include('public/loading-component.php');
 
                         <!-- Recent Sessions (Collapsed by default) -->
                         <div class="border-t pt-4">
-                            <button id="toggle-recent-sessions" class="flex items-center justify-between w-full text-left">
+                            <button id="toggle-recent-sessions"
+                                    class="flex items-center justify-between w-full text-left">
                                 <h4 class="font-medium text-gray-800">Recent Sessions</h4>
                                 <i class="fas fa-chevron-down text-gray-500"></i>
                             </button>
-                            
+
                             <div id="recent-sessions-content" class="hidden mt-3">
                                 <?php if (empty($todaySessions)): ?>
                                     <div class="text-center py-6 text-gray-500">
@@ -812,6 +814,58 @@ include('public/loading-component.php');
         </div>
     </div>
 
+    <div id="focus-tips"
+         class="w-full bg-white rounded-xl shadow-md p-6 transition-all duration-300 hover:shadow-lg dark:bg-gray-800">
+        <h3 class="font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
+            <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+            <span>Personalized Focus Tips</span>
+            <div class="ml-auto">
+                <button id="refresh-tips" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+                <button id="tips-info" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 ml-1">
+                    <i class="fas fa-info-circle"></i>
+                </button>
+            </div>
+        </h3>
+
+        <div class="tips-container space-y-3">
+            <?php if (empty($personalizedTips)): ?>
+                <!-- Show default tips when no personalized data is available -->
+                <div class="tip-card p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <div class="flex items-start">
+                        <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                        <div>
+                            <h4 class="font-medium text-gray-700 dark:text-gray-200">Find your focus zone</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Create a dedicated space with minimal
+                                distractions for your focus sessions.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- More default tips -->
+            <?php else: ?>
+                <?php foreach ($personalizedTips as $tip): ?>
+                    <div class="tip-card p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded-lg transform transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+                        <div class="flex items-start">
+                            <div class="text-blue-500 dark:text-blue-400 mt-1 mr-3 text-lg">
+                                <i class="<?= $tip['icon'] ?>"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-800 dark:text-gray-200"><?= $tip['title'] ?></h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400"><?= $tip['description'] ?></p>
+                                <?php if (isset($tip['stat'])): ?>
+                                    <div class="mt-2 text-xs font-medium text-gray-500 dark:text-gray-500">
+                                        <?= $tip['stat'] ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
+    </div>
+
     <!-- Audio elements for ambient sounds -->
     <audio id="sound-rain" loop preload="none">
         <source src="<?= $baseUrl ?>/public/sounds/Howl.mp3" type="audio/mp3">
@@ -846,7 +900,6 @@ include('public/loading-component.php');
         <source src="<?= $baseUrl ?>/public/sounds/break-complete.mp3" type="audio/mp3">
     </audio>
 
-    
 
     <div id="focus-mode-overlay" class="focus-mode-overlay"></div>
     <script src="<?= $baseUrl ?>/public/js/focus/focus-3d.js"></script>
@@ -855,15 +908,27 @@ include('public/loading-component.php');
 
         /* State transition animations */
         @keyframes pulse-focus {
-            0% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(22, 163, 74, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); }
+            0% {
+                box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(22, 163, 74, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(22, 163, 74, 0);
+            }
         }
 
         @keyframes pulse-break {
-            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(59, 130, 246, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+            0% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(59, 130, 246, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+            }
         }
 
         .focus-state .timer-inner {
@@ -917,7 +982,7 @@ include('public/loading-component.php');
             z-index: 50;
             transition: all 0.3s ease;
         }
-        
+
         .control-icon {
             background-color: #fff;
             border-radius: 50%;
@@ -926,20 +991,20 @@ include('public/loading-component.php');
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             cursor: pointer;
             transition: all 0.3s ease;
         }
-        
+
         body.dark-mode .control-icon {
             background-color: #333;
             color: #fff;
         }
-        
+
         .control-icon:hover {
             transform: scale(1.1);
         }
-        
+
         .advanced-options-panel {
             position: fixed;
             top: 0;
@@ -952,16 +1017,16 @@ include('public/loading-component.php');
             overflow-y: auto;
             transition: right 0.4s ease;
         }
-        
+
         body.dark-mode .advanced-options-panel {
             background-color: #1e1e1e;
             color: #e0e0e0;
         }
-        
+
         .advanced-options-panel.visible {
             right: 0;
         }
-        
+
         .panel-header {
             display: flex;
             justify-content: space-between;
@@ -969,11 +1034,11 @@ include('public/loading-component.php');
             padding: 15px 20px;
             border-bottom: 1px solid #e5e7eb;
         }
-        
+
         body.dark-mode .panel-header {
             border-bottom: 1px solid #333;
         }
-        
+
         .close-panel {
             background: none;
             border: none;
@@ -981,20 +1046,20 @@ include('public/loading-component.php');
             cursor: pointer;
             color: #6b7280;
         }
-        
+
         body.dark-mode .close-panel {
             color: #d1d5db;
         }
-        
+
         .panel-section {
             padding: 15px 20px;
             border-bottom: 1px solid #e5e7eb;
         }
-        
+
         body.dark-mode .panel-section {
             border-bottom: 1px solid #333;
         }
-        
+
         .panel-section h4 {
             font-size: 1rem;
             font-weight: 600;
@@ -1002,7 +1067,7 @@ include('public/loading-component.php');
             display: flex;
             align-items: center;
         }
-        
+
         /* Enhanced Slider Styling */
         input[type="range"] {
             -webkit-appearance: none;
@@ -1168,34 +1233,34 @@ include('public/loading-component.php');
             const advancedOptionsToggle = document.getElementById('advanced-options-toggle');
             const advancedOptionsPanel = document.getElementById('advanced-options-panel');
             const closeAdvancedOptions = document.getElementById('close-advanced-options');
-            
+
             if (advancedOptionsToggle && advancedOptionsPanel) {
-                advancedOptionsToggle.addEventListener('click', function() {
+                advancedOptionsToggle.addEventListener('click', function () {
                     advancedOptionsPanel.classList.add('visible');
                 });
             }
-            
+
             if (closeAdvancedOptions && advancedOptionsPanel) {
-                closeAdvancedOptions.addEventListener('click', function() {
+                closeAdvancedOptions.addEventListener('click', function () {
                     advancedOptionsPanel.classList.remove('visible');
                 });
             }
-            
+
             // Close panel when clicking outside
-            document.addEventListener('click', function(e) {
+            document.addEventListener('click', function (e) {
                 if (advancedOptionsPanel && advancedOptionsPanel.classList.contains('visible')) {
                     if (!advancedOptionsPanel.contains(e.target) && e.target !== advancedOptionsToggle) {
                         advancedOptionsPanel.classList.remove('visible');
                     }
                 }
             });
-            
+
             // Session intent expansion
             const intentPreview = document.getElementById('intent-preview');
             const intentDetails = document.getElementById('intent-details');
-            
+
             if (intentPreview && intentDetails) {
-                intentPreview.addEventListener('click', function() {
+                intentPreview.addEventListener('click', function () {
                     if (intentDetails.classList.contains('hidden')) {
                         intentDetails.classList.remove('hidden');
                         this.querySelector('i').classList.remove('fa-chevron-down');
@@ -1207,13 +1272,13 @@ include('public/loading-component.php');
                     }
                 });
             }
-            
+
             // Timer settings toggle
             const showTimerSettings = document.getElementById('show-timer-settings');
             const timerSettings = document.getElementById('timer-settings');
-            
+
             if (showTimerSettings && timerSettings) {
-                showTimerSettings.addEventListener('click', function() {
+                showTimerSettings.addEventListener('click', function () {
                     if (timerSettings.classList.contains('hidden')) {
                         timerSettings.classList.remove('hidden');
                         this.innerHTML = '<i class="fas fa-times mr-1"></i> Hide Timer Settings';
@@ -1223,13 +1288,13 @@ include('public/loading-component.php');
                     }
                 });
             }
-            
+
             // Creature selection toggle
             const showCreatureSelection = document.getElementById('show-creature-selection');
             const creatureSelectionContainer = document.getElementById('creature-selection-container');
-            
+
             if (showCreatureSelection && creatureSelectionContainer) {
-                showCreatureSelection.addEventListener('click', function() {
+                showCreatureSelection.addEventListener('click', function () {
                     if (creatureSelectionContainer.classList.contains('hidden')) {
                         creatureSelectionContainer.classList.remove('hidden');
                         this.querySelector('.fa-chevron-down').classList.remove('fa-chevron-down');
@@ -1241,13 +1306,13 @@ include('public/loading-component.php');
                     }
                 });
             }
-            
+
             // Recent sessions toggle
             const toggleRecentSessions = document.getElementById('toggle-recent-sessions');
             const recentSessionsContent = document.getElementById('recent-sessions-content');
-            
+
             if (toggleRecentSessions && recentSessionsContent) {
-                toggleRecentSessions.addEventListener('click', function() {
+                toggleRecentSessions.addEventListener('click', function () {
                     if (recentSessionsContent.classList.contains('hidden')) {
                         recentSessionsContent.classList.remove('hidden');
                         this.querySelector('i').classList.remove('fa-chevron-down');
@@ -1526,7 +1591,7 @@ include('public/loading-component.php');
                 }
             }
             // Escape key to close panels
-            document.addEventListener('keydown', function(e) {
+            document.addEventListener('keydown', function (e) {
                 if (e.key === 'Escape') {
                     // Close advanced options panel
                     if (advancedOptionsPanel && advancedOptionsPanel.classList.contains('visible')) {
@@ -2111,7 +2176,7 @@ include('public/loading-component.php');
         }
 
         .intent-input-container:focus-within {
-            border-color:rgb(76, 76, 76);
+            border-color: rgb(76, 76, 76);
             box-shadow: 0 0 0 2px rgba(76, 76, 76, 0.2);
         }
 
@@ -2379,9 +2444,9 @@ include('public/loading-component.php');
 
         function transitionToFocus() {
             const focusStartSound = document.getElementById('sound-focus-start');
-            if(focusStartSound) {
+            if (focusStartSound) {
                 focusStartSound.volume = 0.3;
-                focusStartSound.play().catch(e=>console.log("Auto play prevented:", e));
+                focusStartSound.play().catch(e => console.log("Auto play prevented:", e));
             }
 
             const timerContainer = document.querySelector('.timer-container');
@@ -2391,22 +2456,22 @@ include('public/loading-component.php');
             timerContainer.classList.remove('break-state');
             timerInner.classList.remove('break-state');
             timerStatus.classList.remove('break-state');
-            
+
             // Add transition effect
             timerContainer.classList.add('state-transition');
             setTimeout(() => timerContainer.classList.remove('state-transition'), 500);
-            
+
             // Add focus state classes
             timerContainer.classList.add('focus-state', 'focus-pulse');
             timerInner.classList.add('focus-state');
             timerStatus.classList.add('focus-state');
-            
+
             // Remove pulse after animation completes
             setTimeout(() => timerContainer.classList.remove('focus-pulse'), 2000);
-            
+
             // Update UI text
             timerStatus.textContent = 'Focusing...';
-            
+
             // Update body class for global styling
             document.body.classList.add('in-focus-session');
             document.body.classList.remove('in-break-session');
@@ -2419,32 +2484,32 @@ include('public/loading-component.php');
                 breakStartSound.volume = 0.3;
                 breakStartSound.play().catch(e => console.log('Audio play prevented:', e));
             }
-            
+
             // Visual transition
             const timerContainer = document.querySelector('.timer-container');
             const timerInner = document.querySelector('.timer-inner');
             const timerStatus = document.getElementById('timer-status');
-            
+
             // Remove focus state classes
             timerContainer.classList.remove('focus-state');
             timerInner.classList.remove('focus-state');
             timerStatus.classList.remove('focus-state');
-            
+
             // Add transition effect
             timerContainer.classList.add('state-transition');
             setTimeout(() => timerContainer.classList.remove('state-transition'), 500);
-            
+
             // Add break state classes
             timerContainer.classList.add('break-state', 'break-pulse');
             timerInner.classList.add('break-state');
             timerStatus.classList.add('break-state');
-            
+
             // Remove pulse after animation completes
             setTimeout(() => timerContainer.classList.remove('break-pulse'), 2000);
-            
+
             // Update UI text
             timerStatus.textContent = 'Taking a break...';
-            
+
             // Update body class for global styling
             document.body.classList.remove('in-focus-session');
             document.body.classList.add('in-break-session');

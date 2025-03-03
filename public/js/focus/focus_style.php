@@ -1416,5 +1416,48 @@
         window.selectedCreatureData = selectedCreatureData;
     });
 
+    document.addEventListener('DOMContentLoaded', function () {
+        const tipsContainer = document.querySelector('.tips-container');
+        const refreshTipsBtn = document.getElementById('refresh-tips');
+
+        if (refreshTipsBtn) {
+            refreshTipsBtn.addEventListener('click', function () {
+                // Add rotation animation to button
+                this.classList.add('animate-spin');
+
+                // Simulate fetching new tips (in production you'd fetch from server)
+                setTimeout(() => {
+                    this.classList.remove('animate-spin');
+
+                    // Add fade out effect
+                    tipsContainer.style.opacity = 0;
+
+                    setTimeout(() => {
+                        // In production, update tips with newly fetched ones
+                        // For now just change the existing ones' style
+                        const tipCards = document.querySelectorAll('.tip-card');
+                        tipCards.forEach(card => {
+                            card.style.backgroundColor = getRandomTipColor();
+                        });
+
+                        // Fade back in
+                        tipsContainer.style.opacity = 1;
+                    }, 300);
+                }, 800);
+            });
+        }
+
+        // Helper to generate random tip background colors
+        function getRandomTipColor() {
+            const colors = [
+                'rgba(219, 234, 254, 0.6)', // blue-50
+                'rgba(236, 253, 245, 0.6)', // green-50
+                'rgba(254, 243, 199, 0.6)', // yellow-50
+                'rgba(254, 226, 226, 0.6)', // red-50
+                'rgba(237, 233, 254, 0.6)'  // purple-50
+            ];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+    });
 
 </script>
