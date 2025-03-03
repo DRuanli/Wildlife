@@ -931,6 +931,3 @@
             }
         }
     </script>
-
-
-<?php require_once ROOT_PATH . '/resources/views/layouts/footer.php'; ?>

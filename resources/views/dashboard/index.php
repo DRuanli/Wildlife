@@ -35,9 +35,15 @@ include('public/loading-component.php');
   
   <!-- Custom Styles -->
   <style>
+
+    @font-face {
+      font-family: "ZooCute";
+      src: url("/Wildlife/public/fonts/Zoocute.ttf") format("truetype");
+    }
     :root {
-      --font-sans: 'Inter', sans-serif;
-      --font-display: 'Playfair Display', serif;
+      --font-sans: 'Merriweather', sans-serif;
+      --font-display: 'ZooCute', cursive;
+      
       
       /* Core palette */
       --color-bg: #F9F8F2;
@@ -70,7 +76,37 @@ include('public/loading-component.php');
     
     .headline {
       font-family: var(--font-display);
-      font-weight: 700;
+      font-weight: 1000;
+    }
+
+    .wave-title {
+      font-size: 48px;
+      font-weight: bold;
+      animation-name: waveMotion;
+      animation-duration: 3s;
+      animation-iteration-count: infinite;
+    }
+
+
+    @keyframes waveMotion {
+      0% {
+        transform: translate3d(0, 0, 0);
+      }
+      20% {
+        transform: translate3d(15px, -10px, 15px);
+      }
+      40% {
+        transform: translate3d(0, 15px, 0);
+      }
+      60% {
+        transform: translate3d(-15px, -10px, -15px);
+      }
+      80% {
+        transform: translate3d(0, -5px, 0);
+      }
+      100% {
+        transform: translate3d(0, 0, 0);
+      }
     }
 
     /* Hero section styles */
@@ -88,12 +124,13 @@ include('public/loading-component.php');
     }
     
     .welcome-text {
-      font-size: 4rem;
+      font-size: 10rem;
       margin-bottom: 1rem;
     }
     
     .tagline {
-      font-size: 1.5rem;
+      font-family: var(--font-display);
+      font-size: 2.5rem;
       margin-bottom: 4rem;
       opacity: 0.9;
     }
@@ -233,17 +270,17 @@ include('public/loading-component.php');
   
   <!-- Main hero section -->
   <div class="hero-container">
-    <h1 class="headline welcome-text" id="welcome-text">
-      Welcome back, <span class="username"><?php echo $user['username']; ?></span>!
+    <h1 class="headline welcome-text wave-title" id="welcome-text" style = "animation: waveMotion 10s infinite;">
+      Welcome back, <span class="username" ><?php echo $user['username']; ?></span>!
     </h1>
-    <p class="tagline">Your wild haven awaits your focused energy.</p>
+    <p class="tagline" style = "animation: waveMotion 10s infinite;">Your wild haven awaits your focused energy.</p>
     
     <div class="buttons-container">
       <a href="<?= $baseUrl ?>/focus" class="hero-button focus-button">
         <i class="fas fa-clock mr-3"></i>
-        <span>Start Focus Session</span>
+        <span">Start Focus Session</span>
       </a>
-      <a href="<?= $baseUrl ?>/dashboard/visualization" class="hero-button analytics-button">
+      <a href="<?= $baseUrl ?>/focus/history" class="hero-button analytics-button">
         <i class="fas fa-chart-line mr-3"></i>
         <span>View Analytics</span>
       </a>
@@ -251,7 +288,7 @@ include('public/loading-component.php');
   </div>
   
   <!-- Animal templates (hidden) -->
-  <div id="animal-templates" style="display: none;">
+  <div id="animal-templates" style="display: none; ">
     <img src="<?= $baseUrl ?>/public/img/diana-parkhouse-dBrKSWR-z1w-unsplash.jpg">
     <img src="<?= $baseUrl ?>/public/img/ele.png">
     <img src="<?= $baseUrl ?>/public/img/Rhino.png">
