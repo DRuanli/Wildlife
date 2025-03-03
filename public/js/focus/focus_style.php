@@ -366,10 +366,9 @@
                 
                 // Check if this is a break or focus session
                 if (isBreak) {
-                    timerStatus.textContent = 'On break...';
+                    transitionToBreak();
                 } else {
-                    timerStatus.textContent = 'Focusing...';
-                    
+                    transitionToFocus();
                     // Only create backend session for focus sessions, not breaks
                     createBackendSession();
                 }
@@ -384,9 +383,19 @@
                         
                         if (isBreak) {
                             // Break is over, start a new focus session
+                            const breakCompleteSound = document.getElementById('sound-break-complete');
+                            if (breakCompleteSound) {
+                                breakCompleteSound.volume = 0.3;
+                                breakCompleteSound.play().catch(e => console.log('Audio play prevented:', e));
+                            }
                             completeBreak();
                         } else {
                             // Focus session is over
+                            const focusCompleteSound = document.getElementById('sound-focus-complete');
+                            if (focusCompleteSound) {
+                                focusCompleteSound.volume = 0.3;
+                                focusCompleteSound.play().catch(e => console.log('Audio play prevented:', e));
+                            }
                             completeSession();
                         }
                     } else {
@@ -427,7 +436,7 @@
             }
             
             function completeBreak() {
-                // Break is over, start a new focus session if auto-start is enabled
+                // Break is over, start a new focus session
                 isBreak = false;
                 resetTimer(false); // Don't reset UI elements
                 
@@ -438,6 +447,13 @@
                 
                 // Update UI
                 timerStatus.textContent = 'Ready to focus';
+                
+                // Reset state classes
+                const timerContainer = document.querySelector('.timer-container');
+                const timerInner = document.querySelector('.timer-inner');
+                timerContainer.classList.remove('break-state');
+                timerInner.classList.remove('break-state');
+                timerStatus.classList.remove('break-state');
                 
                 // Auto-start next focus session if enabled
                 if (autoStartEnabled) {
@@ -539,9 +555,6 @@
                 sessionDuration = parseInt(pomodoroBreakSelect.value) * 60;
                 timeRemaining = sessionDuration;
                 updateTimerDisplay();
-                
-                // Update UI
-                timerStatus.textContent = 'Take a break';
                 
                 // Auto-start break if enabled
                 if (autoStartEnabled) {
