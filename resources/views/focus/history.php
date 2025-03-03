@@ -75,6 +75,50 @@ include('public/loading-component.php');
                         <?= round($userStats['avg_focus_score']) ?>%
                     </p>
                 </div>
+                
+                <!-- Status Donut Chart -->
+                <div class="tab-panel hidden" id="status">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <div class="mb-3 text-center">
+                                <p class="text-sm text-gray-500">Session status distribution</p>
+                            </div>
+                            <div class="h-72 flex items-center justify-center">
+                                <canvas id="statusDonutChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="flex flex-col justify-center">
+                            <h3 class="font-medium text-lg mb-3">Status Breakdown</h3>
+                            <div id="status-stats" class="space-y-4">
+                                <!-- Status stats will be filled dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Lollipop Chart -->
+                <div class="tab-panel hidden" id="lollipop">
+                    <div class="mb-3 text-center">
+                        <p class="text-sm text-gray-500">Session duration by status (most recent 30 sessions)</p>
+                    </div>
+                    <div class="h-72 mb-4">
+                        <div id="lollipopContainer" class="w-full h-full"></div>
+                    </div>
+                    <div class="flex justify-center gap-6 text-sm text-gray-600">
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 bg-green-500 rounded-full mr-1"></div>
+                            <span>Completed</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 bg-yellow-500 rounded-full mr-1"></div>
+                            <span>In Progress</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
+                            <span>Cancelled</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -252,6 +296,21 @@ include('public/loading-component.php');
                             <i class="fas fa-clock mr-2"></i>Time of Day
                         </button>
                     </li>
+                    <li class="mr-2" role="presentation">
+                        <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300" id="candlestick-tab" type="button" role="tab" aria-controls="candlestick" aria-selected="false">
+                            <i class="fas fa-chart-line mr-2"></i>Focus Trends
+                        </button>
+                    </li>
+                    <li class="mr-2" role="presentation">
+                        <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300" id="status-tab" type="button" role="tab" aria-controls="status" aria-selected="false">
+                            <i class="fas fa-chart-pie mr-2"></i>Status Overview
+                        </button>
+                    </li>
+                    <li class="mr-2" role="presentation">
+                        <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300" id="lollipop-tab" type="button" role="tab" aria-controls="lollipop" aria-selected="false">
+                            <i class="fas fa-circle mr-2"></i>Duration Analysis
+                        </button>
+                    </li>
                 </ul>
             </div>
             
@@ -307,6 +366,26 @@ include('public/loading-component.php');
                     </div>
                     <div class="flex justify-center text-sm text-gray-600">
                         This chart shows your most productive hours based on when you start focus sessions
+                    </div>
+                </div>
+                
+                <!-- Candlestick Chart -->
+                <div class="tab-panel hidden" id="candlestick">
+                    <div class="mb-3 text-center">
+                        <p class="text-sm text-gray-500">Daily focus score and duration trends</p>
+                    </div>
+                    <div class="h-72 mb-4">
+                        <canvas id="candlestickChart"></canvas>
+                    </div>
+                    <div class="flex justify-center text-sm text-gray-600">
+                        <div class="mr-4 flex items-center">
+                            <div class="w-4 h-4 bg-green-500 rounded-sm mr-1"></div>
+                            <span>Increasing trend</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-red-500 rounded-sm mr-1"></div>
+                            <span>Decreasing trend</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -761,126 +840,175 @@ document.addEventListener('DOMContentLoaded', function() {
         const minDate = dates.length ? new Date(Math.min.apply(null, dates)) : new Date();
         const maxDate = dates.length ? new Date(Math.max.apply(null, dates)) : new Date();
         
-        // Make sure we have at least a month range
-        minDate.setDate(minDate.getDate() - 30);
+        // Ensure we have a reasonable date range (at least 3 months)
+        let startDate = new Date(minDate);
+        startDate.setDate(1); // Start at the beginning of the month
         
-        // Size calculations
-        const cellSize = 15;
+        let endDate = new Date(maxDate);
+        // Go to the end of the month
+        endDate.setMonth(endDate.getMonth() + 1);
+        endDate.setDate(0);
+        
+        // Ensure we have at least 3 months of context
+        if ((endDate - startDate) < (90 * 24 * 60 * 60 * 1000)) {
+            startDate = new Date(endDate);
+            startDate.setMonth(startDate.getMonth() - 2);
+            startDate.setDate(1);
+        }
+        
+        // Calendar dimensions
+        const cellSize = 14;
         const cellMargin = 2;
+        const weekdays = 7;
         const width = container.clientWidth;
-        const height = 7 * (cellSize + cellMargin) + 30; // 7 days + some margin for labels
         
-        // Create SVG
+        // Calculate number of weeks to display
+        const totalDays = Math.round((endDate - startDate) / (24 * 60 * 60 * 1000));
+        const totalWeeks = Math.ceil(totalDays / 7);
+        
+        // Calculate height based on 7 days of the week
+        const height = (cellSize + cellMargin) * weekdays + 30; // Add space for labels
+        
+        // Create SVG element
         const svg = d3.select(container)
             .append('svg')
             .attr('width', width)
-            .attr('height', height);
+            .attr('height', height)
+            .attr('class', 'calendar-heatmap');
         
-        // Set up scales
-        const timeWeek = d3.utcSunday;
-        const timeMonth = d3.utcMonth;
+        // Maximum value for color intensity
+        const maxValue = d3.max(heatmapData, d => d.value) || 120;
         
-        const x = d3.scaleUtc()
-            .domain([minDate, maxDate])
-            .range([cellSize * 1.5, width - cellSize * 1.5]);
-        
-        const y = d3.scaleBand()
-            .domain(d3.range(7))
-            .range([cellSize, 7 * cellSize]);
-        
-        // Maximum value for color scale
-        const maxValue = d3.max(heatmapData, d => d.value) || 60;
-        
-        // Color scale
-        const color = d3.scaleSequential()
+        // Color scale for heatmap
+        const colorScale = d3.scaleSequential()
             .domain([0, maxValue])
             .interpolator(d3.interpolateBlues);
         
-        // Function to get week of the year
-        function weekOfYear(date) {
-            return d3.timeWeek.count(d3.timeYear(date), date);
+        // Create a lookup map for easy data access
+        const dataByDate = {};
+        heatmapData.forEach(d => {
+            dataByDate[d.date.toISOString().substring(0, 10)] = d.value;
+        });
+        
+        // Generate calendar data
+        const calendarData = [];
+        let currentDate = new Date(startDate);
+        
+        while (currentDate <= endDate) {
+            const dateKey = currentDate.toISOString().substring(0, 10);
+            calendarData.push({
+                date: new Date(currentDate),
+                value: dataByDate[dateKey] || 0
+            });
+            currentDate.setDate(currentDate.getDate() + 1);
         }
         
-        // Function to get day of the week (0 = Sunday)
-        function dayOfWeek(date) {
-            return date.getUTCDay();
+        // Calculate the number of columns (weeks)
+        const weeks = Math.ceil(calendarData.length / 7);
+        
+        // Create a scale for the X axis (weeks)
+        const xScale = d3.scaleLinear()
+            .domain([0, weeks])
+            .range([cellSize, width - cellSize]);
+        
+        // Create a scale for the Y axis (days of week)
+        const yScale = d3.scaleBand()
+            .domain([0, 1, 2, 3, 4, 5, 6]) // 0 = Sunday, 6 = Saturday
+            .range([cellSize, 7 * (cellSize + cellMargin)]);
+        
+        // Helper to get the week offset from start date
+        function getWeekOffset(date) {
+            return Math.floor((date - startDate) / (7 * 24 * 60 * 60 * 1000));
         }
-        
-        // Group by week
-        const weeks = d3.nest()
-            .key(d => weekOfYear(d.date))
-            .entries(heatmapData);
-        
-        // Create cells for each day
-        svg.selectAll('.day')
-            .data(heatmapData)
-            .enter().append('rect')
-            .attr('class', 'day')
-            .attr('width', cellSize)
-            .attr('height', cellSize)
-            .attr('x', d => {
-                // Position based on week number relative to min date
-                const week = weekOfYear(d.date) - weekOfYear(minDate) + 1;
-                return week * (cellSize + cellMargin);
-            })
-            .attr('y', d => y(dayOfWeek(d.date)))
-            .attr('fill', d => d.value > 0 ? color(d.value) : '#eee')
-            .attr('rx', 2)
-            .attr('ry', 2)
-            .append('title')
-            .text(d => `${d3.timeFormat('%Y-%m-%d')(d.date)}: ${d.value} minutes`);
         
         // Add day labels
         const dayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         svg.selectAll('.day-label')
             .data(dayLabels)
-            .enter().append('text')
+            .enter()
+            .append('text')
             .attr('class', 'day-label')
-            .attr('x', 5)
-            .attr('y', (d, i) => y(i) + cellSize/2)
+            .attr('x', 0)
+            .attr('y', (d, i) => cellSize + i * (cellSize + cellMargin))
             .attr('dy', '0.35em')
             .attr('text-anchor', 'start')
-            .attr('font-size', '10px')
-            .attr('fill', '#666')
-            .text(d => d);
+            .attr('font-size', '9px')
+            .attr('fill', '#888')
+            .text(d => d.substring(0, 1));
+        
+        // Draw calendar cells
+        svg.selectAll('.day-cell')
+            .data(calendarData)
+            .enter()
+            .append('rect')
+            .attr('class', 'day-cell')
+            .attr('width', cellSize)
+            .attr('height', cellSize)
+            .attr('rx', 2)
+            .attr('ry', 2)
+            .attr('x', d => {
+                const dayOfWeek = d.date.getDay(); // 0 = Sunday, 6 = Saturday
+                const weekOffset = getWeekOffset(d.date);
+                return cellSize * 1.5 + weekOffset * (cellSize + cellMargin);
+            })
+            .attr('y', d => {
+                const dayOfWeek = d.date.getDay(); // 0 = Sunday, 6 = Saturday
+                return cellSize + dayOfWeek * (cellSize + cellMargin);
+            })
+            .attr('fill', d => d.value > 0 ? colorScale(d.value) : '#eee')
+            .style('stroke', '#fff')
+            .style('stroke-width', 1)
+            .append('title')
+            .text(d => {
+                const dateStr = d.date.toLocaleDateString();
+                const minutes = d.value;
+                const hours = Math.floor(minutes / 60);
+                const mins = minutes % 60;
+                
+                let timeStr = "";
+                if (hours > 0) timeStr += `${hours}h `;
+                if (mins > 0 || hours === 0) timeStr += `${mins}m`;
+                
+                return `${dateStr}: ${timeStr}`;
+            });
         
         // Add month labels
         const monthLabels = [];
         let currentMonth = -1;
         
-        heatmapData.forEach(d => {
+        calendarData.forEach(d => {
             const month = d.date.getMonth();
-            if (month !== currentMonth) {
+            const year = d.date.getFullYear();
+            const monthYear = `${month}-${year}`;
+            
+            if (!monthLabels.some(ml => ml.monthYear === monthYear)) {
                 monthLabels.push({
-                    month: month,
-                    date: d.date
+                    date: new Date(d.date),
+                    month,
+                    year,
+                    monthYear
                 });
-                currentMonth = month;
             }
         });
         
-        // Add month dividers and labels
-        monthLabels.forEach(d => {
-            const week = weekOfYear(d.date) - weekOfYear(minDate) + 1;
-            const x = week * (cellSize + cellMargin);
-            
-            svg.append('text')
-                .attr('x', x)
-                .attr('y', 0)
-                .attr('dy', '-.5em')
-                .attr('text-anchor', 'start')
-                .attr('font-size', '10px')
-                .attr('fill', '#666')
-                .text(d3.timeFormat('%b')(d.date));
-            
-            svg.append('line')
-                .attr('x1', x)
-                .attr('x2', x)
-                .attr('y1', 0)
-                .attr('y2', 7 * (cellSize + cellMargin))
-                .attr('stroke', '#ddd')
-                .attr('stroke-dasharray', '2,2');
-        });
+        svg.selectAll('.month-label')
+            .data(monthLabels)
+            .enter()
+            .append('text')
+            .attr('class', 'month-label')
+            .attr('x', d => {
+                const weekOffset = getWeekOffset(d.date);
+                return cellSize * 1.5 + weekOffset * (cellSize + cellMargin);
+            })
+            .attr('y', cellSize / 2)
+            .attr('text-anchor', 'start')
+            .attr('font-size', '10px')
+            .attr('font-weight', 'bold')
+            .attr('fill', '#666')
+            .text(d => {
+                const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                return `${monthNames[d.month]} ${d.year}`;
+            });
     }
     
     // Initialize time of day chart
@@ -1025,6 +1153,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else if (panelId === 'hourly' && !window.hourlyChartInitialized) {
                     initializeHourlyChart();
                     window.hourlyChartInitialized = true;
+                } else if (panelId === 'candlestick' && !window.candlestickChartInitialized) {
+                    initializeCandlestickChart();
+                    window.candlestickChartInitialized = true;
+                } else if (panelId === 'status' && !window.statusChartInitialized) {
+                    initializeStatusDonutChart();
+                    window.statusChartInitialized = true;
+                } else if (panelId === 'lollipop' && !window.lollipopChartInitialized) {
+                    initializeLollipopChart();
+                    window.lollipopChartInitialized = true;
                 }
             });
         });
@@ -1688,6 +1825,604 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Download file
         saveAs(blob, fileName);
+    }
+    
+    // Initialize candlestick chart for focus trends
+    function initializeCandlestickChart() {
+        // Group sessions by day
+        const sessions = <?= json_encode($sessions) ?>;
+        const sessionsByDay = {};
+        
+        // Process sessions into daily data points
+        sessions.forEach(session => {
+            if (!session.completed || !session.focus_score) return;
+            
+            const date = new Date(session.start_time).toISOString().split('T')[0];
+            
+            if (!sessionsByDay[date]) {
+                sessionsByDay[date] = {
+                    date: date,
+                    sessions: [],
+                    durations: [],
+                    scores: []
+                };
+            }
+            
+            sessionsByDay[date].sessions.push(session);
+            sessionsByDay[date].durations.push(session.duration_minutes);
+            sessionsByDay[date].scores.push(session.focus_score);
+        });
+        
+        // Convert to array and calculate OHLC (Open, High, Low, Close) values
+        const candlestickData = Object.values(sessionsByDay).map(day => {
+            // Sort sessions by time
+            day.sessions.sort((a, b) => new Date(a.start_time) - new Date(b.start_time));
+            
+            // For scores
+            const openScore = day.scores[0];
+            const highScore = Math.max(...day.scores);
+            const lowScore = Math.min(...day.scores);
+            const closeScore = day.scores[day.scores.length - 1];
+            
+            // For durations
+            const totalDuration = day.durations.reduce((sum, d) => sum + d, 0);
+            const avgDuration = Math.round(totalDuration / day.durations.length);
+            
+            return {
+                date: day.date,
+                sessionCount: day.sessions.length,
+                // Score data
+                o: openScore,
+                h: highScore,
+                l: lowScore,
+                c: closeScore,
+                // Duration data
+                avgDuration: avgDuration,
+                totalDuration: totalDuration
+            };
+        });
+        
+        // Sort by date
+        candlestickData.sort((a, b) => new Date(a.date) - new Date(b.date));
+        
+        // Prepare data for Chart.js
+        const labels = candlestickData.map(d => d.date);
+        const openData = candlestickData.map(d => d.o);
+        const highData = candlestickData.map(d => d.h);
+        const lowData = candlestickData.map(d => d.l);
+        const closeData = candlestickData.map(d => d.c);
+        const colorData = candlestickData.map(d => d.c >= d.o ? 'rgba(16, 185, 129, 0.8)' : 'rgba(239, 68, 68, 0.8)');
+        const borderColorData = candlestickData.map(d => d.c >= d.o ? 'rgb(16, 185, 129)' : 'rgb(239, 68, 68)');
+        
+        // Get chart context
+        const ctx = document.getElementById('candlestickChart').getContext('2d');
+        
+        // Create custom candlestick chart
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Focus Score Range',
+                        data: candlestickData.map(d => d.h - d.l), // Height of the bar is high-low
+                        backgroundColor: colorData,
+                        borderColor: borderColorData,
+                        borderWidth: 1,
+                        barPercentage: 0.3,
+                        categoryPercentage: 0.8,
+                        barThickness: 15,
+                        // Custom data for drawing
+                        open: openData,
+                        high: highData,
+                        low: lowData,
+                        close: closeData
+                    },
+                    {
+                        label: 'Average Duration (minutes)',
+                        data: candlestickData.map(d => d.avgDuration),
+                        type: 'line',
+                        borderColor: 'rgba(99, 102, 241, 0.8)',
+                        backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                        pointBackgroundColor: 'rgba(99, 102, 241, 1)',
+                        pointRadius: 3,
+                        pointHoverRadius: 5,
+                        fill: false,
+                        tension: 0.1,
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        },
+                        ticks: {
+                            maxRotation: 45,
+                            minRotation: 45
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Focus Score'
+                        },
+                        min: 0,
+                        max: 100,
+                        ticks: {
+                            stepSize: 10
+                        }
+                    },
+                    y1: {
+                        beginAtZero: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Duration (min)'
+                        },
+                        grid: {
+                            drawOnChartArea: false
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const datasetLabel = context.dataset.label || '';
+                                const index = context.dataIndex;
+                                
+                                if (context.datasetIndex === 0) {
+                                    const day = candlestickData[index];
+                                    return [
+                                        `Date: ${day.date}`,
+                                        `Open: ${day.o}%`,
+                                        `High: ${day.h}%`,
+                                        `Low: ${day.l}%`,
+                                        `Close: ${day.c}%`,
+                                        `Sessions: ${day.sessionCount}`
+                                    ];
+                                } else {
+                                    return `Avg Duration: ${context.raw} minutes`;
+                                }
+                            }
+                        }
+                    },
+                    legend: {
+                        labels: {
+                            usePointStyle: true
+                        }
+                    }
+                }
+            },
+            plugins: [{
+                id: 'candlestickBars',
+                beforeDatasetsDraw(chart, args, pluginOptions) {
+                    const { ctx, scales } = chart;
+                    const dataset = chart.data.datasets[0];
+                    const { x, y } = scales;
+                    
+                    // Draw the high-low line and open-close marks
+                    ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+                    ctx.lineWidth = 1;
+                    
+                    for (let i = 0; i < chart.data.labels.length; i++) {
+                        const open = dataset.open[i];
+                        const high = dataset.high[i];
+                        const low = dataset.low[i];
+                        const close = dataset.close[i];
+                        
+                        if (open === undefined || high === undefined || low === undefined || close === undefined) {
+                            continue;
+                        }
+                        
+                        const xPos = x.getPixelForValue(i);
+                        const yHigh = y.getPixelForValue(high);
+                        const yLow = y.getPixelForValue(low);
+                        const yOpen = y.getPixelForValue(open);
+                        const yClose = y.getPixelForValue(close);
+                        
+                        const barWidth = chart.getDatasetMeta(0).data[i]?.width || 10;
+                        
+                        // Draw the high-low line (the wick)
+                        ctx.beginPath();
+                        ctx.moveTo(xPos, yHigh);
+                        ctx.lineTo(xPos, yLow);
+                        ctx.stroke();
+                        
+                        // Draw open tick (horizontal line to the left)
+                        ctx.beginPath();
+                        ctx.moveTo(xPos - barWidth/2, yOpen);
+                        ctx.lineTo(xPos, yOpen);
+                        ctx.stroke();
+                        
+                        // Draw close tick (horizontal line to the right)
+                        ctx.beginPath();
+                        ctx.moveTo(xPos, yClose);
+                        ctx.lineTo(xPos + barWidth/2, yClose);
+                        ctx.stroke();
+                    }
+                }
+            }]
+        });
+    }
+    
+    // Initialize status donut chart
+    function initializeStatusDonutChart() {
+        const sessions = <?= json_encode($sessions) ?>;
+        
+        // Group sessions by status
+        const statusCounts = {
+            'completed': 0,
+            'in_progress': 0,
+            'cancelled': 0
+        };
+        
+        sessions.forEach(session => {
+            if (session.completed) {
+                statusCounts.completed++;
+            } else if (session.end_time === null) {
+                statusCounts.in_progress++;
+            } else {
+                statusCounts.cancelled++;
+            }
+        });
+        
+        // Calculate percentages
+        const total = sessions.length;
+        const statusPercentages = {
+            'completed': Math.round((statusCounts.completed / total) * 100) || 0,
+            'in_progress': Math.round((statusCounts.in_progress / total) * 100) || 0,
+            'cancelled': Math.round((statusCounts.cancelled / total) * 100) || 0
+        };
+        
+        // Update stats display
+        const statsContainer = document.getElementById('status-stats');
+        statsContainer.innerHTML = '';
+        
+        const statItems = [
+            {
+                status: 'Completed',
+                count: statusCounts.completed,
+                percentage: statusPercentages.completed,
+                color: 'bg-green-100 text-green-800',
+                icon: 'fa-check-circle text-green-500'
+            },
+            {
+                status: 'In Progress',
+                count: statusCounts.in_progress,
+                percentage: statusPercentages.in_progress,
+                color: 'bg-yellow-100 text-yellow-800',
+                icon: 'fa-clock text-yellow-500'
+            },
+            {
+                status: 'Cancelled',
+                count: statusCounts.cancelled,
+                percentage: statusPercentages.cancelled,
+                color: 'bg-red-100 text-red-800',
+                icon: 'fa-times-circle text-red-500'
+            }
+        ];
+        
+        statItems.forEach(item => {
+            const statEl = document.createElement('div');
+            statEl.className = 'p-3 rounded-lg border ' + item.color.replace('text-', 'border-');
+            
+            statEl.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <i class="fas ${item.icon} text-xl mr-3"></i>
+                        <div>
+                            <h4 class="font-medium">${item.status}</h4>
+                            <p class="text-sm opacity-75">${item.count} sessions</p>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-bold">${item.percentage}%</div>
+                </div>
+                <div class="mt-2 bg-white bg-opacity-30 rounded-full h-2.5">
+                    <div class="h-2.5 rounded-full ${item.color.replace('text-', 'bg-')}" style="width: ${item.percentage}%"></div>
+                </div>
+            `;
+            
+            statsContainer.appendChild(statEl);
+        });
+        
+        // Additional total info
+        const totalInfo = document.createElement('div');
+        totalInfo.className = 'p-3 rounded-lg bg-gray-50 border border-gray-200 mt-2';
+        totalInfo.innerHTML = `
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-list-ul text-gray-500 text-xl mr-3"></i>
+                    <div>
+                        <h4 class="font-medium">Total Sessions</h4>
+                        <p class="text-sm text-gray-500">During selected period</p>
+                    </div>
+                </div>
+                <div class="text-2xl font-bold">${total}</div>
+            </div>
+        `;
+        statsContainer.appendChild(totalInfo);
+        
+        // Create donut chart
+        const ctx = document.getElementById('statusDonutChart').getContext('2d');
+        
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Completed', 'In Progress', 'Cancelled'],
+                datasets: [{
+                    data: [
+                        statusCounts.completed,
+                        statusCounts.in_progress,
+                        statusCounts.cancelled
+                    ],
+                    backgroundColor: [
+                        'rgba(16, 185, 129, 0.8)',  // Green for completed
+                        'rgba(245, 158, 11, 0.8)',  // Yellow for in progress
+                        'rgba(239, 68, 68, 0.8)'    // Red for cancelled
+                    ],
+                    borderColor: [
+                        'rgb(16, 185, 129)',
+                        'rgb(245, 158, 11)',
+                        'rgb(239, 68, 68)'
+                    ],
+                    borderWidth: 1,
+                    hoverOffset: 15
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '70%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.raw || 0;
+                                const percentage = Math.round((value / total) * 100);
+                                return `${label}: ${value} sessions (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            },
+            plugins: [{
+                id: 'centerText',
+                beforeDraw: function(chart) {
+                    const width = chart.width;
+                    const height = chart.height;
+                    const ctx = chart.ctx;
+                    
+                    ctx.restore();
+                    
+                    // Font size based on canvas size
+                    const fontSize = (height / 250).toFixed(2) * 16;
+                    ctx.font = `bold ${fontSize}px Arial`;
+                    ctx.textBaseline = 'middle';
+                    
+                    const text = total.toString();
+                    const textWidth = ctx.measureText(text).width;
+                    
+                    // Position text in center
+                    ctx.fillStyle = '#333';
+                    ctx.fillText(text, (width - textWidth) / 2, height / 2 - fontSize / 2);
+                    
+                    // Add "sessions" text below
+                    ctx.font = `${fontSize * 0.5}px Arial`;
+                    const sessionsText = 'sessions';
+                    const sessionsWidth = ctx.measureText(sessionsText).width;
+                    ctx.fillStyle = '#666';
+                    ctx.fillText(sessionsText, (width - sessionsWidth) / 2, height / 2 + fontSize / 2);
+                    
+                    ctx.save();
+                }
+            }]
+        });
+    }
+    
+    // Initialize lollipop chart
+    function initializeLollipopChart() {
+        const sessions = <?= json_encode($sessions) ?>;
+        const container = document.getElementById('lollipopContainer');
+        
+        if (!container) return;
+        
+        // Clear previous visualization if any
+        container.innerHTML = '';
+        
+        // Get the most recent 30 sessions
+        const recentSessions = [...sessions]
+            .sort((a, b) => new Date(b.start_time) - new Date(a.start_time))
+            .slice(0, 30)
+            .map(session => ({
+                id: session.id,
+                date: new Date(session.start_time),
+                duration: session.duration_minutes,
+                status: session.end_time === null ? 'in_progress' : (session.completed ? 'completed' : 'cancelled'),
+                score: session.focus_score
+            }))
+            .reverse(); // Reverse to show oldest to newest (left to right)
+        
+        // Set up dimensions
+        const margin = {top: 20, right: 30, bottom: 40, left: 50};
+        const width = container.clientWidth - margin.left - margin.right;
+        const height = container.clientHeight - margin.top - margin.bottom;
+        
+        // Create SVG
+        const svg = d3.select(container)
+            .append('svg')
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom)
+            .append('g')
+            .attr('transform', `translate(${margin.left},${margin.top})`);
+        
+        // Create scales
+        const x = d3.scaleLinear()
+            .domain([0, d3.max(recentSessions, d => d.duration) * 1.1]) // Add 10% padding
+            .range([0, width]);
+        
+        const y = d3.scaleBand()
+            .domain(recentSessions.map((d, i) => i))
+            .range([0, height])
+            .padding(0.3);
+        
+        // Status color scale
+        const colorScale = d => {
+            if (d.status === 'completed') return '#10B981'; // Green
+            if (d.status === 'in_progress') return '#F59E0B'; // Yellow
+            return '#EF4444'; // Red for cancelled
+        };
+        
+        // Add X axis
+        svg.append('g')
+            .attr('transform', `translate(0,${height})`)
+            .call(d3.axisBottom(x).ticks(5))
+            .append('text')
+            .attr('x', width / 2)
+            .attr('y', 35)
+            .attr('fill', 'currentColor')
+            .attr('text-anchor', 'middle')
+            .text('Duration (minutes)');
+        
+        // Add Y axis labels (session dates)
+        svg.append('g')
+            .call(d3.axisLeft(y)
+                .tickFormat((d, i) => {
+                    // Format the date for display
+                    const session = recentSessions[d];
+                    return session.date.toLocaleDateString(undefined, {
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                })
+            );
+        
+        // Add horizontal lines
+        svg.selectAll('lines')
+            .data(recentSessions)
+            .enter()
+            .append('line')
+            .attr('x1', 0)
+            .attr('x2', d => x(d.duration))
+            .attr('y1', (d, i) => y(i) + y.bandwidth() / 2)
+            .attr('y2', (d, i) => y(i) + y.bandwidth() / 2)
+            .attr('stroke', '#CCCCCC')
+            .attr('stroke-width', 1.5);
+        
+        // Add lollipop circles
+        svg.selectAll('circles')
+            .data(recentSessions)
+            .enter()
+            .append('circle')
+            .attr('cx', d => x(d.duration))
+            .attr('cy', (d, i) => y(i) + y.bandwidth() / 2)
+            .attr('r', 6)
+            .attr('fill', d => colorScale(d))
+            .attr('stroke', 'white')
+            .attr('stroke-width', 1)
+            .on('mouseover', function(event, d) {
+                // Enlarge the circle on hover
+                d3.select(this)
+                    .transition()
+                    .duration(200)
+                    .attr('r', 9);
+                
+                // Show tooltip
+                tooltip.transition()
+                    .duration(200)
+                    .style('opacity', 0.9);
+                
+                // Format date
+                const dateStr = d.date.toLocaleDateString(undefined, {
+                    weekday: 'short',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                // Format status
+                const statusStr = d.status.charAt(0).toUpperCase() + d.status.slice(1);
+                
+                // Format score
+                const scoreStr = d.score ? `${d.score}%` : 'N/A';
+                
+                // Set tooltip content
+                tooltip.html(`
+                    <div class="p-2">
+                        <div class="font-medium">${dateStr}</div>
+                        <div class="grid grid-cols-2 gap-x-4 text-sm">
+                            <div>Duration:</div><div>${d.duration} min</div>
+                            <div>Status:</div><div>${statusStr}</div>
+                            <div>Focus Score:</div><div>${scoreStr}</div>
+                        </div>
+                    </div>
+                `)
+                .style('left', (event.pageX + 10) + 'px')
+                .style('top', (event.pageY - 28) + 'px');
+            })
+            .on('mouseout', function() {
+                // Restore circle size
+                d3.select(this)
+                    .transition()
+                    .duration(200)
+                    .attr('r', 6);
+                
+                // Hide tooltip
+                tooltip.transition()
+                    .duration(500)
+                    .style('opacity', 0);
+            });
+        
+        // Add duration labels
+        svg.selectAll('labels')
+            .data(recentSessions)
+            .enter()
+            .append('text')
+            .attr('x', d => x(d.duration) + 10)
+            .attr('y', (d, i) => y(i) + y.bandwidth() / 2)
+            .attr('dy', '0.35em')
+            .text(d => `${d.duration}`)
+            .attr('font-size', '10px')
+            .attr('fill', '#666');
+        
+        // Create tooltip
+        const tooltip = d3.select('body').append('div')
+            .attr('class', 'lollipop-tooltip')
+            .style('opacity', 0)
+            .style('position', 'absolute')
+            .style('background', 'white')
+            .style('border', '1px solid #ddd')
+            .style('border-radius', '4px')
+            .style('box-shadow', '0 2px 5px rgba(0,0,0,0.1)')
+            .style('pointer-events', 'none')
+            .style('z-index', 1000);
+        
+        // Add title
+        svg.append('text')
+            .attr('x', width / 2)
+            .attr('y', -margin.top / 2)
+            .attr('text-anchor', 'middle')
+            .style('font-size', '14px')
+            .style('font-weight', 'bold')
+            .text('Session Duration by Date');
     }
     
     // ----------------------------------------
